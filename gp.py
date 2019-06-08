@@ -2,7 +2,7 @@ from random import random, randint, choice
 from copy import deepcopy
 from math import log
 import datetime
-
+import stats
 
 class fwrapper:
     def __init__(self, function, childcount, name):
@@ -199,19 +199,23 @@ def get_stats(rounds=50):
 
     scores = [row[0] for row in tries]
     avg_score = sum(scores) / len(scores)
+    std_score = stats.stddev(scores)
 
     successes = scores.count(0)
 
     times = [row[1] for row in tries]
     avg_time = sum(times) / len(times)
+    std_time = stats.stddev(avg_time)
 
     generations = [row[2] for row in tries]
     avg_generations = sum(generations) / len(generations)
+    std_generations = stats.stddev(generations)
+
 
     print "# of Successes:", successes
-    print "Average Score:", avg_score
-    print "Average Time (Seconds):", avg_time
-    print "Average Generations:", avg_generations
+    print "Average Score:", avg_score, "Std:", std_score
+    print "Average Time (Seconds):", avg_time, "Std:", std_time
+    print "Average Generations:", avg_generations, "Std:", std_generations
 
     return successes, avg_score, avg_time, avg_generations
 
