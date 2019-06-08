@@ -1,6 +1,7 @@
 from random import random, randint, choice
 from copy import deepcopy
 from math import log
+import datetime
 
 
 class fwrapper:
@@ -158,7 +159,7 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     population = [makerandomtree(pc) for i in range(popsize)]
     for i in range(maxgen):
         scores = rankfunction(population)
-        print scores[0][0]
+        print "Generation:", i+1, "Score:", scores[0][0]
         if scores[0][0] == 0: break
 
         # The two best always make it
@@ -178,7 +179,42 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
         population = newpop
     scores[0][1].display()
-    return scores[0][1]
+    return (scores[0][1], i+1)
+
+
+def get_stats(rounds=50):
+    dataset = buildhiddenset()
+    rf = getrankfunction(dataset)
+    tries = []
+    for i in range(rounds):
+        print "*******Round: ", i+1, "*******"
+        start = datetime.datetime.now()
+        best, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, pexp=0.7, pnew=0.1)
+        score = scorefunction(best, dataset)
+        end = datetime.datetime.now()
+        delta = end - start
+        seconds = delta.total_seconds()
+        row = (score, seconds, generations, best)
+        tries.append(row)
+
+    scores = [row[0] for row in tries]
+    avg_score = sum(scores) / len(scores)
+
+    successes = scores.count(0)
+
+    times = [row[1] for row in tries]
+    avg_time = sum(times) / len(times)
+
+    generations = [row[2] for row in tries]
+    avg_generations = sum(generations) / len(generations)
+
+    print "# of Successes:", successes
+    print "Average Score:", avg_score
+    print "Average Time (Seconds):", avg_time
+    print "Average Generations:", avg_generations
+
+    return successes, avg_score, avg_time, avg_generations
+
 
 
 def gridgame(p):
