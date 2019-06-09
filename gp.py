@@ -3,13 +3,7 @@ from copy import deepcopy
 from math import log
 import datetime
 import stats
-
-class fwrapper:
-    def __init__(self, function, childcount, name):
-        self.function = function
-        self.childcount = childcount
-        self.name = name
-
+import functionwrapper as fw
 
 class node:
     def __init__(self, fw, children):
@@ -27,7 +21,7 @@ class node:
             c.display(indent + 1)
 
 
-class paramnode:
+class paramnode(node):
     def __init__(self, idx):
         self.idx = idx
 
@@ -38,56 +32,30 @@ class paramnode:
         print '%sp%d' % (' ' * indent, self.idx)
 
 
-class constnode:
-    def __init__(self, v):
-        self.v = v
+class constnode(node):
+    def __init__(self, value):
+        self.value = value
 
     def evaluate(self, inp):
-        return self.v
+        return self.value
 
     def display(self, indent=0):
-        print '%s%d' % (' ' * indent, self.v)
+        print '%s%d' % (' ' * indent, self.value)
 
 
-addw = fwrapper(lambda l: l[0] + l[1], 2, 'add')
-subw = fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
-mulw = fwrapper(lambda l: l[0] * l[1], 2, 'multiply')
-
-
-def iffunc(l):
-    if l[0] > 0:
-        return l[1]
-    else:
-        return l[2]
-
-
-ifw = fwrapper(iffunc, 3, 'if')
-
-
-def isgreater(l):
-    if l[0] > l[1]:
-        return 1
-    else:
-        return 0
-
-
-gtw = fwrapper(isgreater, 2, 'isgreater')
-
-flist = [addw, mulw, ifw, gtw, subw]
 
 
 def exampletree():
-    return node(ifw, [
-        node(gtw, [paramnode(0), constnode(3)]),
-        node(addw, [paramnode(1), constnode(5)]),
-        node(subw, [paramnode(1), constnode(2)]),
-    ]
-                )
+    return node(fw.ifw, [
+        node(fw.gtw, [paramnode(0), constnode(3)]),
+        node(fw.addw, [paramnode(1), constnode(5)]),
+        node(fw.subw, [paramnode(1), constnode(2)])])
+
 
 
 def makerandomtree(pc, maxdepth=4, fpr=0.5, ppr=0.6):
     if random() < fpr and maxdepth > 0:
-        f = choice(flist)
+        f = choice(fw.flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
                     for i in range(f.childcount)]
         return node(f, children)
@@ -110,11 +78,11 @@ def buildhiddenset():
     return rows
 
 
-def scorefunction(tree, s):
+def scorefunction(tree, dataset):
     dif = 0
-    for data in s:
-        v = tree.evaluate([data[0], data[1]])
-        dif += abs(v - data[2])
+    for row in dataset:
+        val = tree.evaluate([row[0], row[1]])
+        dif += abs(val - row[2])
     return dif
 
 
@@ -205,7 +173,7 @@ def get_stats(rounds=50):
 
     times = [row[1] for row in tries]
     avg_time = sum(times) / len(times)
-    std_time = stats.stddev(avg_time)
+    std_time = stats.stddev(times)
 
     generations = [row[2] for row in tries]
     avg_generations = sum(generations) / len(generations)
@@ -213,121 +181,9 @@ def get_stats(rounds=50):
 
 
     print "# of Successes:", successes
-    print "Average Score:", avg_score, "Std:", std_score
-    print "Average Time (Seconds):", avg_time, "Std:", std_time
-    print "Average Generations:", avg_generations, "Std:", std_generations
+    print "Average Score:", avg_score, "StD:", round(std_score, 2)
+    print "Average Time (Seconds):", avg_time, "StD:", round(std_time, 2)
+    print "Average Generations:", avg_generations, "StD:", round(std_generations, 2)
 
     return successes, avg_score, avg_time, avg_generations
 
-
-
-def gridgame(p):
-    # Board size
-    max = (3, 3)
-
-    # Remember the last move for each player
-    lastmove = [-1, -1]
-
-    # Remember the player's locations
-    location = [[randint(0, max[0]), randint(0, max[1])]]
-
-    # Put the second player a sufficient distance from the first
-    location.append([(location[0][0] + 2) % 4, (location[0][1] + 2) % 4])
-    # Maximum of 50 moves before a tie
-    for o in range(50):
-
-        # For each player
-        for i in range(2):
-            locs = location[i][:] + location[1 - i][:]
-            locs.append(lastmove[i])
-            move = p[i].evaluate(locs) % 4
-
-            # You lose if you move the same direction twice in a row
-            if lastmove[i] == move: return 1 - i
-            lastmove[i] = move
-            if move == 0:
-                location[i][0] -= 1
-                # Board wraps
-                if location[i][0] < 0: location[i][0] = 0
-            if move == 1:
-                location[i][0] += 1
-                if location[i][0] > max[0]: location[i][0] = max[0]
-            if move == 2:
-                location[i][1] -= 1
-                if location[i][1] < 0: location[i][1] = 0
-            if move == 3:
-                location[i][1] += 1
-                if location[i][1] > max[1]: location[i][1] = max[1]
-
-            # If you have captured the other player, you win
-            if location[i] == location[1 - i]: return i
-    return -1
-
-
-def tournament(pl):
-    # Count losses
-    losses = [0 for p in pl]
-
-    # Every player plays every other player
-    for i in range(len(pl)):
-        for j in range(len(pl)):
-            if i == j: continue
-
-            # Who is the winner?
-            winner = gridgame([pl[i], pl[j]])
-
-            # Two points for a loss, one point for a tie
-            if winner == 0:
-                losses[j] += 2
-            elif winner == 1:
-                losses[i] += 2
-            elif winner == -1:
-                losses[i] += 1
-                losses[j] += 1
-                pass
-
-    # Sort and return the results
-    z = zip(losses, pl)
-    z.sort()
-    return z
-
-
-class humanplayer:
-    def evaluate(self, board):
-
-        # Get my location and the location of other players
-        me = tuple(board[0:2])
-        others = [tuple(board[x:x + 2]) for x in range(2, len(board) - 1, 2)]
-
-        # Display the board
-        for i in range(4):
-            for j in range(4):
-                if (i, j) == me:
-                    print 'O',
-                elif (i, j) in others:
-                    print 'X',
-                else:
-                    print '.',
-            print
-
-        # Show moves, for reference
-        print 'Your last move was %d' % board[len(board) - 1]
-        print ' 0'
-        print '2 3'
-        print ' 1'
-        print 'Enter move: ',
-
-        # Return whatever the user enters
-        move = int(raw_input())
-        return move
-
-
-class fwrapper:
-    def __init__(self, function, params, name):
-        self.function = function
-        self.childcount = params
-        self.name = name
-
-
-# flist={'str':[substringw,concatw],'int':[indexw]}
-flist = [addw, mulw, ifw, gtw, subw]
