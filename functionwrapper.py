@@ -1,7 +1,7 @@
 class fwrapper:
     def __init__(self, function, params, name):
         self.function = function
-        self.childcount = params
+        self.params = params
         self.name = name
 
 

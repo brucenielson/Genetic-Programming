@@ -43,13 +43,29 @@ class constnode(node):
         print '%s%d' % (' ' * indent, self.value)
 
 
+class Rectangle:
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        return self.length * self.width
+
+    def perimeter(self):
+        return 2 * self.length + 2 * self.width
+
+class Square(Rectangle):
+    def __init__(self, length):
+        super(Square, self).__init__(length, length)
 
 
-def exampletree():
-    return node(fw.ifw, [
-        node(fw.gtw, [paramnode(0), constnode(3)]),
-        node(fw.addw, [paramnode(1), constnode(5)]),
-        node(fw.subw, [paramnode(1), constnode(2)])])
+class exampletree(node):
+    def __init__(self):
+        children = [node(fw.gtw, [paramnode(0), constnode(3)]),
+                    node(fw.addw, [paramnode(1), constnode(5)]),
+                    node(fw.subw, [paramnode(1), constnode(2)])]
+
+        node.__init__(self, fw.ifw, children)
 
 
 
@@ -57,7 +73,7 @@ def makerandomtree(pc, maxdepth=4, fpr=0.5, ppr=0.6):
     if random() < fpr and maxdepth > 0:
         f = choice(fw.flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
-                    for i in range(f.childcount)]
+                    for i in range(f.params)]
         return node(f, children)
     elif random() < ppr:
         return paramnode(randint(0, pc - 1))
