@@ -15,6 +15,11 @@ Average Score: 1481 StD: 1622.15
 Average Time (Seconds): 234.3271 StD: 847.81
 Average Generations: 37 StD: 17.66
 
+New
+# of Successes: 24
+Average Score: 1622 StD: 1666.28
+Average Time (Seconds): 87.2958 StD: 54.39
+Average Generations: 37 StD: 15.75
 
 
 New
@@ -56,5 +61,24 @@ Average Score: 1252 StD: 1662.0
 Average Time (Seconds): 108.1762 StD: 62.64
 Average Generations: 38 StD: 19.49
 
+
+
+w/unstuck
+# of Successes: 3
+Average Score: 962 StD: 1650.78
+Average Time (Seconds): 44.2196 StD: 57.14
+Average Generations: 25 StD: 22.89
+
+
+# of Successes: 1
+Average Score: 1115 StD: 2101.28
+Average Time (Seconds): 130.5934 StD: 50.15
+Average Generations: 48 StD: 3.61
+
+
+# of Successes: 2
+Average Score: 729 StD: 1311.73
+Average Time (Seconds): 67.7482 StD: 35.14
+Average Generations: 38 StD: 17.49
 
 
