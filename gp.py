@@ -164,7 +164,7 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
         if evolvebest > 0:
             for i in range(evolvebest):
                 newpop.append(mutate(
-                        crossover(scores[randint(0,3)][1],
+                        crossover(scores[randint(0,10)][1],
                                   randint(0,popsize-1),
                                   probswap=0.90),
                         numparams, probchange=min(0.30, 0.5)))
