@@ -121,15 +121,10 @@ def getrankfunction(dataset):
     return rankfunction
 
 
-def sigmoid(x, factor=25.0):
-    # This is an adjusted sigmoid that grows 100 times slower
-    return 1.0 / (1.0 + math.exp(-x / factor))
-
-
 def evolve(numparams, popsize, rankfunction, maxgen=500,
            mutationrate=0.1, breedingrate=0.4, fitnesspref=0.7, probnew=0.05,
-           unstuck=False):
-    # unstuck tracks how often the same fitness score repeats and slowly both
+           incprobnew=False, evolvebest=0):
+    # incprobnew tracks how often the same fitness score repeats and slowly both
     # increases probnew while decreasing fitnesspref so as to allow more randomness to get unstuck
 
     def selectindex(fitnesspref):
@@ -147,7 +142,7 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
         # If we get same value too often, allow in new random nodes
         adj_probnew = probnew
         adj_fitnesspref = fitnesspref
-        if unstuck:
+        if incprobnew:
             if scores[0][0] == lastscore:
                 stuckcounter += 1
             else:
@@ -155,9 +150,8 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
             lastscore = scores[0][0]
 
             if stuckcounter > 0:
-                adj_val = sigmoid(stuckcounter)
-                adj_probnew = probnew + (adj_val - 0.5)
-                if adj_probnew > 1.0: adj_probnew = 1.0
+                adj_probnew = probnew + 2.0*(float(stuckcounter)/100.0)
+                if adj_probnew > min(probnew * 2.0, 0.5): adj_probnew = min(probnew * 2.0, 0.5)
                 # adj_fitnesspref = fitnesspref * (adj_val + 0.5)
 
         print "Generation:", i+1, "Score:", scores[0][0], "Adj Prob New:", adj_probnew, "Adj Fitness Pref:", adj_fitnesspref
@@ -165,6 +159,15 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
 
         # The two best always make it
         newpop = [scores[0][1], scores[1][1]]
+
+        # If evolvebest is set, the nmake sure the first program is always evolved that number of times
+        if evolvebest > 0:
+            for i in range(evolvebest):
+                newpop.append(mutate(
+                        crossover(scores[randint(0,3)][1],
+                                  randint(0,popsize-1),
+                                  probswap=0.90),
+                        numparams, probchange=min(0.30, 0.5)))
 
         # Build the next generation
         while len(newpop) < popsize:
@@ -183,14 +186,15 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
     return (scores[0][1], i+1)
 
 
-def getstats(rounds=50, unstuck=False):
+def getstats(rounds=50, incprobnew=False, evolvebest=0):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        best, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, unstuck=True)
+        best, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.3, fitnesspref=0.7, probnew=0.1, \
+                                   incprobnew=incprobnew, evolvebest=evolvebest) # breedingrate=0.1 probnew=0.1
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
         delta = end - start

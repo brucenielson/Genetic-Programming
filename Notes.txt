@@ -21,6 +21,15 @@ Average Score: 1622 StD: 1666.28
 Average Time (Seconds): 87.2958 StD: 54.39
 Average Generations: 37 StD: 15.75
 
+W/Unstuck
+# of Successes: 20
+Average Score: 1756 StD: 1753.57
+Average Time (Seconds): 209.90302 StD: 792.58
+Average Generations: 40 StD: 14.76
+(20, 1756, 209.90302000000003, 40)
+
+
+
 
 New
 # of Successes: 1
@@ -80,5 +89,7 @@ Average Generations: 48 StD: 3.61
 Average Score: 729 StD: 1311.73
 Average Time (Seconds): 67.7482 StD: 35.14
 Average Generations: 38 StD: 17.49
+
+
 
 
