@@ -7,11 +7,16 @@ import functionwrapper as fw
 import math
 
 
+
+
 class node:
+    treecounter = 0
     def __init__(self, fw, children):
         self.function = fw.function
         self.name = fw.name
         self.children = children
+        self.id = node.treecounter
+        node.treecounter += 1
 
     def evaluate(self, inp):
         results = [n.evaluate(inp) for n in self.children]
@@ -101,8 +106,8 @@ def mutate(t, pc, probchange=0.1):
         return result
 
 
-def crossover(t1, t2, probswap=0.7, top=1):
-    if random() < probswap and not top:
+def crossover(t1, t2, probswap=0.1, top=1):
+    if random() > probswap and not top:
         return deepcopy(t2)
     else:
         result = deepcopy(t1)
@@ -121,8 +126,18 @@ def getrankfunction(dataset):
     return rankfunction
 
 
+def getscore(scores):
+    vals = [(row[0], getattr(row[1],"id", -1)) for row in scores]
+    return vals
+
+
+def getids(population):
+    vals = [getattr(row, "id", -1) for row in population]
+    return vals
+
+
 def evolve(numparams, popsize, rankfunction, maxgen=500,
-           mutationrate=0.1, breedingrate=0.4, fitnesspref=0.7, probnew=0.05,
+           mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
            incprobnew=False, evolvebest=0):
     # incprobnew tracks how often the same fitness score repeats and slowly both
     # increases probnew while decreasing fitnesspref so as to allow more randomness to get unstuck
@@ -134,6 +149,7 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
 
     # Create a random initial population
     population = [makerandomtree(numparams) for i in range(popsize)]
+    print "Initial Population:", getids(population)
     lastscore = None
     stuckcounter = 0
     for i in range(maxgen):
@@ -155,6 +171,9 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
                 # adj_fitnesspref = fitnesspref * (adj_val + 0.5)
 
         print "Generation:", i+1, "Best Score:", scores[0][0], "Adj Prob New:", adj_probnew
+        #if (i+1) % 10 == 0 and i != 0:
+        print "Population:", getscore(scores)
+
         if scores[0][0] == 0: break
 
         # The two best always make it
@@ -166,8 +185,8 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
                 newpop.append(mutate(
                         crossover(scores[randint(0,10)][1],
                                   randint(0,popsize-1),
-                                  probswap=0.90),
-                        numparams, probchange=min(0.30, 0.5)))
+                                  probswap=0.10),
+                        numparams, probchange=0.30))
 
         # Build the next generation
         while len(newpop) < popsize:
@@ -183,7 +202,7 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
 
         population = newpop
     scores[0][1].display()
-    return (scores[0][1], i+1)
+    return (population, i+1)
 
 
 def getstats(rounds=50, incprobnew=False, evolvebest=0):
@@ -193,8 +212,9 @@ def getstats(rounds=50, incprobnew=False, evolvebest=0):
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        best, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.3, fitnesspref=0.7, probnew=0.1, \
-                                   incprobnew=incprobnew, evolvebest=evolvebest) # breedingrate=0.1 probnew=0.1
+        population, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, \
+                                   incprobnew=incprobnew, evolvebest=evolvebest)
+        best = population[0]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
         delta = end - start
@@ -216,7 +236,7 @@ def getstats(rounds=50, incprobnew=False, evolvebest=0):
     avg_generations = sum(generations) / len(generations)
     std_generations = stats.stddev(generations)
 
-
+    print "Final Population", getscore(population)
     print "# of Successes:", successes
     print "Average Score:", avg_score, "StD:", round(std_score, 2)
     print "Average Time (Seconds):", avg_time, "StD:", round(std_time, 2)
