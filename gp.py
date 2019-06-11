@@ -6,6 +6,7 @@ import stats
 import functionwrapper as fw
 import math
 
+
 class node:
     def __init__(self, fw, children):
         self.function = fw.function
@@ -52,7 +53,6 @@ class exampletree(node):
                     node(fw.subw, [paramnode(1), constnode(2)])]
 
         node.__init__(self, fw.ifw, children)
-
 
 
 
@@ -151,10 +151,10 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
 
             if stuckcounter > 0:
                 adj_probnew = probnew + 2.0*(float(stuckcounter)/100.0)
-                if adj_probnew > min(probnew * 2.0, 0.5): adj_probnew = min(probnew * 2.0, 0.5)
+                if adj_probnew > 0.5: adj_probnew = 0.5
                 # adj_fitnesspref = fitnesspref * (adj_val + 0.5)
 
-        print "Generation:", i+1, "Score:", scores[0][0], "Adj Prob New:", adj_probnew, "Adj Fitness Pref:", adj_fitnesspref
+        print "Generation:", i+1, "Best Score:", scores[0][0], "Adj Prob New:", adj_probnew
         if scores[0][0] == 0: break
 
         # The two best always make it
