@@ -4,9 +4,7 @@ from math import log
 import datetime
 import stats
 import functionwrapper as fw
-import math
-
-
+import operator
 
 
 class node:
@@ -88,17 +86,20 @@ def buildhiddenset():
     return rows
 
 
-def scorefunction(tree, dataset):
-    dif = 0
+def scorefunction(tree, dataset, penalizecomplexity=False):
     start = datetime.datetime.now()
+    dif = 0
     for row in dataset:
         val = tree.evaluate([row[0], row[1]])
         dif += abs(val - row[2])
 
-    end = datetime.datetime.now()
-    delta = end - start
-    seconds = delta.total_seconds()
-    return int(dif * (1.0 + seconds))
+    if penalizecomplexity == False:
+        return (dif, tree)
+    else:
+        end = datetime.datetime.now()
+        delta = end - start
+        seconds = delta.total_seconds()
+        return (dif, tree, seconds)
 
 
 def mutate(t, pc, probchange=0.1):
@@ -126,9 +127,10 @@ def crossover(t1, t2, probswap=0.1, top=True):
 
 
 def getrankfunction(dataset):
-    def rankfunction(population):
-        scores = [(scorefunction(t, dataset), t) for t in population]
-        scores.sort()
+    def rankfunction(population, penalizecomplexity=False):
+        scores = [scorefunction(t, dataset, penalizecomplexity) for t in population]
+        # scores.sort()
+        scores = sorted(scores, key=operator.itemgetter(0, 2))
         return scores
 
     return rankfunction
@@ -144,79 +146,10 @@ def getids(population):
     return vals
 
 
-def evolve2(numparams, popsize, rankfunction, maxgen=500,
-           mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
-           incprobnew=False, evolvebest=0):
-    # incprobnew tracks how often the same fitness score repeats and slowly both
-    # increases probnew while decreasing fitnesspref so as to allow more randomness to get unstuck
-
-    def selectindex(fitnesspref):
-        # Returns a random number, tending towards lower numbers. The lower pref_fit
-        # is, more lower numbers you will get
-        return int(log(random()) / log(fitnesspref))
-
-    # Create a random initial population
-    population = [makerandomtree(numparams) for i in range(popsize)]
-    # print "Initial Population:", getids(population)
-    lastscore = None
-    stuckcounter = 0
-    for i in range(maxgen):
-        scores = rankfunction(population)
-
-        # If we get same value too often, allow in new random nodes
-        adj_probnew = probnew
-        adj_fitnesspref = fitnesspref
-        if incprobnew:
-            if scores[0][0] == lastscore:
-                stuckcounter += 1
-            else:
-                stuckcounter = 0
-            lastscore = scores[0][0]
-
-            if stuckcounter > 0:
-                adj_probnew = probnew + 2.0*(float(stuckcounter)/100.0)
-                if adj_probnew > 0.5: adj_probnew = 0.5
-                adj_fitnesspref = fitnesspref + 2.0*(float(stuckcounter)/100.0)
-                if adj_fitnesspref > 0.9: adj_fitnesspref = 0.9
-
-        print "Generation:", i+1, "Best Score:", scores[0][0], "Prob New:", adj_probnew, "Fitness Pref:", adj_fitnesspref
-        #if (i+1) % 10 == 0 and i != 0:
-        # print "Population:", getscore(scores)
-
-        if scores[0][0] == 0: break
-
-        # The two best always make it
-        newpop = [scores[0][1], scores[1][1]]
-
-        # If evolvebest is set, the nmake sure the first program is always evolved that number of times
-        if evolvebest > 0:
-            for i in range(evolvebest):
-                newpop.append(mutate(
-                        crossover(scores[randint(0,10)][1],
-                                  randint(0,popsize-1),
-                                  probswap=0.10),
-                        numparams, probchange=0.30))
-
-        # Build the next generation
-        while len(newpop) < popsize:
-            if random() > adj_probnew:
-                newpop.append(mutate(
-                    crossover(scores[selectindex(adj_fitnesspref)][1],
-                              scores[selectindex(adj_fitnesspref)][1],
-                              probswap=breedingrate),
-                    numparams, probchange=mutationrate))
-            else:
-                # Add a random node to mix things up
-                newpop.append(makerandomtree(numparams))
-
-        population = newpop
-    scores[0][1].display()
-    return (scores, i+1)
-
 
 def evolve(pc, popsize, rankfunction, maxgen=500,
-            mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
-            penalizecomplexity=False, evolvebest=0):
+           mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
+           penalizecomplexity=False, doublemutate=True):
     # Returns a random number, tending towards lower numbers. The lower pexp
     # is, more lower numbers you will get
     def selectindex():
@@ -224,9 +157,29 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
     # Create a random initial population
     population = [makerandomtree(pc) for i in range(popsize)]
+    lastscore = None
+    stuckcounter = 0
     for i in range(maxgen):
-        scores = rankfunction(population)
-        print "Generation:", i+1, "Best Score:", scores[0][0]
+        scores = rankfunction(population, penalizecomplexity)
+
+        # If we get same value too often, allow in new random nodes
+        adj_mutate = mutationrate
+        if doublemutate:
+            if scores[0][2] == lastscore:
+                stuckcounter += 1
+            else:
+                stuckcounter = 0
+
+            lastscore = scores[0][2]
+
+            if stuckcounter > 0:
+                adj_mutate = mutationrate + 2.0*(float(stuckcounter)/100.0)
+                if adj_mutate > 0.5: adj_mutate = 0.5
+
+        if penalizecomplexity:
+            print "Generation:", i+1, "Best Score:", scores[0][0], "Mutate:", adj_mutate, "Time:", scores[0][2]
+        else:
+            print "Generation:", i+1, "Best Score:", scores[0][0], "Mutate:", adj_mutate
         if scores[0][0] == 0: break
 
         # The two best always make it
@@ -239,7 +192,7 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
                     crossover(scores[selectindex()][1],
                               scores[selectindex()][1],
                               probswap=breedingrate),
-                    pc, probchange=mutationrate))
+                    pc, probchange=adj_mutate))
             else:
                 # Add a random node to mix things up
                 newpop.append(makerandomtree(pc))
@@ -249,21 +202,21 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     return (scores, i+1)
 
 
-def getstats(rounds=50, incprobnew=False, evolvebest=0):
+def getstats(rounds=50, penalizecomplexity=False, doublemutate=False):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, \
-                                   )
+        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.1, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, \
+                                     penalizecomplexity=penalizecomplexity, doublemutate=doublemutate)
         best = scores[0][1]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
         delta = end - start
         seconds = delta.total_seconds()
-        row = (score, seconds, generations, best)
+        row = (score[0], seconds, generations, best)
         tries.append(row)
 
     scores = [row[0] for row in tries]
