@@ -182,7 +182,7 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     return (scores[0][1], i+1)
 
 
-def get_stats(rounds=50):
+def getstats(rounds=50):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
