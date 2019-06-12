@@ -90,10 +90,15 @@ def buildhiddenset():
 
 def scorefunction(tree, dataset):
     dif = 0
+    start = datetime.datetime.now()
     for row in dataset:
         val = tree.evaluate([row[0], row[1]])
         dif += abs(val - row[2])
-    return dif
+
+    end = datetime.datetime.now()
+    delta = end - start
+    seconds = delta.total_seconds()
+    return int(dif * (1.0 + seconds))
 
 
 def mutate(t, pc, probchange=0.1):
@@ -139,7 +144,7 @@ def getids(population):
     return vals
 
 
-def evolve(numparams, popsize, rankfunction, maxgen=500,
+def evolve2(numparams, popsize, rankfunction, maxgen=500,
            mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
            incprobnew=False, evolvebest=0):
     # incprobnew tracks how often the same fitness score repeats and slowly both
@@ -209,9 +214,9 @@ def evolve(numparams, popsize, rankfunction, maxgen=500,
     return (scores, i+1)
 
 
-def evolve2(pc, popsize, rankfunction, maxgen=500,
+def evolve(pc, popsize, rankfunction, maxgen=500,
             mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
-            incprobnew=False, evolvebest=0):
+            penalizecomplexity=False, evolvebest=0):
     # Returns a random number, tending towards lower numbers. The lower pexp
     # is, more lower numbers you will get
     def selectindex():
@@ -221,7 +226,7 @@ def evolve2(pc, popsize, rankfunction, maxgen=500,
     population = [makerandomtree(pc) for i in range(popsize)]
     for i in range(maxgen):
         scores = rankfunction(population)
-        print "Generation:", i+1, "Score:", scores[0][0]
+        print "Generation:", i+1, "Best Score:", scores[0][0]
         if scores[0][0] == 0: break
 
         # The two best always make it
@@ -252,7 +257,7 @@ def getstats(rounds=50, incprobnew=False, evolvebest=0):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
         scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, \
-                                   incprobnew=incprobnew, evolvebest=evolvebest)
+                                   )
         best = scores[0][1]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
