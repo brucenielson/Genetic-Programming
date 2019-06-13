@@ -209,7 +209,7 @@ def getstats(rounds=50, penalizecomplexity=False, doublemutate=False):
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.1, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, \
+        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, \
                                      penalizecomplexity=penalizecomplexity, doublemutate=doublemutate)
         best = scores[0][1]
         score = scorefunction(best, dataset)
