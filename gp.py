@@ -177,9 +177,9 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
                 if adj_mutate > 0.5: adj_mutate = 0.5
 
         if penalizecomplexity:
-            print "Generation:", i+1, "Best Score:", scores[0][0], "Mutate:", adj_mutate, "Time:", scores[0][2]
+            print "Generation:", i+1, "Best Score:", scores[0][0], "Time:", scores[0][2]
         else:
-            print "Generation:", i+1, "Best Score:", scores[0][0], "Mutate:", adj_mutate
+            print "Generation:", i+1, "Best Score:", scores[0][0]
         if scores[0][0] == 0: break
 
         # The two best always make it
