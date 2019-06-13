@@ -3,19 +3,18 @@ from copy import deepcopy
 from math import log
 import datetime
 import stats
-
-class fwrapper:
-    def __init__(self, function, childcount, name):
-        self.function = function
-        self.childcount = childcount
-        self.name = name
+import functionwrapper as fw
+import operator
 
 
 class node:
+    treecounter = 0
     def __init__(self, fw, children):
         self.function = fw.function
         self.name = fw.name
         self.children = children
+        self.id = node.treecounter
+        node.treecounter += 1
 
     def evaluate(self, inp):
         results = [n.evaluate(inp) for n in self.children]
@@ -39,62 +38,39 @@ class paramnode:
 
 
 class constnode:
-    def __init__(self, v):
-        self.v = v
+    def __init__(self, value):
+        self.value = value
 
     def evaluate(self, inp):
-        return self.v
+        return self.value
 
     def display(self, indent=0):
-        print '%s%d' % (' ' * indent, self.v)
+        print '%s%d' % (' ' * indent, self.value)
 
 
-addw = fwrapper(lambda l: l[0] + l[1], 2, 'add')
-subw = fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
-mulw = fwrapper(lambda l: l[0] * l[1], 2, 'multiply')
+
+class exampletree(node):
+    def __init__(self):
+        children = [node(fw.gtw, [paramnode(0), constnode(3)]),
+                    node(fw.addw, [paramnode(1), constnode(5)]),
+                    node(fw.subw, [paramnode(1), constnode(2)])]
+
+        node.__init__(self, fw.ifw, children)
 
 
-def iffunc(l):
-    if l[0] > 0:
-        return l[1]
-    else:
-        return l[2]
-
-
-ifw = fwrapper(iffunc, 3, 'if')
-
-
-def isgreater(l):
-    if l[0] > l[1]:
-        return 1
-    else:
-        return 0
-
-
-gtw = fwrapper(isgreater, 2, 'isgreater')
-
-flist = [addw, mulw, ifw, gtw, subw]
-
-
-def exampletree():
-    return node(ifw, [
-        node(gtw, [paramnode(0), constnode(3)]),
-        node(addw, [paramnode(1), constnode(5)]),
-        node(subw, [paramnode(1), constnode(2)]),
-    ]
-                )
 
 
 def makerandomtree(pc, maxdepth=4, fpr=0.5, ppr=0.6):
     if random() < fpr and maxdepth > 0:
-        f = choice(flist)
+        f = choice(fw.flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
-                    for i in range(f.childcount)]
+                    for i in range(f.params)]
         return node(f, children)
     elif random() < ppr:
         return paramnode(randint(0, pc - 1))
     else:
         return constnode(randint(0, 10))
+
 
 
 def hiddenfunction(x, y):
@@ -110,12 +86,20 @@ def buildhiddenset():
     return rows
 
 
-def scorefunction(tree, s):
+def scorefunction(tree, dataset, penalizecomplexity=False):
+    start = datetime.datetime.now()
     dif = 0
-    for data in s:
-        v = tree.evaluate([data[0], data[1]])
-        dif += abs(v - data[2])
-    return dif
+    for row in dataset:
+        val = tree.evaluate([row[0], row[1]])
+        dif += abs(val - row[2])
+
+    if penalizecomplexity == False:
+        return (dif, tree)
+    else:
+        end = datetime.datetime.now()
+        delta = end - start
+        seconds = delta.total_seconds()
+        return (dif, tree, seconds)
 
 
 def mutate(t, pc, probchange=0.1):
@@ -128,38 +112,74 @@ def mutate(t, pc, probchange=0.1):
         return result
 
 
-def crossover(t1, t2, probswap=0.7, top=1):
+def crossover(t1, t2, probswap=0.1, top=True):
+    # print "t1:", getattr(t1, "id", -1), "t2:", getattr(t2, "id", -1)
     if random() < probswap and not top:
+        # print "return t2:", getattr(t2, "id", -1)
         return deepcopy(t2)
     else:
         result = deepcopy(t1)
         if hasattr(t1, 'children') and hasattr(t2, 'children'):
-            result.children = [crossover(c, choice(t2.children), probswap, 0)
+            result.children = [crossover(c, choice(t2.children), probswap, top=False)
                                for c in t1.children]
+        # print "return crossover:", getattr(result, "id", -1)
         return result
 
 
 def getrankfunction(dataset):
-    def rankfunction(population):
-        scores = [(scorefunction(t, dataset), t) for t in population]
-        scores.sort()
+    def rankfunction(population, penalizecomplexity=False):
+        scores = [scorefunction(t, dataset, penalizecomplexity) for t in population]
+        # scores.sort()
+        scores = sorted(scores, key=operator.itemgetter(0, 2))
         return scores
 
     return rankfunction
 
 
+def getscore(scores):
+    vals = [(row[0], getattr(row[1],"id", -1)) for row in scores]
+    return vals
+
+
+def getids(population):
+    vals = [getattr(row, "id", -1) for row in population]
+    return vals
+
+
+
 def evolve(pc, popsize, rankfunction, maxgen=500,
-           mutationrate=0.1, breedingrate=0.4, pexp=0.7, pnew=0.05):
+           mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
+           penalizecomplexity=False, doublemutate=True):
     # Returns a random number, tending towards lower numbers. The lower pexp
     # is, more lower numbers you will get
     def selectindex():
-        return int(log(random()) / log(pexp))
+        return int(log(random()) / log(fitnesspref))
 
     # Create a random initial population
     population = [makerandomtree(pc) for i in range(popsize)]
+    lastscore = None
+    stuckcounter = 0
     for i in range(maxgen):
-        scores = rankfunction(population)
-        print "Generation:", i+1, "Score:", scores[0][0]
+        scores = rankfunction(population, penalizecomplexity)
+
+        # If we get same value too often, allow in new random nodes
+        adj_mutate = mutationrate
+        if doublemutate:
+            if scores[0][2] == lastscore:
+                stuckcounter += 1
+            else:
+                stuckcounter = 0
+
+            lastscore = scores[0][2]
+
+            if stuckcounter > 0:
+                adj_mutate = mutationrate + 2.0*(float(stuckcounter)/100.0)
+                if adj_mutate > 0.5: adj_mutate = 0.5
+
+        if penalizecomplexity:
+            print "Generation:", i+1, "Best Score:", scores[0][0], "Time:", scores[0][2]
+        else:
+            print "Generation:", i+1, "Best Score:", scores[0][0]
         if scores[0][0] == 0: break
 
         # The two best always make it
@@ -167,34 +187,36 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
         # Build the next generation
         while len(newpop) < popsize:
-            if random() > pnew:
+            if random() > probnew:
                 newpop.append(mutate(
                     crossover(scores[selectindex()][1],
                               scores[selectindex()][1],
                               probswap=breedingrate),
-                    pc, probchange=mutationrate))
+                    pc, probchange=adj_mutate))
             else:
                 # Add a random node to mix things up
                 newpop.append(makerandomtree(pc))
 
         population = newpop
     scores[0][1].display()
-    return (scores[0][1], i+1)
+    return (scores, i+1)
 
 
-def getstats(rounds=50):
+def getstats(rounds=50, penalizecomplexity=False, doublemutate=False):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        best, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.2, breedingrate=0.1, pexp=0.7, pnew=0.1)
+        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, \
+                                     penalizecomplexity=penalizecomplexity, doublemutate=doublemutate)
+        best = scores[0][1]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
         delta = end - start
         seconds = delta.total_seconds()
-        row = (score, seconds, generations, best)
+        row = (score[0], seconds, generations, best)
         tries.append(row)
 
     scores = [row[0] for row in tries]
@@ -211,7 +233,7 @@ def getstats(rounds=50):
     avg_generations = sum(generations) / len(generations)
     std_generations = stats.stddev(generations)
 
-
+    # print "Final Population", getids(population)
     print "# of Successes:", successes
     print "Average Score:", avg_score, "StD:", round(std_score, 2)
     print "Average Time (Seconds):", avg_time, "StD:", round(std_time, 2)
@@ -219,115 +241,3 @@ def getstats(rounds=50):
 
     return successes, avg_score, avg_time, avg_generations
 
-
-
-def gridgame(p):
-    # Board size
-    max = (3, 3)
-
-    # Remember the last move for each player
-    lastmove = [-1, -1]
-
-    # Remember the player's locations
-    location = [[randint(0, max[0]), randint(0, max[1])]]
-
-    # Put the second player a sufficient distance from the first
-    location.append([(location[0][0] + 2) % 4, (location[0][1] + 2) % 4])
-    # Maximum of 50 moves before a tie
-    for o in range(50):
-
-        # For each player
-        for i in range(2):
-            locs = location[i][:] + location[1 - i][:]
-            locs.append(lastmove[i])
-            move = p[i].evaluate(locs) % 4
-
-            # You lose if you move the same direction twice in a row
-            if lastmove[i] == move: return 1 - i
-            lastmove[i] = move
-            if move == 0:
-                location[i][0] -= 1
-                # Board wraps
-                if location[i][0] < 0: location[i][0] = 0
-            if move == 1:
-                location[i][0] += 1
-                if location[i][0] > max[0]: location[i][0] = max[0]
-            if move == 2:
-                location[i][1] -= 1
-                if location[i][1] < 0: location[i][1] = 0
-            if move == 3:
-                location[i][1] += 1
-                if location[i][1] > max[1]: location[i][1] = max[1]
-
-            # If you have captured the other player, you win
-            if location[i] == location[1 - i]: return i
-    return -1
-
-
-def tournament(pl):
-    # Count losses
-    losses = [0 for p in pl]
-
-    # Every player plays every other player
-    for i in range(len(pl)):
-        for j in range(len(pl)):
-            if i == j: continue
-
-            # Who is the winner?
-            winner = gridgame([pl[i], pl[j]])
-
-            # Two points for a loss, one point for a tie
-            if winner == 0:
-                losses[j] += 2
-            elif winner == 1:
-                losses[i] += 2
-            elif winner == -1:
-                losses[i] += 1
-                losses[j] += 1
-                pass
-
-    # Sort and return the results
-    z = zip(losses, pl)
-    z.sort()
-    return z
-
-
-class humanplayer:
-    def evaluate(self, board):
-
-        # Get my location and the location of other players
-        me = tuple(board[0:2])
-        others = [tuple(board[x:x + 2]) for x in range(2, len(board) - 1, 2)]
-
-        # Display the board
-        for i in range(4):
-            for j in range(4):
-                if (i, j) == me:
-                    print 'O',
-                elif (i, j) in others:
-                    print 'X',
-                else:
-                    print '.',
-            print
-
-        # Show moves, for reference
-        print 'Your last move was %d' % board[len(board) - 1]
-        print ' 0'
-        print '2 3'
-        print ' 1'
-        print 'Enter move: ',
-
-        # Return whatever the user enters
-        move = int(raw_input())
-        return move
-
-
-class fwrapper:
-    def __init__(self, function, params, name):
-        self.function = function
-        self.childcount = params
-        self.name = name
-
-
-# flist={'str':[substringw,concatw],'int':[indexw]}
-flist = [addw, mulw, ifw, gtw, subw]
