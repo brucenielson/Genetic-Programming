@@ -14,14 +14,20 @@ class node:
         self.name = fw.name
         self.children = children
         self.id = node.treecounter
+        self.lock = False
         node.treecounter += 1
+
 
     def evaluate(self, inp):
         results = [n.evaluate(inp) for n in self.children]
         return self.function(results)
 
     def display(self, indent=0):
-        print (' ' * indent) + self.name
+        if self.lock:
+            add = "*"
+        else:
+            add = ""
+        print (' ' * indent) + self.name + add
         for c in self.children:
             c.display(indent + 1)
 
@@ -102,6 +108,23 @@ def scorefunction(tree, dataset, penalizecomplexity=False):
         return (dif, tree, seconds)
 
 
+
+def modularize(t, probchange=0.05, top=True):
+    result = deepcopy(t)
+
+    if not hasattr(result, "children"):
+        return result
+    if result.lock:
+        return result
+    if random() < probchange and not top:
+        result.lock = True
+        return result
+    else:
+        result.children = [modularize(c, probchange, top=False) for c in result.children]
+        return result
+
+
+
 def mutate(t, pc, probchange=0.1):
     if random() < probchange:
         return makerandomtree(pc)
@@ -109,6 +132,7 @@ def mutate(t, pc, probchange=0.1):
         result = deepcopy(t)
         if hasattr(t, "children"):
             result.children = [mutate(c, pc, probchange) for c in t.children]
+
         return result
 
 
@@ -119,7 +143,7 @@ def crossover(t1, t2, probswap=0.1, top=True):
         return deepcopy(t2)
     else:
         result = deepcopy(t1)
-        if hasattr(t1, 'children') and hasattr(t2, 'children'):
+        if hasattr(t1, 'children') and hasattr(t2, 'children') and not getattr(result, "lock", False):
             result.children = [crossover(c, choice(t2.children), probswap, top=False)
                                for c in t1.children]
         # print "return crossover:", getattr(result, "id", -1)
@@ -184,6 +208,9 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
         # The two best always make it
         newpop = [scores[0][1], scores[1][1]]
+
+        # Next two are same as first two, but modularized
+        newpop.append(modularize(newpop[0]))
 
         # Build the next generation
         while len(newpop) < popsize:
