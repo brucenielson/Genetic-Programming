@@ -153,8 +153,11 @@ def crossover(t1, t2, probswap=0.1, top=True):
 def getrankfunction(dataset):
     def rankfunction(population, penalizecomplexity=False):
         scores = [scorefunction(t, dataset, penalizecomplexity) for t in population]
-        # scores.sort()
-        scores = sorted(scores, key=operator.itemgetter(0, 2))
+        if penalizecomplexity:
+            scores = sorted(scores, key=operator.itemgetter(0, 2))
+        else:
+            scores.sort()
+
         return scores
 
     return rankfunction
@@ -170,10 +173,9 @@ def getids(population):
     return vals
 
 
-
 def evolve(pc, popsize, rankfunction, maxgen=500,
-           mutationrate=0.1, breedingrate=0.3, fitnesspref=0.7, probnew=0.05,
-           penalizecomplexity=False, doublemutate=True):
+           mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1,
+           penalizecomplexity=False, detectstuck=False, modularize=False, mute=False):
     # Returns a random number, tending towards lower numbers. The lower pexp
     # is, more lower numbers you will get
     def selectindex():
@@ -186,9 +188,9 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     for i in range(maxgen):
         scores = rankfunction(population, penalizecomplexity)
 
-        # If we get same value too often, allow in new random nodes
+        # If we get same value too often, take action
         adj_mutate = mutationrate
-        if doublemutate:
+        if detectstuck:
             if scores[0][2] == lastscore:
                 stuckcounter += 1
             else:
@@ -197,20 +199,23 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
             lastscore = scores[0][2]
 
             if stuckcounter > 0:
-                adj_mutate = mutationrate + 2.0*(float(stuckcounter)/100.0)
+                adj_mutate = mutationrate + 2.0 * (float(stuckcounter) / 100.0)
                 if adj_mutate > 0.5: adj_mutate = 0.5
 
-        if penalizecomplexity:
-            print "Generation:", i+1, "Best Score:", scores[0][0], "Time:", scores[0][2]
-        else:
-            print "Generation:", i+1, "Best Score:", scores[0][0]
+        if not mute:
+            if penalizecomplexity:
+                print "Generation:", i + 1, "Best Score:", scores[0][0], "Time:", scores[0][2]
+            else:
+                print "Generation:", i + 1, "Best Score:", scores[0][0]
+
         if scores[0][0] == 0: break
 
         # The two best always make it
         newpop = [scores[0][1], scores[1][1]]
 
-        # Next two are same as first two, but modularized
-        newpop.append(modularize(newpop[0]))
+        if modularize:
+            # Next one is same as first one, but modularized
+            newpop.append(modularize(newpop[0]))
 
         # Build the next generation
         while len(newpop) < popsize:
@@ -225,19 +230,24 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
                 newpop.append(makerandomtree(pc))
 
         population = newpop
-    scores[0][1].display()
-    return (scores, i+1)
+
+    if not mute:
+        print "******"
+        print "Best Tree Found:"
+        scores[0][1].display()
+
+    return (scores, i + 1)
 
 
-def getstats(rounds=50, penalizecomplexity=False, doublemutate=False):
+def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=False, detectstuck=False, mute=False):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
         print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        scores, generations = evolve(2, 500, rf, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, \
-                                     penalizecomplexity=penalizecomplexity, doublemutate=doublemutate)
+        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, \
+                                     penalizecomplexity=penalizecomplexity, detectstuck=detectstuck, mute=mute)
         best = scores[0][1]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
