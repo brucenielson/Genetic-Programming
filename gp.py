@@ -109,7 +109,8 @@ def scorefunction(tree, dataset, penalizecomplexity=False):
 
 
 
-def modularize(t, probchange=0.05, top=True):
+# This is the locksubtree function that locks subtrees
+def locksubtree(t, probchange=0.05, top=True):
     result = deepcopy(t)
 
     if not hasattr(result, "children"):
@@ -120,8 +121,9 @@ def modularize(t, probchange=0.05, top=True):
         result.lock = True
         return result
     else:
-        result.children = [modularize(c, probchange, top=False) for c in result.children]
+        result.children = [locksubtree(c, probchange, top=False) for c in result.children]
         return result
+
 
 
 
@@ -215,7 +217,7 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
         if modularize:
             # Next one is same as first one, but modularized
-            newpop.append(modularize(newpop[0]))
+            newpop.append(locksubtree(newpop[0]))
 
         # Build the next generation
         while len(newpop) < popsize:
@@ -239,15 +241,15 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     return (scores, i + 1)
 
 
-def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=False, detectstuck=False, mute=False):
+def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=False, modularize=False, mute=False):
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
-        print "*******Round: ", i+1, "*******"
+        if not mute:
+          print "*******Round: ", i+1, "*******"
         start = datetime.datetime.now()
-        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, \
-                                     penalizecomplexity=penalizecomplexity, detectstuck=detectstuck, mute=mute)
+        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, modularize=modularize, mute=mute)
         best = scores[0][1]
         score = scorefunction(best, dataset)
         end = datetime.datetime.now()
@@ -277,4 +279,20 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     print "Average Generations:", avg_generations, "StD:", round(std_generations, 2)
 
     return successes, avg_score, avg_time, avg_generations
+
+def runexperiment():
+    # print "Default********************"
+    # getstats(rounds=100, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, mute=True)
+    # print " "
+    # print " "
+    # print "Best Paramaters************"
+    # getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
+    # print " "
+    # print " "
+    # print "Penalize Complexity*********"
+    # getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
+    # print " "
+    # print " "
+    print "Modualization*********"
+    getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, modularize=True, mute=True)
 

@@ -1,0 +1,1 @@
+C:\Python27\python -m nuitka --standalone --mingw64 gp.py

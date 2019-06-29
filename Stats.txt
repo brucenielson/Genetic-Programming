@@ -1,0 +1,33 @@
+Default********************
+# of Successes: 49
+Average Score: 1508 StD: 1723.85
+Average Time (Seconds): 93.82101 StD: 77.17
+Average Generations: 36 StD: 16.58
+ 
+ 
+Best Paramaters************
+# of Successes: 61
+Average Score: 904 StD: 1238.38
+Average Time (Seconds): 129.71456 StD: 141.34
+Average Generations: 29 StD: 17.69
+ 
+ 
+Penalize Complexity*********
+# of Successes: 60
+Average Score: 931 StD: 1242.01
+Average Time (Seconds): 95.72787 StD: 103.4
+Average Generations: 29 StD: 17.8
+ 
+ 
+Modualization? No this was actually just Penalize Complexity*********
+# of Successes: 68
+Average Score: 829 StD: 1250.79
+Average Time (Seconds): 89.85775 StD: 110.95
+Average Generations: 27 StD: 17.44
+
+
+Modualization*********
+# of Successes: 61
+Average Score: 944 StD: 1290.97
+Average Time (Seconds): 101.70307 StD: 101.87
+Average Generations: 29 StD: 17.78
