@@ -31,3 +31,19 @@ Modualization*********
 Average Score: 944 StD: 1290.97
 Average Time (Seconds): 101.70307 StD: 101.87
 Average Generations: 29 StD: 17.78
+
+
+Best Param vs Penalize Complexity:
+
+Best Paramaters************
+# of Successes: 158 StD 120.81 % 0.632 StD: 0.48
+Average Score: 912 StD: 1299.04
+Average Time (Seconds): 132.42634 StD: 141.76
+Average Generations: 28 StD: 17.69
+
+
+Penalize Complexity*********
+# of Successes: 167 StD 117.97 % 0.668 StD: 0.47
+Average Score: 859 StD: 1280.82
+Average Time (Seconds): 100.376604 StD: 123.02
+Average Generations: 27 StD: 17.35

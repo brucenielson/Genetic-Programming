@@ -282,7 +282,7 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     std_generations = stats.stddev(generations)
 
     # print "Final Population", getids(population)
-    print "# of Successes:", successes, "StD", round(std_successes * float(rounds),2), "%", success_perc, "StD:", round(std_successes, 2)
+    print "# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2)
     print "Average Score:", avg_score, "StD:", round(std_score, 2)
     print "Average Time (Seconds):", avg_time, "StD:", round(std_time, 2)
     print "Average Generations:", avg_generations, "StD:", round(std_generations, 2)
