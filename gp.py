@@ -295,11 +295,11 @@ def runexperiment():
     # print " "
     # print " "
     print("Best Paramaters************")
-    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
     print(" ")
     print(" ")
     print("Penalize Complexity*********")
-    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
     # print " "
     # print " "
     # print "Modualization*********"
