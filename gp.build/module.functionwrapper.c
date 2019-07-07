@@ -75,13 +75,13 @@ static bool constants_created = false;
 /* Function to create module private constants. */
 static void createModuleConstants( void )
 {
-    const_str_digest_138f156feee319e4aad63e09468300c9 = UNSTREAM_STRING( &constant_bin[ 2424 ], 18, 0 );
-    const_str_plain_isgreater = UNSTREAM_STRING( &constant_bin[ 2442 ], 9, 1 );
-    const_str_plain_multiply = UNSTREAM_STRING( &constant_bin[ 2451 ], 8, 1 );
+    const_str_digest_138f156feee319e4aad63e09468300c9 = UNSTREAM_STRING( &constant_bin[ 2458 ], 18, 0 );
+    const_str_plain_isgreater = UNSTREAM_STRING( &constant_bin[ 2476 ], 9, 1 );
+    const_str_plain_multiply = UNSTREAM_STRING( &constant_bin[ 2485 ], 8, 1 );
     const_tuple_str_plain_p_tuple = PyTuple_New( 1 );
     const_str_plain_p = UNSTREAM_CHAR( 112, 1 );
     PyTuple_SET_ITEM( const_tuple_str_plain_p_tuple, 0, const_str_plain_p ); Py_INCREF( const_str_plain_p );
-    const_str_plain_if = UNSTREAM_STRING( &constant_bin[ 642 ], 2, 1 );
+    const_str_plain_if = UNSTREAM_STRING( &constant_bin[ 1089 ], 2, 1 );
     const_tuple_1be43531bb3043f6f3d322d028adb67a_tuple = PyTuple_New( 4 );
     PyTuple_SET_ITEM( const_tuple_1be43531bb3043f6f3d322d028adb67a_tuple, 0, const_str_plain_self ); Py_INCREF( const_str_plain_self );
     PyTuple_SET_ITEM( const_tuple_1be43531bb3043f6f3d322d028adb67a_tuple, 1, const_str_plain_function ); Py_INCREF( const_str_plain_function );
@@ -90,12 +90,12 @@ static void createModuleConstants( void )
     const_tuple_str_plain_l_tuple = PyTuple_New( 1 );
     const_str_plain_l = UNSTREAM_CHAR( 108, 1 );
     PyTuple_SET_ITEM( const_tuple_str_plain_l_tuple, 0, const_str_plain_l ); Py_INCREF( const_str_plain_l );
-    const_str_plain_subtract = UNSTREAM_STRING( &constant_bin[ 2459 ], 8, 1 );
-    const_str_plain_iffunc = UNSTREAM_STRING( &constant_bin[ 2467 ], 6, 1 );
-    const_str_plain_mulw = UNSTREAM_STRING( &constant_bin[ 2473 ], 4, 1 );
-    const_str_plain_fwrapper = UNSTREAM_STRING( &constant_bin[ 2477 ], 8, 1 );
-    const_str_digest_28aa9e7bb019e0090ae409cea7c01fed = UNSTREAM_STRING( &constant_bin[ 2485 ], 24, 0 );
-    const_str_angle_lambda = UNSTREAM_STRING( &constant_bin[ 2509 ], 8, 0 );
+    const_str_plain_subtract = UNSTREAM_STRING( &constant_bin[ 2493 ], 8, 1 );
+    const_str_plain_iffunc = UNSTREAM_STRING( &constant_bin[ 2501 ], 6, 1 );
+    const_str_plain_mulw = UNSTREAM_STRING( &constant_bin[ 2507 ], 4, 1 );
+    const_str_plain_fwrapper = UNSTREAM_STRING( &constant_bin[ 2511 ], 8, 1 );
+    const_str_digest_28aa9e7bb019e0090ae409cea7c01fed = UNSTREAM_STRING( &constant_bin[ 2519 ], 24, 0 );
+    const_str_angle_lambda = UNSTREAM_STRING( &constant_bin[ 2543 ], 8, 0 );
 
     constants_created = true;
 }

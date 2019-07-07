@@ -27,7 +27,7 @@ class node:
             add = "*"
         else:
             add = ""
-        print (' ' * indent) + self.name + add
+        print( (' ' * indent) + self.name + add)
         for c in self.children:
             c.display(indent + 1)
 
@@ -40,7 +40,7 @@ class paramnode:
         return inp[self.idx]
 
     def display(self, indent=0):
-        print '%sp%d' % (' ' * indent, self.idx)
+        print('%sp%d' % (' ' * indent, self.idx))
 
 
 class constnode:
@@ -51,7 +51,7 @@ class constnode:
         return self.value
 
     def display(self, indent=0):
-        print '%s%d' % (' ' * indent, self.value)
+        print('%s%d' % (' ' * indent, self.value))
 
 
 
@@ -158,7 +158,7 @@ def getrankfunction(dataset):
         if penalizecomplexity:
             scores = sorted(scores, key=operator.itemgetter(0, 2))
         else:
-            scores.sort()
+            scores = sorted(scores, key=operator.itemgetter(0))
 
         return scores
 
@@ -206,9 +206,9 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
 
         if not mute:
             if penalizecomplexity:
-                print "Generation:", i + 1, "Best Score:", scores[0][0], "Time:", scores[0][2]
+                print("Generation:", i + 1, "Best Score:", scores[0][0], "Time:", scores[0][2])
             else:
-                print "Generation:", i + 1, "Best Score:", scores[0][0]
+                print("Generation:", i + 1, "Best Score:", scores[0][0])
 
         if scores[0][0] == 0: break
 
@@ -234,8 +234,8 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
         population = newpop
 
     if not mute:
-        print "******"
-        print "Best Tree Found:"
+        print("******")
+        print("Best Tree Found:")
         scores[0][1].display()
 
     return (scores, i + 1)
@@ -247,7 +247,7 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     tries = []
     for i in range(rounds):
         if not mute:
-          print "*******Round: ", i+1, "*******"
+          print("*******Round: ", i+1, "*******")
         start = datetime.datetime.now()
         scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, modularize=modularize, mute=mute)
         best = scores[0][1]
@@ -282,10 +282,10 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     std_generations = stats.stddev(generations)
 
     # print "Final Population", getids(population)
-    print "# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2)
-    print "Average Score:", avg_score, "StD:", round(std_score, 2)
-    print "Average Time (Seconds):", avg_time, "StD:", round(std_time, 2)
-    print "Average Generations:", avg_generations, "StD:", round(std_generations, 2)
+    print("# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2))
+    print("Average Score:", avg_score, "StD:", round(std_score, 2))
+    print("Average Time (Seconds):", avg_time, "StD:", round(std_time, 2))
+    print("Average Generations:", avg_generations, "StD:", round(std_generations, 2))
 
     return successes, avg_score, avg_time, avg_generations
 
@@ -294,12 +294,12 @@ def runexperiment():
     # getstats(rounds=100, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, mute=True)
     # print " "
     # print " "
-    print "Best Paramaters************"
-    getstats(rounds=250, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
-    print " "
-    print " "
-    print "Penalize Complexity*********"
-    getstats(rounds=250, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
+    print("Best Paramaters************")
+    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    print(" ")
+    print(" ")
+    print("Penalize Complexity*********")
+    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
     # print " "
     # print " "
     # print "Modualization*********"
