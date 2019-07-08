@@ -72,8 +72,8 @@ PyObject *const_str_plain___metaclass__;
 PyObject *const_str_plain__initializing;
 PyObject *const_str_plain___class_getitem__;
 PyObject *const_str_plain_submodule_search_locations;
-PyObject *const_str_digest_478eb3e7966ca42168418b19ed615522;
-PyObject *const_str_digest_f991db4eb2a5fe951da05f90abfe246b;
+PyObject *const_str_digest_6de5855651d8835e19f0219a160bc8ba;
+PyObject *const_str_digest_9eba47f18b2f1b957086ae148e9796b9;
 
 static void _createGlobalConstants( void )
 {
@@ -150,27 +150,27 @@ static void _createGlobalConstants( void )
     const_str_plain__initializing = UNSTREAM_STRING_ASCII( &constant_bin[ 427 ], 13, 1 );
     const_str_plain___class_getitem__ = UNSTREAM_STRING_ASCII( &constant_bin[ 440 ], 17, 1 );
     const_str_plain_submodule_search_locations = UNSTREAM_STRING_ASCII( &constant_bin[ 457 ], 26, 1 );
-    const_str_digest_478eb3e7966ca42168418b19ed615522 = UNSTREAM_STRING_ASCII( &constant_bin[ 483 ], 22, 0 );
-    const_str_digest_f991db4eb2a5fe951da05f90abfe246b = UNSTREAM_STRING_ASCII( &constant_bin[ 483 ], 11, 0 );
+    const_str_digest_6de5855651d8835e19f0219a160bc8ba = UNSTREAM_STRING_ASCII( &constant_bin[ 483 ], 71, 0 );
+    const_str_digest_9eba47f18b2f1b957086ae148e9796b9 = UNSTREAM_STRING_ASCII( &constant_bin[ 554 ], 11, 0 );
 
 #if _NUITKA_EXE
     /* Set the "sys.executable" path to the original CPython executable. */
     PySys_SetObject(
         (char *)"executable",
-        const_str_digest_478eb3e7966ca42168418b19ed615522
+        const_str_digest_6de5855651d8835e19f0219a160bc8ba
     );
 
 #ifndef _NUITKA_STANDALONE
     /* Set the "sys.prefix" path to the original one. */
     PySys_SetObject(
         (char *)"prefix",
-        const_str_digest_f991db4eb2a5fe951da05f90abfe246b
+        const_str_digest_9eba47f18b2f1b957086ae148e9796b9
     );
 
     /* Set the "sys.prefix" path to the original one. */
     PySys_SetObject(
         (char *)"exec_prefix",
-        const_str_digest_f991db4eb2a5fe951da05f90abfe246b
+        const_str_digest_9eba47f18b2f1b957086ae148e9796b9
     );
 
 
@@ -178,13 +178,13 @@ static void _createGlobalConstants( void )
     /* Set the "sys.base_prefix" path to the original one. */
     PySys_SetObject(
         (char *)"base_prefix",
-        const_str_digest_f991db4eb2a5fe951da05f90abfe246b
+        const_str_digest_9eba47f18b2f1b957086ae148e9796b9
     );
 
     /* Set the "sys.exec_base_prefix" path to the original one. */
     PySys_SetObject(
         (char *)"base_exec_prefix",
-        const_str_digest_f991db4eb2a5fe951da05f90abfe246b
+        const_str_digest_9eba47f18b2f1b957086ae148e9796b9
     );
 
 #endif

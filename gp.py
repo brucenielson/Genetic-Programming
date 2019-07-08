@@ -305,3 +305,8 @@ def runexperiment():
     # print "Modualization*********"
     # getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, modularize=True, mute=True)
 
+def main():
+    runexperiment()
+
+if __name__ == "__main__":
+    main()
