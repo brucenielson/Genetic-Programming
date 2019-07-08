@@ -1,6 +1,6 @@
 class fwrapper:
-    def __init__(self, function, params, name):
-        self.function = function
+    def __init__(self, funct, params, name):
+        self.function = funct
         self.params = params
         self.name = name
 

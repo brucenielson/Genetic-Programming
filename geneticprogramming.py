@@ -1,13 +1,19 @@
 import numpy as np
 
+# Fake enum types
+NODE = 1
+PARAM_NODE = 2
+CONST_NODE = 3
+
+# Node format
+# [TYPE, Function, name, value or param indx, child1, child2, child3, lock, id]
+# https://docs.scipy.org/doc/numpy/user/basics.rec.html
 
 class tree:
     treecounter = 0
     def __init__(self):
         self.id = tree.treecounter
         tree.treecounter += 1
-        # Node format
-        # [TYPE, Function, ]
 
 
 class node:

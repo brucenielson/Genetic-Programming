@@ -5,6 +5,9 @@ import datetime
 import stats
 import functionwrapper as fw
 import operator
+#from numba import njit, jit
+
+
 
 
 class node:
