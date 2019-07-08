@@ -1,3 +1,22 @@
+Nuitka install error:
+https://github.com/conda/conda/issues/6057
+
+Windows instructions:
+https://stackoverflow.com/questions/33104873/nuitka-on-windows
+
+Tutorial:
+https://sourcecontribute.com/2015/05/02/compiling-python-to-standalone-executables-on-linux-using-nuitka/
+
+clang:
+https://clang.llvm.org/get_started.html
+
+python -m nuitka --standalone --mingw64 --follow-import hello.py
+
+
+https://medium.com/@JBendelbrot/bundling-python-to-really-portable-executable-b453c31110c1
+
+https://nuitka.net/doc/user-manual.html#run-it
+
 # of Successes: 25
 Average Score: 1433
 Average Time (Seconds): 80.30722
