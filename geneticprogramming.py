@@ -6,14 +6,23 @@ PARAM_NODE = 2
 CONST_NODE = 3
 
 # Node format
-# [TYPE, Function, name, value or param indx, child1, child2, child3, lock, id]
+# [TYPE, Function, name, value or param indx, [children], lock, node id]
 # https://docs.scipy.org/doc/numpy/user/basics.rec.html
+# https://docs.scipy.org/doc/numpy/reference/generated/numpy.dtype.html#numpy.dtype
+
+
+class population:
+    def __init__(self, size):
+        pass
 
 class tree:
     treecounter = 0
+    nodecounter = 0
     def __init__(self):
         self.id = tree.treecounter
         tree.treecounter += 1
+        pass
+
 
 
 class node:
