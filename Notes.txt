@@ -16,3 +16,13 @@ python -m nuitka --standalone --mingw64 --follow-import hello.py
 https://medium.com/@JBendelbrot/bundling-python-to-really-portable-executable-b453c31110c1
 
 https://nuitka.net/doc/user-manual.html#run-it
+
+structured arrays
+https://docs.scipy.org/doc/numpy/user/basics.rec.html
+https://www.reddit.com/r/learnpython/comments/2tnldq/how_to_mix_strings_and_floats_in_a_numpy_array/
+
+Cython:
+Installation: https://cython.readthedocs.io/en/latest/src/quickstart/install.html
+Tutorial: https://cython.readthedocs.io/en/latest/src/tutorial/cython_tutorial.html
+Bug: https://stackoverflow.com/questions/56928489/how-to-use-annotate-true-on-cythonize
+
