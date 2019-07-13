@@ -25,4 +25,20 @@ Cython:
 Installation: https://cython.readthedocs.io/en/latest/src/quickstart/install.html
 Tutorial: https://cython.readthedocs.io/en/latest/src/tutorial/cython_tutorial.html
 Bug: https://stackoverflow.com/questions/56928489/how-to-use-annotate-true-on-cythonize
+Book: https://www.packtpub.com/catalogsearch/result/?q=cython
 
+DEAP
+https://deap.readthedocs.io/en/0.7-0/examples/symbreg.html
+
+Julia
+https://julialang.org/
+
+Einstein
+https://link.springer.com/content/pdf/10.1007%2Fs00407-009-0050-5.pdf
+
+
+How to run Cython build:
+python setup.py build_ext --inplace
+
+How to compile Nuitka:
+python -m nuitka --standalone --show-scons  --mingw64 hello.py

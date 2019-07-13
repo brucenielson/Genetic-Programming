@@ -1,0 +1,1 @@
+python -m nuitka --standalone --show-scons --mingw64 hello.py

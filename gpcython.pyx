@@ -2,23 +2,140 @@ from random import random, randint, choice
 from copy import deepcopy
 from math import log
 import datetime
-import stats
-import functionwrapper as fw
 import operator
+from cpython cimport array
+import array
+from libc.stdio cimport printf
 #from numba import njit, jit
 
+# Utility Functions for Cython (when I can't remember how to do it). See: https://cython.readthedocs.io/en/latest/src/tutorial/array.html
+# Note: Type is the available types from the built in Python arrays: https://docs.python.org/3/library/array.html
+# Initially I'm constraining to 'i' = int, 'l' = long, 'd' = double, 'f' = float, 
+# cdef _int_carray_from_list(list l):
+#     cdef array.array a = array.array('i', l)
+#     cdef int[:] ca = a
+#     return ca
+
+# cdef _long_carray_from_list(list l):
+#     cdef array.array a = array.array('l', l)
+#     cdef long[:] ca = a
+#     return ca
+
+# cdef _float_carray_from_list(list l):
+#     cdef array.array a = array.array('f', l)
+#     cdef float[:] ca = a
+#     return ca
+
+cdef double[:] _double_carray_from_list(list l):
+    cdef array.array a = array.array('d', l)
+    cdef double[:] ca = a
+    return ca
+
+
+cdef double[:] carray_from_list(list l):
+    return _double_carray_from_list(l)
+
+
+# Stats Code
+cdef mean(list data):
+    cdef double[:] cdata
+    cdef int size
+    size = len(data)
+    cdata = carray_from_list(data)
+    printf("size:%d\n",size)
+    printf("*\n")
+    print(cdata)
+
+    return cmean(cdata, size)
+
+cdef stddev(list data):
+    cdef double[:] cdata
+    cdef int size
+    size = len(data)
+    cdata = carray_from_list(data)
+    printf("size:%d\n",size)
+    printf("*\n")
+    print(cdata)
+    return cstddev(cdata, size)
+
+
+cdef double cmean(double[:] data, int size):
+    """Return the sample arithmetic mean of data."""
+    cdef double tot
+    if size < 1:
+        raise ValueError('mean requires at least one data point')
+    
+    # Now loop in C and get mean
+    tot = 0
+    for i in range(size):
+        tot += data[i]
+    tot = tot / float(size)
+    return tot
+
+
+cdef double _ss(double[:] data, int size):
+    """Return sum of square deviations of sequence data."""
+    cdef double c, tot
+    c = cmean(data, size)
+    tot = 0
+    # C loop
+    for i in range(size):
+        tot += (data[i] - c)**2
+    return tot
+
+
+cdef double cstddev(double[:] data, int size, int ddof=1):
+    """Calculates the population standard deviation
+    if ddof=0; specify ddof=1 to compute the sample
+    standard deviation. (which I made default)"""
+    cdef double pvar, ss
+    if size < 2:
+        raise ValueError('variance requires at least two data points')
+    ss = _ss(data, size)
+    pvar = ss/(size-ddof)
+    return pvar**0.5
+
+
+# Function Wrapper Code
+class fwrapper:
+    def __init__(self, funct, params, name):
+        self.function = funct
+        self.params = params
+        self.name = name
+
+
+# Functions with 2 parameters
+addw = fwrapper(lambda p: p[0] + p[1], 2, 'add')
+subw = fwrapper(lambda p: p[0] - p[1], 2, 'subtract')
+mulw = fwrapper(lambda p: p[0] * p[1], 2, 'multiply')
+# If and > Function
+def iffunc(l):
+    if l[0] > 0:
+        return l[1]
+    else:
+        return l[2]
+
+ifw = fwrapper(iffunc, 3, 'if')
+
+
+def isgreater(l):
+    if l[0] > l[1]:
+        return 1
+    else:
+        return 0
+gtw = fwrapper(isgreater, 2, 'isgreater')
+
+# List of possible functions
+flist = [addw, mulw, ifw, gtw, subw]
 
 
 
 class node:
-    treecounter = 0
-    def __init__(self, fw, children):
-        self.function = fw.function
-        self.name = fw.name
+    def __init__(self, fwrappper, children):
+        self.function = fwrappper.function
+        self.name = fwrappper.name
         self.children = children
-        self.id = node.treecounter
         self.lock = False
-        node.treecounter += 1
 
 
     def evaluate(self, inp):
@@ -61,18 +178,18 @@ class constnode:
 
 class exampletree(node):
     def __init__(self):
-        children = [node(fw.gtw, [paramnode(0), constnode(3)]),
-                    node(fw.addw, [paramnode(1), constnode(5)]),
-                    node(fw.subw, [paramnode(1), constnode(2)])]
+        children = [node(gtw, [paramnode(0), constnode(3)]),
+                    node(addw, [paramnode(1), constnode(5)]),
+                    node(subw, [paramnode(1), constnode(2)])]
 
-        node.__init__(self, fw.ifw, children)
+        node.__init__(self, ifw, children)
 
 
 
 
 def makerandomtree(pc, maxdepth=4, fpr=0.5, ppr=0.6):
     if random() < fpr and maxdepth > 0:
-        f = choice(fw.flist)
+        f = choice(flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
                     for i in range(f.params)]
         return node(f, children)
@@ -263,8 +380,9 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
         tries.append(row)
 
     scores = [row[0] for row in tries]
-    avg_score = sum(scores) / len(scores)
-    std_score = stats.stddev(scores)
+
+    avg_score = mean(scores)
+    std_score = stddev(scores)
 
     successes = scores.count(0)
     success_perc = float(successes) / float(rounds)
@@ -275,15 +393,15 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     for i in range(failures):
         success_failure.append(0.0)
 
-    std_successes = stats.stddev(success_failure)
+    std_successes = stddev(success_failure)
 
     times = [row[1] for row in tries]
-    avg_time = sum(times) / len(times)
-    std_time = stats.stddev(times)
+    avg_time = mean(times)
+    std_time = stddev(times)
 
     generations = [row[2] for row in tries]
-    avg_generations = sum(generations) / len(generations)
-    std_generations = stats.stddev(generations)
+    avg_generations = mean(generations)
+    std_generations = stddev(generations)
 
     # print "Final Population", getids(population)
     print("# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2))
@@ -298,12 +416,12 @@ def runexperiment():
     # getstats(rounds=100, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, mute=True)
     # print " "
     # print " "
-    print("Best Paramaters************")
-    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
-    print(" ")
-    print(" ")
+    # print("Best Paramaters************")
+    # getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    # print(" ")
+    # print(" ")
     print("Penalize Complexity*********")
-    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    getstats(rounds=2, maxgen=10, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
     # print " "
     # print " "
     # print "Modualization*********"
