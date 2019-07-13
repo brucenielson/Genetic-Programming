@@ -11,51 +11,51 @@ from libc.stdio cimport printf
 # Utility Functions for Cython (when I can't remember how to do it). See: https://cython.readthedocs.io/en/latest/src/tutorial/array.html
 # Note: Type is the available types from the built in Python arrays: https://docs.python.org/3/library/array.html
 # Initially I'm constraining to 'i' = int, 'l' = long, 'd' = double, 'f' = float, 
-# cdef _int_carray_from_list(list l):
-#     cdef array.array a = array.array('i', l)
-#     cdef int[:] ca = a
-#     return ca
+cdef _int_carray_from_list(list l):
+    cdef array.array a = array.array('i', l)
+    cdef int[:] ca = a
+    return ca
 
-# cdef _long_carray_from_list(list l):
-#     cdef array.array a = array.array('l', l)
-#     cdef long[:] ca = a
-#     return ca
+cdef _long_carray_from_list(list l):
+    cdef array.array a = array.array('l', l)
+    cdef long[:] ca = a
+    return ca
 
-# cdef _float_carray_from_list(list l):
-#     cdef array.array a = array.array('f', l)
-#     cdef float[:] ca = a
-#     return ca
+cdef _float_carray_from_list(list l):
+    cdef array.array a = array.array('f', l)
+    cdef float[:] ca = a
+    return ca
 
-cdef double[:] _double_carray_from_list(list l):
+cdef _double_carray_from_list(list l):
     cdef array.array a = array.array('d', l)
     cdef double[:] ca = a
     return ca
 
 
-cdef double[:] carray_from_list(list l):
-    return _double_carray_from_list(l)
+cdef carray_from_list(char type_code, list l):
+    if type_code == 'i':
+        return _int_carray_from_list(l), len(l)
+    elif type_code == 'l':
+        return _long_carray_from_list(l), len(l)
+    elif type_code == 'f':
+        return _float_carray_from_list(l), len(l)
+    elif type_code == 'd':
+        return _double_carray_from_list(l), len(l)
+    else:
+        raise Exception("type_code not a supported type.")
 
 
 # Stats Code
 cdef mean(list data):
     cdef double[:] cdata
     cdef int size
-    size = len(data)
-    cdata = carray_from_list(data)
-    printf("size:%d\n",size)
-    printf("*\n")
-    print(cdata)
-
+    cdata, size = carray_from_list("d", data)
     return cmean(cdata, size)
 
 cdef stddev(list data):
     cdef double[:] cdata
     cdef int size
-    size = len(data)
-    cdata = carray_from_list(data)
-    printf("size:%d\n",size)
-    printf("*\n")
-    print(cdata)
+    cdata, size = carray_from_list("d", data)
     return cstddev(cdata, size)
 
 
@@ -421,7 +421,7 @@ def runexperiment():
     # print(" ")
     # print(" ")
     print("Penalize Complexity*********")
-    getstats(rounds=2, maxgen=10, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    getstats(rounds=2, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
     # print " "
     # print " "
     # print "Modualization*********"
