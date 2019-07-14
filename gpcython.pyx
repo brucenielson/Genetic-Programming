@@ -1,12 +1,14 @@
 from random import random, randint, choice
 from copy import deepcopy
 from math import log
-import datetime
 import operator
 from cpython cimport array
 import array
 from libc.stdio cimport printf
+import time
 #from numba import njit, jit
+
+
 
 
 # Utility Functions for Cython (when I can't remember how to do it). See: https://cython.readthedocs.io/en/latest/src/tutorial/array.html
@@ -96,12 +98,6 @@ cdef double cstddev(double[:] data, int size, int ddof=1):
     pvar = ss/(size-ddof)
     return pvar**0.5
 
-# cdef char* add_str = "add"
-# cdef char* subtract_str = "subtract"
-# cdef char* multiply_str = "multiply"
-# cdef char* if_str = "if"
-# cdef char* isgreater_str = "isgreater"
-
 
 # Function Wrapper Code
 cdef class fwrapper:
@@ -109,27 +105,30 @@ cdef class fwrapper:
     cdef public int params 
     cdef public object name
 
-    def __init__(self, funct, int params, name):
+    def __init__(self, object funct, int params, name):
         self.function = funct
         self.params = params
         self.name = name
 
 
+# ctypedef double(*func_2params)(double, double)
+# ctypedef double(*func_3params)(double, double, double)
+
 # Functions with 2 parameters
-cdef add(double param1, double param2):
+cdef double add(double param1, double param2):
     return param1 + param2
 addw = fwrapper(add, 2, 'add')
 
-cdef subtract(double param1, double param2):
+cdef double subtract(double param1, double param2):
     return param1 - param2
 subw = fwrapper(subtract, 2, 'subtract')
 
-cdef multiply(double param1, double param2):
+cdef double multiply(double param1, double param2):
     return param1 * param2
 mulw = fwrapper(multiply, 2, 'multiply')
 
 # If and > Function - 3 parameter functions
-cdef iffunc(double param1, double param2, double param3):
+cdef double iffunc(double param1, double param2, double param3):
     if param1 > 0:
         return param2
     else:
@@ -138,7 +137,7 @@ cdef iffunc(double param1, double param2, double param3):
 ifw = fwrapper(iffunc, 3, 'if')
 
 
-cdef isgreater(double param1, double param2):
+cdef double isgreater(double param1, double param2):
     if param1 > param2:
         return 1
     else:
@@ -155,27 +154,28 @@ cdef class node:
     cdef public object function
     cdef public object name
     cdef public object children
-    cdef public int lock
+    cdef int lock
 
-    def __init__(self, fwrappper, children):
+    def __init__(self, object fwrappper, object children):
         self.function = fwrappper.function
         self.name = fwrappper.name
         self.children = children
         self.lock = False
 
 
-    cpdef evaluate(self, inp):
+    cpdef double evaluate(self, list inp):
         cdef int size 
         cdef double results[3]
         size = len(self.children)
         for i in range(size):
             results[i] = self.children[i].evaluate(inp)
-        if size == 3:
-            return self.function(results[0], results[1], results[2])
-        else:
+        if size == 1:
+            return self.function(results[0])
+        elif size == 2:
             return self.function(results[0], results[1])
-
-        #return self.function(*results)
+        elif size == 3:
+            return self.function(results[0], results[1], results[2])
+        # TODO: fix to use return self.function(*results)
 
 
     def display(self, indent=0):
@@ -190,12 +190,12 @@ cdef class node:
 
 
 cdef class paramnode:
-    cdef public int idx
+    cdef int idx
 
-    def __init__(self, idx):
+    def __init__(self, int idx):
         self.idx = idx
 
-    cpdef evaluate(self, inp):
+    cpdef double evaluate(self, list inp):
         return inp[self.idx]
 
     def display(self, indent=0):
@@ -203,12 +203,12 @@ cdef class paramnode:
 
 
 cdef class constnode:
-    cdef public double value
+    cdef double value
 
-    def __init__(self, value):
+    def __init__(self, double value):
         self.value = value
 
-    cpdef evaluate(self, inp):
+    cpdef double evaluate(self, list inp):
         return self.value
 
     def display(self, indent=0):
@@ -227,7 +227,7 @@ class exampletree(node):
 
 
 
-def makerandomtree(pc, maxdepth=4, fpr=0.5, ppr=0.6):
+cdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):
     if random() < fpr and maxdepth > 0:
         f = choice(flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
@@ -253,25 +253,27 @@ def buildhiddenset():
     return rows
 
 
-def scorefunction(tree, dataset, penalizecomplexity=False):
-    start = datetime.datetime.now()
+cdef scorefunction(object tree, list dataset, bint penalizecomplexity=False):
+    cdef double dif, val, start, end, x, y, z
+    cdef int i, size
+    start = time.time()
     dif = 0
-    for row in dataset:
-        val = tree.evaluate([row[0], row[1]])
-        dif += abs(val - row[2])
+    size = len(dataset)
+    for i in range(size):
+        x, y, z = dataset[i]
+        val = tree.evaluate([x, y])
+        dif += abs(val - z)
 
     if penalizecomplexity == False:
         return (dif, tree)
     else:
-        end = datetime.datetime.now()
-        delta = end - start
-        seconds = delta.total_seconds()
-        return (dif, tree, seconds)
+        end = time.time()
+        return (dif, tree, end-start)
 
 
 
 # This is the locksubtree function that locks subtrees
-def locksubtree(t, probchange=0.05, top=True):
+cdef locksubtree(object t, float probchange=0.05, bint top=True):
     result = deepcopy(t)
 
     if not hasattr(result, "children"):
@@ -288,7 +290,7 @@ def locksubtree(t, probchange=0.05, top=True):
 
 
 
-def mutate(t, pc, probchange=0.1):
+cdef mutate(object t, int pc, float probchange=0.1):
     if random() < probchange:
         return makerandomtree(pc)
     else:
@@ -299,7 +301,7 @@ def mutate(t, pc, probchange=0.1):
         return result
 
 
-def crossover(t1, t2, probswap=0.1, top=True):
+cdef crossover(object t1, object t2, float probswap=0.1, bint top=True):
     # print "t1:", getattr(t1, "id", -1), "t2:", getattr(t2, "id", -1)
     if random() < probswap and not top:
         # print "return t2:", getattr(t2, "id", -1)
@@ -313,7 +315,7 @@ def crossover(t1, t2, probswap=0.1, top=True):
         return result
 
 
-def getrankfunction(dataset):
+cdef getrankfunction(list dataset):
     def rankfunction(population, penalizecomplexity=False):
         scores = [scorefunction(t, dataset, penalizecomplexity) for t in population]
         if penalizecomplexity:
@@ -326,27 +328,23 @@ def getrankfunction(dataset):
     return rankfunction
 
 
-def getscore(scores):
-    vals = [(row[0], getattr(row[1],"id", -1)) for row in scores]
-    return vals
+cdef selectindex(float fitnesspref):
+    # TODO: https://stackoverflow.com/questions/40976880/canonical-way-to-generate-random-numbers-in-cython?noredirect=1&lq=1
+    r = random()
+    return int(log(r) / log(fitnesspref))
 
 
-def getids(population):
-    vals = [getattr(row, "id", -1) for row in population]
-    return vals
-
-
-def evolve(pc, popsize, rankfunction, maxgen=500,
-           mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1,
-           penalizecomplexity=False, detectstuck=False, modularize=False, mute=False):
+cdef evolve(int pc, int popsize, object rankfunction, int maxgen=500,
+           float mutationrate=0.2, float breedingrate=0.1, float fitnesspref=0.7, float probnew=0.1,
+           bint penalizecomplexity=False, bint detectstuck=False, bint modularize=False, bint mute=False):
+    
     # Returns a random number, tending towards lower numbers. The lower pexp
     # is, more lower numbers you will get
-    def selectindex():
-        return int(log(random()) / log(fitnesspref))
-
+    cdef int i, stuckcounter, lastscore
+    
     # Create a random initial population
     population = [makerandomtree(pc) for i in range(popsize)]
-    lastscore = None
+    lastscore = -1
     stuckcounter = 0
     for i in range(maxgen):
         scores = rankfunction(population, penalizecomplexity)
@@ -384,8 +382,8 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
         while len(newpop) < popsize:
             if random() > probnew:
                 newpop.append(mutate(
-                    crossover(scores[selectindex()][1],
-                              scores[selectindex()][1],
+                    crossover(scores[selectindex(fitnesspref)][1],
+                              scores[selectindex(fitnesspref)][1],
                               probswap=breedingrate),
                     pc, probchange=adj_mutate))
             else:
@@ -402,20 +400,20 @@ def evolve(pc, popsize, rankfunction, maxgen=500,
     return (scores, i + 1)
 
 
-def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=False, modularize=False, mute=False):
+cpdef getstats(int rounds=50, int maxgen=50, float mutationrate=0.05, float breedingrate=0.10, float fitnesspref=0.95, float probnew=0.10, bint penalizecomplexity=False, bint detectstuck = False, bint modularize=False, bint mute=False):
+    cdef int i
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
     for i in range(rounds):
         if not mute:
           print("*******Round: ", i+1, "*******")
-        start = datetime.datetime.now()
-        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, modularize=modularize, mute=mute)
+        start = time.time()
+        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, detectstuck=detectstuck, modularize=modularize, mute=mute)
         best = scores[0][1]
         score = scorefunction(best, dataset)
-        end = datetime.datetime.now()
-        delta = end - start
-        seconds = delta.total_seconds()
+        end = time.time()
+        seconds = end - start
         row = (score[0], seconds, generations, best)
         tries.append(row)
 
@@ -443,7 +441,6 @@ def getstats(rounds=50, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitness
     avg_generations = mean(generations)
     std_generations = stddev(generations)
 
-    # print "Final Population", getids(population)
     print("# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2))
     print("Average Score:", avg_score, "StD:", round(std_score, 2))
     print("Average Time (Seconds):", avg_time, "StD:", round(std_time, 2))
@@ -461,7 +458,7 @@ def runexperiment():
     # print(" ")
     # print(" ")
     print("Penalize Complexity*********")
-    getstats(rounds=2, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    getstats(rounds=250, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
     # print " "
     # print " "
     # print "Modualization*********"

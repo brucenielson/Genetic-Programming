@@ -47,3 +47,11 @@ Penalize Complexity*********
 Average Score: 859 StD: 1280.82
 Average Time (Seconds): 100.376604 StD: 123.02
 Average Generations: 27 StD: 17.35
+
+
+Penalize Complexity*********
+('# of Successes:', 140, 'StD:', 124.35, 'Success %:', 0.56, 'StD:', 0.5)
+('Average Score:', 1084.64, 'StD:', 1366.84)
+('Average Time (Seconds):', 71.98595521600001, 'StD:', 84.99)
+('Average Generations:', 31.696, 'StD:', 17.63)
+
