@@ -8,6 +8,7 @@ import array
 from libc.stdio cimport printf
 #from numba import njit, jit
 
+
 # Utility Functions for Cython (when I can't remember how to do it). See: https://cython.readthedocs.io/en/latest/src/tutorial/array.html
 # Note: Type is the available types from the built in Python arrays: https://docs.python.org/3/library/array.html
 # Initially I'm constraining to 'i' = int, 'l' = long, 'd' = double, 'f' = float, 
@@ -98,6 +99,7 @@ cdef double cstddev(double[:] data, int size, int ddof=1):
 
 # Function Wrapper Code
 class fwrapper:
+
     def __init__(self, funct, params, name):
         self.function = funct
         self.params = params
@@ -105,24 +107,34 @@ class fwrapper:
 
 
 # Functions with 2 parameters
-addw = fwrapper(lambda p: p[0] + p[1], 2, 'add')
-subw = fwrapper(lambda p: p[0] - p[1], 2, 'subtract')
-mulw = fwrapper(lambda p: p[0] * p[1], 2, 'multiply')
-# If and > Function
-def iffunc(l):
-    if l[0] > 0:
-        return l[1]
+cdef add(double param1, double param2):
+    return param1 + param2
+addw = fwrapper(add, 2, 'add')
+
+cdef subtract(double param1, double param2):
+    return param1 - param2
+subw = fwrapper(subtract, 2, 'subtract')
+
+cdef multiply(double param1, double param2):
+    return param1 * param2
+mulw = fwrapper(multiply, 2, 'multiply')
+
+# If and > Function - 3 parameter functions
+cdef iffunc(double param1, double param2, double param3):
+    if param1 > 0:
+        return param2
     else:
-        return l[2]
+        return param3
 
 ifw = fwrapper(iffunc, 3, 'if')
 
 
-def isgreater(l):
-    if l[0] > l[1]:
+cdef isgreater(double param1, double param2):
+    if param1 > param2:
         return 1
     else:
         return 0
+
 gtw = fwrapper(isgreater, 2, 'isgreater')
 
 # List of possible functions
@@ -130,7 +142,12 @@ flist = [addw, mulw, ifw, gtw, subw]
 
 
 
-class node:
+cdef class node:
+    cdef public object function
+    cdef public object name
+    cdef public object children
+    cdef public int lock
+
     def __init__(self, fwrappper, children):
         self.function = fwrappper.function
         self.name = fwrappper.name
@@ -138,9 +155,18 @@ class node:
         self.lock = False
 
 
-    def evaluate(self, inp):
-        results = [n.evaluate(inp) for n in self.children]
-        return self.function(results)
+    cpdef evaluate(self, inp):
+        cdef int size 
+        cdef double results[3]
+        size = len(self.children)
+        for i in range(size):
+            results[i] = self.children[i].evaluate(inp)
+        if size == 3:
+            return self.function(results[0], results[1], results[2])
+        else:
+            return self.function(results[0], results[1])
+
+        return self.function(*results)
 
 
     def display(self, indent=0):
@@ -153,22 +179,26 @@ class node:
             c.display(indent + 1)
 
 
-class paramnode:
+cdef class paramnode:
+    cdef public int idx
+
     def __init__(self, idx):
         self.idx = idx
 
-    def evaluate(self, inp):
+    cpdef evaluate(self, inp):
         return inp[self.idx]
 
     def display(self, indent=0):
         print('%sp%d' % (' ' * indent, self.idx))
 
 
-class constnode:
+cdef class constnode:
+    cdef public double value
+
     def __init__(self, value):
         self.value = value
 
-    def evaluate(self, inp):
+    cpdef evaluate(self, inp):
         return self.value
 
     def display(self, indent=0):
