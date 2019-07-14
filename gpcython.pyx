@@ -96,11 +96,20 @@ cdef double cstddev(double[:] data, int size, int ddof=1):
     pvar = ss/(size-ddof)
     return pvar**0.5
 
+# cdef char* add_str = "add"
+# cdef char* subtract_str = "subtract"
+# cdef char* multiply_str = "multiply"
+# cdef char* if_str = "if"
+# cdef char* isgreater_str = "isgreater"
+
 
 # Function Wrapper Code
-class fwrapper:
+cdef class fwrapper:
+    cdef public object function
+    cdef public int params 
+    cdef public object name
 
-    def __init__(self, funct, params, name):
+    def __init__(self, funct, int params, name):
         self.function = funct
         self.params = params
         self.name = name
@@ -166,7 +175,7 @@ cdef class node:
         else:
             return self.function(results[0], results[1])
 
-        return self.function(*results)
+        #return self.function(*results)
 
 
     def display(self, indent=0):
@@ -174,7 +183,8 @@ cdef class node:
             add = "*"
         else:
             add = ""
-        print( (' ' * indent) + self.name + add)
+        name = str(self.name)
+        print( (' ' * indent) + name + add)
         for c in self.children:
             c.display(indent + 1)
 
