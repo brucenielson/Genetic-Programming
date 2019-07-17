@@ -4,8 +4,10 @@ from math import log
 import operator
 from cpython cimport array
 import array
-from libc.stdio cimport printf
 import time
+from libc.stdio cimport printf
+from libc.stdlib cimport rand, RAND_MAX
+from libc.math cimport log
 #from numba import njit, jit
 
 
@@ -14,6 +16,9 @@ import time
 # Utility Functions for Cython (when I can't remember how to do it). See: https://cython.readthedocs.io/en/latest/src/tutorial/array.html
 # Note: Type is the available types from the built in Python arrays: https://docs.python.org/3/library/array.html
 # Initially I'm constraining to 'i' = int, 'l' = long, 'd' = double, 'f' = float, 
+cdef float crandom() except -1: 
+    return  <float>rand() / <float>RAND_MAX
+
 cdef _int_carray_from_list(list l):
     cdef array.array a = array.array('i', l)
     cdef int[:] ca = a
@@ -228,12 +233,12 @@ class exampletree(node):
 
 
 cdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):
-    if random() < fpr and maxdepth > 0:
+    if crandom() < fpr and maxdepth > 0:
         f = choice(flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)
                     for i in range(f.params)]
         return node(f, children)
-    elif random() < ppr:
+    elif crandom() < ppr:
         return paramnode(randint(0, pc - 1))
     else:
         return constnode(randint(0, 10))
@@ -253,10 +258,11 @@ def buildhiddenset():
     return rows
 
 
-cdef scorefunction(object tree, list dataset, bint penalizecomplexity=False):
+cdef object scorefunction(object tree, list dataset, bint penalizecomplexity=False):
     cdef double dif, val, start, end, x, y, z
     cdef int i, size
-    start = time.time()
+    if penalizecomplexity:
+        start = time.time()
     dif = 0
     size = len(dataset)
     for i in range(size):
@@ -264,23 +270,23 @@ cdef scorefunction(object tree, list dataset, bint penalizecomplexity=False):
         val = tree.evaluate([x, y])
         dif += abs(val - z)
 
-    if penalizecomplexity == False:
-        return (dif, tree)
-    else:
+    if penalizecomplexity:
         end = time.time()
         return (dif, tree, end-start)
+    else:
+        return (dif, tree)
 
 
 
 # This is the locksubtree function that locks subtrees
-cdef locksubtree(object t, float probchange=0.05, bint top=True):
+cdef object locksubtree(object t, float probchange=0.05, bint top=True):
     result = deepcopy(t)
 
     if not hasattr(result, "children"):
         return result
     if result.lock:
         return result
-    if random() < probchange and not top:
+    if crandom() < probchange and not top:
         result.lock = True
         return result
     else:
@@ -290,8 +296,8 @@ cdef locksubtree(object t, float probchange=0.05, bint top=True):
 
 
 
-cdef mutate(object t, int pc, float probchange=0.1):
-    if random() < probchange:
+cdef object mutate(object t, int pc, float probchange=0.1):
+    if crandom() < probchange:
         return makerandomtree(pc)
     else:
         result = deepcopy(t)
@@ -301,9 +307,9 @@ cdef mutate(object t, int pc, float probchange=0.1):
         return result
 
 
-cdef crossover(object t1, object t2, float probswap=0.1, bint top=True):
+cdef object crossover(object t1, object t2, float probswap=0.1, bint top=True):
     # print "t1:", getattr(t1, "id", -1), "t2:", getattr(t2, "id", -1)
-    if random() < probswap and not top:
+    if crandom() < probswap and not top:
         # print "return t2:", getattr(t2, "id", -1)
         return deepcopy(t2)
     else:
@@ -328,13 +334,20 @@ cdef getrankfunction(list dataset):
     return rankfunction
 
 
-cdef selectindex(float fitnesspref):
+cdef int selectindex(float fitnesspref, int popsize) except -1:
     # TODO: https://stackoverflow.com/questions/40976880/canonical-way-to-generate-random-numbers-in-cython?noredirect=1&lq=1
-    r = random()
-    return int(log(r) / log(fitnesspref))
+    cdef float r
+    cdef int val
+    r = crandom() + 0.00000000001
+    return <int>(log(r) / log(fitnesspref))
+    # printf("r: %1.20f; fit: %f; index: %d\n", r, fitnesspref, val)
+    # if val > popsize-1:
+    #     return popsize-1
+    # else:
+    #     return val
 
 
-cdef evolve(int pc, int popsize, object rankfunction, int maxgen=500,
+cdef object evolve(int pc, int popsize, object rankfunction, int maxgen=500,
            float mutationrate=0.2, float breedingrate=0.1, float fitnesspref=0.7, float probnew=0.1,
            bint penalizecomplexity=False, bint detectstuck=False, bint modularize=False, bint mute=False):
     
@@ -380,10 +393,10 @@ cdef evolve(int pc, int popsize, object rankfunction, int maxgen=500,
 
         # Build the next generation
         while len(newpop) < popsize:
-            if random() > probnew:
+            if crandom() > probnew:
                 newpop.append(mutate(
-                    crossover(scores[selectindex(fitnesspref)][1],
-                              scores[selectindex(fitnesspref)][1],
+                    crossover(scores[selectindex(fitnesspref, popsize)][1],
+                              scores[selectindex(fitnesspref, popsize)][1],
                               probswap=breedingrate),
                     pc, probchange=adj_mutate))
             else:
@@ -453,12 +466,12 @@ def runexperiment():
     # getstats(rounds=100, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, mute=True)
     # print " "
     # print " "
-    # print("Best Paramaters************")
-    # getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    print("Best Paramaters************")
+    getstats(rounds=250, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
+    print(" ")
     # print(" ")
-    # print(" ")
-    print("Penalize Complexity*********")
-    getstats(rounds=250, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
+    # print("Penalize Complexity*********")
+    # getstats(rounds=2, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
     # print " "
     # print " "
     # print "Modualization*********"

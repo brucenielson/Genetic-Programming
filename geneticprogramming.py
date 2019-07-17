@@ -6,7 +6,7 @@ PARAM_NODE = 2
 CONST_NODE = 3
 
 # Node format
-# [TYPE, Function, name, value or param indx, [children], lock, node id]
+# [TYPE #, Function #, value or param indx, [children], lock, node id]
 # https://docs.scipy.org/doc/numpy/user/basics.rec.html
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.dtype.html#numpy.dtype
 

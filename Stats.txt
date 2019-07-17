@@ -55,3 +55,25 @@ Penalize Complexity*********
 ('Average Time (Seconds):', 71.98595521600001, 'StD:', 84.99)
 ('Average Generations:', 31.696, 'StD:', 17.63)
 
+Penalize Complexity*********
+('# of Successes:', 144, 'StD:', 123.8, 'Success %:', 0.576, 'StD:', 0.5)
+('Average Score:', 1178.604, 'StD:', 1489.8)
+('Average Time (Seconds):', 73.64418788051606, 'StD:', 78.56)
+('Average Generations:', 31.608, 'StD:', 17.24)
+
+
+
+Run Off:
+
+Compiled:
+Penalize Complexity********* 5.47 hours
+('# of Successes:', 163, 'StD:', 119.32, 'Success %:', 0.652, 'StD:', 0.48)
+('Average Score:', 936.228, 'StD:', 1375.92)
+('Average Time (Seconds):', 78.82897444057464, 'StD:', 97.1)
+('Average Generations:', 27.8, 'StD:', 17.38)
+
+Uncompiled:
+Penalize Complexity********* 7.04 hours
+# of Successes: 172 StD: 116.06 Success %: 0.688 StD: 0.46Average Score: 862.14 StD: 1345.65
+Average Time (Seconds): 101.40096198400006 StD: 116.31
+Average Generations: 26.64 StD: 17.42
