@@ -1,3 +1,7 @@
+#!python
+#cython: boundscheck=False
+#cython: cdivision=True
+
 from random import random, randint, choice
 from copy import deepcopy
 from math import log

@@ -9,6 +9,7 @@ class fwrapper:
 addw = fwrapper(lambda p: p[0] + p[1], 2, 'add')
 subw = fwrapper(lambda p: p[0] - p[1], 2, 'subtract')
 mulw = fwrapper(lambda p: p[0] * p[1], 2, 'multiply')
+
 # If and > Function
 def iffunc(l):
     if l[0] > 0:
