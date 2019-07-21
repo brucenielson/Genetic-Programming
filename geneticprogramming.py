@@ -8,7 +8,7 @@ from random import random, randint
 #TODO: cimport cython
 
 # Fake enum for TYPE#
-NODE = 1
+FUNC_NODE = 1
 PARAM_NODE = 2
 CONST_NODE = 3
 
@@ -76,6 +76,7 @@ VALUE_OR_PARAM = 2
 LOCK = 3
 ID = 4
 CHILD1OFFSET = 5
+CHILDOFFSETS = CHILD1OFFSET
 CHILD1LENGTH = 6
 CHILD2OFFSET = 7
 CHILD2LENGTH = 8
@@ -113,7 +114,7 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id]
     # If this is a function, get number of parameters expected vs of children given
-    if node_type == FUNCTION:
+    if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
         # parameter count and number of children in the list must match or else we have an error
         assert param_count == len(children)
@@ -139,10 +140,10 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
 
 
     node = np.array(node)
-    if node_type == FUNCTION:
+    if node_type == FUNC_NODE:
         tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
     else:
-        tree = node
+        tree = np.array(node).reshape(-1,NUM_COLS)
 
     return tree
 
@@ -152,7 +153,7 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        return createtree(FUNCTION, func_num, children)
+        return createtree(FUNC_NODE, func_num, children)
     elif random() < param_prob:
         return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1))
     else:
@@ -160,18 +161,36 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
 
 
 
-def evaluate(treearray, parameters):
-    pass
-
-
+def evaluate(treearray, input):
+    node = treearray[0]
+    node_type = node[TYPE_COL]
+    if node_type == FUNC_NODE:
+        func_num = node[FUNC_NUM]
+        func_row = func_list[func_num]
+        function = func_row[FUNCTION]
+        param_count = func_row[PARAM_COUNT]
+        values = []
+        for i in range(param_count):
+            offset = node[CHILDOFFSETS + (i*2)]
+            length = node[CHILDOFFSETS + (i*2) + 1]
+            val = evaluate(treearray[offset:offset+length], input)
+            values.append(val)
+        return function(values)
+    elif node_type == PARAM_NODE:
+        param = node[VALUE_OR_PARAM]
+        return input[param]
+    elif node_type == CONST_NODE:
+        return node[VALUE_OR_PARAM]
 
 
 
 def runexperiment():
-    return makerandomtree(2)
+    treearray = makerandomtree(2)
+    print(treearray)
+    print(evaluate(treearray, [5,2]))
 
 def main():
-    return runexperiment()
+    runexperiment()
 
 if __name__ == "__main__":
     main()
