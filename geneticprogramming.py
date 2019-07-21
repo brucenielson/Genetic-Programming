@@ -152,14 +152,15 @@ def evaluate(treearray, input):
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
         func_num = node[FUNC_NUM]
-        func_row = func_list[func_num]
-        function = func_row[FUNCTION]
-        param_count = func_row[PARAM_COUNT]
+        function = func_list[func_num, FUNCTION]
+        param_count = func_list[func_num, PARAM_COUNT]
         values = []
+        col = CHILDOFFSETS
         for i in range(param_count):
-            offset = node[CHILDOFFSETS + (i*2)]
-            length = node[CHILDOFFSETS + (i*2) + 1]
-            val = evaluate(treearray[offset:offset+length], input)
+            start = node[col]
+            length = node[col + 1]
+            col += 2
+            val = evaluate(treearray[start:start+length], input)
             values.append(val)
         return function(values)
     elif node_type == PARAM_NODE:
