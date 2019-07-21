@@ -87,24 +87,6 @@ NUM_COLS = CHILD3LENGTH + 1
 treecounter = 0
 nodes = 0
 
-class tree:
-    # TODO: cdef version of instance variables
-    # cdef list treelist
-    # cdef np.array tree
-    # cdef int id
-    # cdef int next
-    def __init__(self):
-        global treecounter #TODO: extern?
-        self.treelist = []
-        self.tree = None # This will be the numpy array
-        self.id = treecounter
-        treecounter += 1
-        self.next = 0
-
-    def getnextid(self):
-        next = self.next
-        self.next += 1
-        return next
 
 def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
     # Get node id
