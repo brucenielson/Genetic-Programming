@@ -236,7 +236,7 @@ class exampletree(node):
 
 
 
-cdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):
+cpdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):
     if crandom() < fpr and maxdepth > 0:
         f = choice(flist)
         children = [makerandomtree(pc, maxdepth - 1, fpr, ppr)

@@ -3342,8 +3342,9 @@ static PyObject *__pyx_pf_8gpcython_11exampletree___init__(CYTHON_UNUSED PyObjec
 <pre class="cython line score-0">&#xA0;<span class="">236</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">237</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">238</span>: </pre>
-<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">239</span>: cdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):</pre>
-<pre class='cython code score-10 '>static PyObject *__pyx_f_8gpcython_makerandomtree(int __pyx_v_pc, struct __pyx_opt_args_8gpcython_makerandomtree *__pyx_optional_args) {
+<pre class="cython line score-78" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">239</span>: cpdef makerandomtree(int pc, int maxdepth=4, float fpr=0.5, float ppr=0.6):</pre>
+<pre class='cython code score-78 '>static PyObject *__pyx_pw_8gpcython_1makerandomtree(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_8gpcython_makerandomtree(int __pyx_v_pc, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_8gpcython_makerandomtree *__pyx_optional_args) {
   int __pyx_v_maxdepth = ((int)4);
   float __pyx_v_fpr = ((float)0.5);
   float __pyx_v_ppr = ((float)0.6);
@@ -3378,6 +3379,132 @@ static PyObject *__pyx_pf_8gpcython_11exampletree___init__(CYTHON_UNUSED PyObjec
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_f);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_children);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_i);
+  <span class='refnanny'>__Pyx_XGIVEREF</span>(__pyx_r);
+  <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_8gpcython_1makerandomtree(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_8gpcython_1makerandomtree(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_v_pc;
+  int __pyx_v_maxdepth;
+  float __pyx_v_fpr;
+  float __pyx_v_ppr;
+  PyObject *__pyx_r = 0;
+  <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
+  <span class='refnanny'>__Pyx_RefNannySetupContext</span>("makerandomtree (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&amp;__pyx_n_s_pc,&amp;__pyx_n_s_maxdepth,&amp;__pyx_n_s_fpr,&amp;__pyx_n_s_ppr,0};
+    PyObject* values[4] = {0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = <span class='py_macro_api'>PyTuple_GET_SIZE</span>(__pyx_args);
+      switch (pos_args) {
+        case  4: values[3] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = <span class='py_c_api'>PyDict_Size</span>(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = <span class='pyx_c_api'>__Pyx_PyDict_GetItemStr</span>(__pyx_kwds, __pyx_n_s_pc)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (kw_args &gt; 0) {
+          PyObject* value = <span class='pyx_c_api'>__Pyx_PyDict_GetItemStr</span>(__pyx_kwds, __pyx_n_s_maxdepth);
+          if (value) { values[1] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args &gt; 0) {
+          PyObject* value = <span class='pyx_c_api'>__Pyx_PyDict_GetItemStr</span>(__pyx_kwds, __pyx_n_s_fpr);
+          if (value) { values[2] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args &gt; 0) {
+          PyObject* value = <span class='pyx_c_api'>__Pyx_PyDict_GetItemStr</span>(__pyx_kwds, __pyx_n_s_ppr);
+          if (value) { values[3] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args &gt; 0)) {
+        if (unlikely(<span class='pyx_c_api'>__Pyx_ParseOptionalKeywords</span>(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "makerandomtree") &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+      }
+    } else {
+      switch (<span class='py_macro_api'>PyTuple_GET_SIZE</span>(__pyx_args)) {
+        case  4: values[3] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_pc = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[0]); if (unlikely((__pyx_v_pc == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+    if (values[1]) {
+      __pyx_v_maxdepth = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[1]); if (unlikely((__pyx_v_maxdepth == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+    } else {
+      __pyx_v_maxdepth = ((int)4);
+    }
+    if (values[2]) {
+      __pyx_v_fpr = __pyx_<span class='py_c_api'>PyFloat_AsFloat</span>(values[2]); if (unlikely((__pyx_v_fpr == (float)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+    } else {
+      __pyx_v_fpr = ((float)0.5);
+    }
+    if (values[3]) {
+      __pyx_v_ppr = __pyx_<span class='py_c_api'>PyFloat_AsFloat</span>(values[3]); if (unlikely((__pyx_v_ppr == (float)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+    } else {
+      __pyx_v_ppr = ((float)0.6);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  <span class='pyx_c_api'>__Pyx_RaiseArgtupleInvalid</span>("makerandomtree", 0, 1, 4, <span class='py_macro_api'>PyTuple_GET_SIZE</span>(__pyx_args)); <span class='error_goto'>__PYX_ERR(0, 239, __pyx_L3_error)</span>
+  __pyx_L3_error:;
+  <span class='pyx_c_api'>__Pyx_AddTraceback</span>("gpcython.makerandomtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_8gpcython_makerandomtree(__pyx_self, __pyx_v_pc, __pyx_v_maxdepth, __pyx_v_fpr, __pyx_v_ppr);
+
+  /* function exit code */
+  <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_8gpcython_makerandomtree(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_pc, int __pyx_v_maxdepth, float __pyx_v_fpr, float __pyx_v_ppr) {
+  PyObject *__pyx_r = NULL;
+  <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
+  <span class='refnanny'>__Pyx_RefNannySetupContext</span>("makerandomtree", 0);
+  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+  __pyx_t_2.__pyx_n = 3;
+  __pyx_t_2.maxdepth = __pyx_v_maxdepth;
+  __pyx_t_2.fpr = __pyx_v_fpr;
+  __pyx_t_2.ppr = __pyx_v_ppr;
+  __pyx_t_1 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, 0, &amp;__pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 239, __pyx_L1_error)</span>
+  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_1);
+  <span class='pyx_c_api'>__Pyx_AddTraceback</span>("gpcython.makerandomtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
   <span class='refnanny'>__Pyx_XGIVEREF</span>(__pyx_r);
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -3434,7 +3561,7 @@ struct __pyx_opt_args_8gpcython_makerandomtree {
       __pyx_t_10.maxdepth = (__pyx_v_maxdepth - 1);
       __pyx_t_10.fpr = __pyx_v_fpr;
       __pyx_t_10.ppr = __pyx_v_ppr;
-      __pyx_t_6 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, &amp;__pyx_t_10);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 242, __pyx_L1_error)</span>
+      __pyx_t_6 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, 0, &amp;__pyx_t_10);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 242, __pyx_L1_error)</span>
       <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
       if (unlikely(<span class='pyx_c_api'>__Pyx_ListComp_Append</span>(__pyx_t_4, (PyObject*)__pyx_t_6))) <span class='error_goto'>__PYX_ERR(0, 242, __pyx_L1_error)</span>
       <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
@@ -3597,9 +3724,9 @@ struct __pyx_opt_args_8gpcython_makerandomtree {
 <pre class="cython line score-0">&#xA0;<span class="">251</span>: </pre>
 <pre class="cython line score-42" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">252</span>: def hiddenfunction(x, y):</pre>
 <pre class='cython code score-42 '>/* Python wrapper */
-static PyObject *__pyx_pw_8gpcython_1hiddenfunction(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_8gpcython_1hiddenfunction = {"hiddenfunction", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8gpcython_1hiddenfunction, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_8gpcython_1hiddenfunction(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_8gpcython_3hiddenfunction(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_8gpcython_3hiddenfunction = {"hiddenfunction", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8gpcython_3hiddenfunction, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_8gpcython_3hiddenfunction(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_x = 0;
   PyObject *__pyx_v_y = 0;
   PyObject *__pyx_r = 0;
@@ -3651,14 +3778,14 @@ static PyObject *__pyx_pw_8gpcython_1hiddenfunction(PyObject *__pyx_self, PyObje
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_8gpcython_hiddenfunction(__pyx_self, __pyx_v_x, __pyx_v_y);
+  __pyx_r = __pyx_pf_8gpcython_2hiddenfunction(__pyx_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gpcython_hiddenfunction(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
+static PyObject *__pyx_pf_8gpcython_2hiddenfunction(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
   PyObject *__pyx_r = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("hiddenfunction", 0);
@@ -3680,7 +3807,7 @@ static PyObject *__pyx_pf_8gpcython_hiddenfunction(CYTHON_UNUSED PyObject *__pyx
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_tuple__44);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_tuple__44);
 /* … */
-  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_1hiddenfunction, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 252, __pyx_L1_error)</span>
+  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_3hiddenfunction, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 252, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_hiddenfunction, __pyx_t_6) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 252, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
@@ -3711,20 +3838,20 @@ static PyObject *__pyx_pf_8gpcython_hiddenfunction(CYTHON_UNUSED PyObject *__pyx
 <pre class="cython line score-0">&#xA0;<span class="">255</span>: </pre>
 <pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">256</span>: def buildhiddenset():</pre>
 <pre class='cython code score-22 '>/* Python wrapper */
-static PyObject *__pyx_pw_8gpcython_3buildhiddenset(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyMethodDef __pyx_mdef_8gpcython_3buildhiddenset = {"buildhiddenset", (PyCFunction)__pyx_pw_8gpcython_3buildhiddenset, METH_NOARGS, 0};
-static PyObject *__pyx_pw_8gpcython_3buildhiddenset(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_8gpcython_5buildhiddenset(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_8gpcython_5buildhiddenset = {"buildhiddenset", (PyCFunction)__pyx_pw_8gpcython_5buildhiddenset, METH_NOARGS, 0};
+static PyObject *__pyx_pw_8gpcython_5buildhiddenset(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("buildhiddenset (wrapper)", 0);
-  __pyx_r = __pyx_pf_8gpcython_2buildhiddenset(__pyx_self);
+  __pyx_r = __pyx_pf_8gpcython_4buildhiddenset(__pyx_self);
 
   /* function exit code */
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gpcython_2buildhiddenset(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_8gpcython_4buildhiddenset(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_v_rows = NULL;
   CYTHON_UNUSED long __pyx_v_i;
   PyObject *__pyx_v_x = NULL;
@@ -3754,7 +3881,7 @@ static PyObject *__pyx_pf_8gpcython_2buildhiddenset(CYTHON_UNUSED PyObject *__py
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_tuple__46);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_tuple__46);
 /* … */
-  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_3buildhiddenset, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
+  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_5buildhiddenset, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_buildhiddenset, __pyx_t_6) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
@@ -4334,7 +4461,7 @@ struct __pyx_opt_args_8gpcython_mutate {
   }
 </pre><pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">305</span>:         return makerandomtree(pc)</pre>
 <pre class='cython code score-1 '>    <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
-    __pyx_t_3 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)</span>
+    __pyx_t_3 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, 0, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
@@ -5070,7 +5197,7 @@ struct __pyx_opt_args_8gpcython_evolve {
   __pyx_t_3 = __pyx_t_2;
   for (__pyx_t_4 = 0; __pyx_t_4 &lt; __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
-    __pyx_t_5 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 363, __pyx_L1_error)</span>
+    __pyx_t_5 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, 0, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 363, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
     if (unlikely(<span class='pyx_c_api'>__Pyx_ListComp_Append</span>(__pyx_t_1, (PyObject*)__pyx_t_5))) <span class='error_goto'>__PYX_ERR(0, 363, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_5); __pyx_t_5 = 0;
@@ -5373,7 +5500,7 @@ struct __pyx_opt_args_8gpcython_evolve {
 <pre class="cython line score-0">&#xA0;<span class="">407</span>:                 # Add a random node to mix things up</pre>
 <pre class="cython line score-3" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">408</span>:                 newpop.append(makerandomtree(pc))</pre>
 <pre class='cython code score-3 '>      /*else*/ {
-        __pyx_t_6 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 408, __pyx_L1_error)</span>
+        __pyx_t_6 = __pyx_f_8gpcython_makerandomtree(__pyx_v_pc, 0, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 408, __pyx_L1_error)</span>
         <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
         __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyList_Append</span>(__pyx_v_newpop, __pyx_t_6);<span class='error_goto'> if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 408, __pyx_L1_error)</span>
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
@@ -5442,7 +5569,7 @@ struct __pyx_opt_args_8gpcython_evolve {
 </pre><pre class="cython line score-0">&#xA0;<span class="">418</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">419</span>: </pre>
 <pre class="cython line score-168" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">420</span>: cpdef getstats(int rounds=50, int maxgen=50, float mutationrate=0.05, float breedingrate=0.10, float fitnesspref=0.95, float probnew=0.10, bint penalizecomplexity=False, bint detectstuck = False, bint modularize=False, bint mute=False):</pre>
-<pre class='cython code score-168 '>static PyObject *__pyx_pw_8gpcython_5getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+<pre class='cython code score-168 '>static PyObject *__pyx_pw_8gpcython_7getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_f_8gpcython_getstats(CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_8gpcython_getstats *__pyx_optional_args) {
   int __pyx_v_rounds = ((int)50);
   int __pyx_v_maxgen = ((int)50);
@@ -5551,8 +5678,8 @@ static PyObject *__pyx_f_8gpcython_getstats(CYTHON_UNUSED int __pyx_skip_dispatc
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_8gpcython_5getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_8gpcython_5getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_8gpcython_7getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_8gpcython_7getstats(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_rounds;
   int __pyx_v_maxgen;
   float __pyx_v_mutationrate;
@@ -5746,14 +5873,14 @@ static PyObject *__pyx_pw_8gpcython_5getstats(PyObject *__pyx_self, PyObject *__
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_8gpcython_4getstats(__pyx_self, __pyx_v_rounds, __pyx_v_maxgen, __pyx_v_mutationrate, __pyx_v_breedingrate, __pyx_v_fitnesspref, __pyx_v_probnew, __pyx_v_penalizecomplexity, __pyx_v_detectstuck, __pyx_v_modularize, __pyx_v_mute);
+  __pyx_r = __pyx_pf_8gpcython_6getstats(__pyx_self, __pyx_v_rounds, __pyx_v_maxgen, __pyx_v_mutationrate, __pyx_v_breedingrate, __pyx_v_fitnesspref, __pyx_v_probnew, __pyx_v_penalizecomplexity, __pyx_v_detectstuck, __pyx_v_modularize, __pyx_v_mute);
 
   /* function exit code */
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gpcython_4getstats(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_rounds, int __pyx_v_maxgen, float __pyx_v_mutationrate, float __pyx_v_breedingrate, float __pyx_v_fitnesspref, float __pyx_v_probnew, int __pyx_v_penalizecomplexity, int __pyx_v_detectstuck, int __pyx_v_modularize, int __pyx_v_mute) {
+static PyObject *__pyx_pf_8gpcython_6getstats(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_rounds, int __pyx_v_maxgen, float __pyx_v_mutationrate, float __pyx_v_breedingrate, float __pyx_v_fitnesspref, float __pyx_v_probnew, int __pyx_v_penalizecomplexity, int __pyx_v_detectstuck, int __pyx_v_modularize, int __pyx_v_mute) {
   PyObject *__pyx_r = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("getstats", 0);
@@ -6321,20 +6448,20 @@ struct __pyx_opt_args_8gpcython_getstats {
 </pre><pre class="cython line score-0">&#xA0;<span class="">467</span>: </pre>
 <pre class="cython line score-14" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">468</span>: def runexperiment():</pre>
 <pre class='cython code score-14 '>/* Python wrapper */
-static PyObject *__pyx_pw_8gpcython_7runexperiment(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyMethodDef __pyx_mdef_8gpcython_7runexperiment = {"runexperiment", (PyCFunction)__pyx_pw_8gpcython_7runexperiment, METH_NOARGS, 0};
-static PyObject *__pyx_pw_8gpcython_7runexperiment(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_8gpcython_9runexperiment(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_8gpcython_9runexperiment = {"runexperiment", (PyCFunction)__pyx_pw_8gpcython_9runexperiment, METH_NOARGS, 0};
+static PyObject *__pyx_pw_8gpcython_9runexperiment(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("runexperiment (wrapper)", 0);
-  __pyx_r = __pyx_pf_8gpcython_6runexperiment(__pyx_self);
+  __pyx_r = __pyx_pf_8gpcython_8runexperiment(__pyx_self);
 
   /* function exit code */
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gpcython_6runexperiment(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_8gpcython_8runexperiment(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_r = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("runexperiment", 0);
@@ -6354,7 +6481,7 @@ static PyObject *__pyx_pf_8gpcython_6runexperiment(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 /* … */
-  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_7runexperiment, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 468, __pyx_L1_error)</span>
+  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_9runexperiment, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 468, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_runexperiment, __pyx_t_6) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 468, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
@@ -6395,20 +6522,20 @@ static PyObject *__pyx_pf_8gpcython_6runexperiment(CYTHON_UNUSED PyObject *__pyx
 <pre class="cython line score-0">&#xA0;<span class="">483</span>: </pre>
 <pre class="cython line score-14" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">484</span>: def main():</pre>
 <pre class='cython code score-14 '>/* Python wrapper */
-static PyObject *__pyx_pw_8gpcython_9main(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyMethodDef __pyx_mdef_8gpcython_9main = {"main", (PyCFunction)__pyx_pw_8gpcython_9main, METH_NOARGS, 0};
-static PyObject *__pyx_pw_8gpcython_9main(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_8gpcython_11main(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_8gpcython_11main = {"main", (PyCFunction)__pyx_pw_8gpcython_11main, METH_NOARGS, 0};
+static PyObject *__pyx_pw_8gpcython_11main(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("main (wrapper)", 0);
-  __pyx_r = __pyx_pf_8gpcython_8main(__pyx_self);
+  __pyx_r = __pyx_pf_8gpcython_10main(__pyx_self);
 
   /* function exit code */
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gpcython_8main(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_8gpcython_10main(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_r = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("main", 0);
@@ -6428,7 +6555,7 @@ static PyObject *__pyx_pf_8gpcython_8main(CYTHON_UNUSED PyObject *__pyx_self) {
   return __pyx_r;
 }
 /* … */
-  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_9main, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 484, __pyx_L1_error)</span>
+  __pyx_t_6 = PyCFunction_NewEx(&amp;__pyx_mdef_8gpcython_11main, NULL, __pyx_n_s_gpcython);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 484, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_main_2, __pyx_t_6) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 484, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;

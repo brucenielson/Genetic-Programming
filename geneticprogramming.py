@@ -1,5 +1,9 @@
 import numpy as np
 from random import random, randint
+import time
+import gp
+import gpcython as gpc
+
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
 #cython: boundscheck=False
@@ -88,7 +92,7 @@ treecounter = 0
 nodes = 0
 
 
-def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
+def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype='int64'):
     # Get node id
     global nodes
     id = nodes
@@ -112,7 +116,7 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
                 node.append(size)
                 index += size
                 if children_array is None:
-                    children_array = np.array(child).reshape(-1, NUM_COLS)
+                    children_array = np.array(child, dtype=dtype).reshape(-1, NUM_COLS)
                 else:
                     children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
             else:
@@ -121,25 +125,25 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False):
         node = node + [-1,-1,-1,-1,-1,-1]
 
 
-    node = np.array(node)
+    node = np.array(node, dtype=dtype)
     if node_type == FUNC_NODE:
         tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
     else:
-        tree = np.array(node).reshape(-1,NUM_COLS)
+        tree = np.array(node, dtype=dtype).reshape(-1,NUM_COLS)
 
     return tree
 
 
-def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
+def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6, dtype='int64'):
     if random() < func_prob and maxdepth > 0:
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        return createtree(FUNC_NODE, func_num, children)
+        return createtree(FUNC_NODE, func_num, children, dtype=dtype)
     elif random() < param_prob:
-        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1))
+        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1), dtype=dtype)
     else:
-        return createtree(CONST_NODE, -1, None, randint(0, 10))
+        return createtree(CONST_NODE, -1, None, randint(0, 10), dtype=dtype)
 
 
 
@@ -171,8 +175,53 @@ def runexperiment():
     print(treearray)
     print(evaluate(treearray, [5,2]))
 
+def timeit():
+    runs = 250000
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(gpc.makerandomtree(2))
+
+    for tree in population:
+        tree.evaluate(input)
+
+    end = time.time()
+    print("Benchmark (gpcython.py): ", end-start)
+
+
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(gp.makerandomtree(2))
+
+    for tree in population:
+        tree.evaluate(input)
+
+    end = time.time()
+    print("Benchmark (gp.py): ", end-start)
+
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(makerandomtree(2))
+
+    for tree in population:
+        evaluate(tree, input)
+
+    end = time.time()
+    print("Benchmark (geneticprogramming.py):  ", end-start)
+
+
+
 def main():
-    runexperiment()
+    # runexperiment()
+    timeit()
 
 if __name__ == "__main__":
     main()
