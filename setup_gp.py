@@ -5,5 +5,5 @@ import Cython.Compiler.Options
 Cython.Compiler.Options.annotate = True
 
 setup(
-    ext_modules = cythonize("gpcython.pyx", annotate=True, force=True)
+    ext_modules = cythonize("geneticprogrammingcython.pyx", annotate=True, force=True)
 )

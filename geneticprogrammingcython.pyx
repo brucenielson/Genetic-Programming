@@ -2,8 +2,7 @@ import numpy as np
 from random import random, randint
 import time
 import gp
-import gpcython as gpc1
-import geneticprogrammingcython as gpc2
+import gpcython as gpc
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -184,7 +183,7 @@ def timeit():
     population = []
     input = [10, 42]
     for i in range(runs):
-        population.append(gpc1.makerandomtree(2))
+        population.append(gpc.makerandomtree(2))
     mid = time.time()
     for tree in population:
         tree.evaluate(input)
@@ -219,19 +218,6 @@ def timeit():
     end = time.time()
     print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
 
-
-
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc2.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        gpc2.evaluate(tree, input)
-
-    end = time.time()
-    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
 
 def main():
