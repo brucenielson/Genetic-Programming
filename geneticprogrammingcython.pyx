@@ -12,10 +12,9 @@ import gpcython as gpc
 #TODO: cimport cython
 
 # Fake enum for TYPE#
-cdef enum NodeType:
-    FUNC_NODE = 1
-    PARAM_NODE = 2
-    CONST_NODE = 3
+FUNC_NODE = 1
+PARAM_NODE = 2
+CONST_NODE = 3
 
 # Node format
 # [TYPE #, Function #, value or param indx, child1, child2, child3, lock, node id]
@@ -30,49 +29,37 @@ cdef enum NodeType:
 # Functions
 
 #Fake Enum for Function List Columns
-cdef enum FunctionListColumns:
-    FUNCTION = 0
-    PARAM_COUNT = 1
-    NAME = 2
+FUNCTION = 0
+PARAM_COUNT = 1
+NAME = 2
 
 # CONSTANTS
-cdef int MAX_PARAMS = 3
+MAX_PARAMS = 3
 
 # Function List
 func_list = []
 
-cdef void definefunction(object function, int param_count, object name):
+def definefunction(function, param_count, name):
     func_list.append((function, param_count, name))
 
-
 # Functions with 2 parameters
-cdef long add(long param1, long param2):
-    return param1 + param2
-definefunction(add, 2, 'add')
-
-cdef long subtract(long param1, long param2):
-    return param1 - param2
-definefunction(subtract, 2, 'subtract')
-
-cdef long multiply(long param1, long param2):
-    return param1 * param2
-definefunction(multiply, 2, 'multiply')
-
+definefunction(lambda p: p[0] + p[1], 2, 'add')
+definefunction(lambda p: p[0] - p[1], 2, 'subtract')
+definefunction(lambda p: p[0] * p[1], 2, 'multiply')
 # > function
-cdef long isgreater(long param1, long param2):
-    if param1 > param2:
+def isgreater(l):
+    if l[0] > l[1]:
         return 1
     else:
         return 0
-
 definefunction(isgreater, 2, 'isgreater')
 
 # If Function (3 parameters)
-cdef long iffunc(long param1, long param2, long param3):
-    if param1 > 0:
-        return param2
+def iffunc(l):
+    if l[0] > 0:
+        return l[1]
     else:
-        return param3
+        return l[2]
 
 definefunction(iffunc, 3, 'if')
 
@@ -87,37 +74,33 @@ func_list = np.array(func_list)
 # TODO: Or use memoryviews (see above)
 
 #Fake Enum for Column Names
-cdef enum ColumnNames:
-    TYPE_COL = 0
-    FUNC_NUM = 1
-    VALUE_OR_PARAM = 2
-    LOCK = 3
-    ID = 4
-    CHILD1OFFSET = 5
-    CHILDOFFSETS = CHILD1OFFSET
-    CHILD1LENGTH = 6
-    CHILD2OFFSET = 7
-    CHILD2LENGTH = 8
-    CHILD3OFFSET = 9
-    CHILD3LENGTH = 10
-    NUM_COLS = CHILD3LENGTH + 1
+TYPE_COL = 0
+FUNC_NUM = 1
+VALUE_OR_PARAM = 2
+LOCK = 3
+ID = 4
+CHILD1OFFSET = 5
+CHILDOFFSETS = CHILD1OFFSET
+CHILD1LENGTH = 6
+CHILD2OFFSET = 7
+CHILD2LENGTH = 8
+CHILD3OFFSET = 9
+CHILD3LENGTH = 10
+NUM_COLS = CHILD3LENGTH + 1
 
-cdef int treecounter = 0
-cdef int nodes = 0
+treecounter = 0
+nodes = 0
 
-ctypedef long long[:,:] Treearray
 
-cdef object createtree(NodeType node_type, int funcnum, list children, int val_or_param=-1, bint lock=False, object dtype='int64'):
+def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype='int64'):
     # Get node id
-    cdef int id, param_count, i, index, size
-    cdef object child
     global nodes
     id = nodes
     nodes += 1
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id]
     # If this is a function, get number of parameters expected vs of children given
-    if node_type == NodeType.FUNC_NODE:
+    if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
         # parameter count and number of children in the list must match or else we have an error
         assert param_count == len(children)
@@ -151,27 +134,20 @@ cdef object createtree(NodeType node_type, int funcnum, list children, int val_o
     return tree
 
 
-cpdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6, str dtype='int64'):
+def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6, dtype='int64'):
     if random() < func_prob and maxdepth > 0:
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        return createtree(FUNC_NODE, func_num, children, dtype=dtype, val_or_param=-1, lock=False)
+        return createtree(FUNC_NODE, func_num, children, dtype=dtype)
     elif random() < param_prob:
-        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1), dtype=dtype, lock=False)
+        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1), dtype=dtype)
     else:
-        return createtree(CONST_NODE, -1, None, randint(0, 10), dtype=dtype, lock=False)
+        return createtree(CONST_NODE, -1, None, randint(0, 10), dtype=dtype)
 
 
 
-# cpdef object makerandomtreepython(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6, str dtype='int64'):
-#     return np.asarray(makerandomtree(param_count, maxdepth=maxdepth, func_prob=func_prob, param_prob=param_prob, dtype=dtype))
-
-cpdef long evaluate(object treearray, list input):
-    cdef int col, param_count, func_num
-    cdef object function
-    cdef list values
-    cdef Py_ssize_t start, length
+def evaluate(treearray, input):
     node = treearray[0]
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
@@ -195,12 +171,12 @@ cpdef long evaluate(object treearray, list input):
 
 
 
-cpdef runexperiment():
+def runexperiment():
     treearray = makerandomtree(2)
     print(treearray)
     print(evaluate(treearray, [5,2]))
 
-cpdef timeit():
+def timeit():
     runs = 250000
 
     start = time.time()
