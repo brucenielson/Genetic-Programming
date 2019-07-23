@@ -184,6 +184,18 @@ def timeit():
     population = []
     input = [10, 42]
     for i in range(runs):
+        population.append(gpc2.makerandomtree(2))
+    mid = time.time()
+    for tree in population:
+        gpc2.evaluate(tree, input)
+
+    end = time.time()
+    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
         population.append(gpc1.makerandomtree(2))
     mid = time.time()
     for tree in population:
@@ -221,17 +233,7 @@ def timeit():
 
 
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc2.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        gpc2.evaluate(tree, input)
 
-    end = time.time()
-    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
 
 def main():
