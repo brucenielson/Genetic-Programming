@@ -111,6 +111,7 @@ cdef long nodes = 0
 
 cdef object createtree(NodeType node_type, int funcnum, np.ndarray[long, ndim=2, mode="c"] children, int val_or_param=-1, bint lock=False):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
+    # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
     global nodes
     cdef int id = nodes
@@ -159,7 +160,6 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        children = np.array(children).reshape(-1,NUM_COLS)
         return createtree(FUNC_NODE, func_num, children)
     elif random() < param_prob:
         return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1))
