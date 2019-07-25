@@ -192,31 +192,31 @@ def timeit():
     end = time.time()
     print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc1.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        tree.evaluate(input)
-
-    end = time.time()
-    print("Benchmark (gpcython.py): ", mid-start, end-mid)
-
-
-
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gp.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        tree.evaluate(input)
-
-    end = time.time()
-    print("Benchmark (gp.py): ", mid-start, end-mid)
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gpc1.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     tree.evaluate(input)
+    #
+    # end = time.time()
+    # print("Benchmark (gpcython.py): ", mid-start, end-mid)
+    #
+    #
+    #
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gp.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     tree.evaluate(input)
+    #
+    # end = time.time()
+    # print("Benchmark (gp.py): ", mid-start, end-mid)
 
 
     start = time.time()

@@ -29,37 +29,52 @@ CONST_NODE = 3
 # Functions
 
 #Fake Enum for Function List Columns
-FUNCTION = 0
-PARAM_COUNT = 1
-NAME = 2
+cdef enum NodeType:
+    FUNCTION = 0
+    PARAM_COUNT = 1
+    NAME = 2
 
 # CONSTANTS
-MAX_PARAMS = 3
+cdef int MAX_PARAMS = 3
 
 # Function List
 func_list = []
 
-def definefunction(function, param_count, name):
+cdef definefunction(function, param_count, name):
     func_list.append((function, param_count, name))
 
 # Functions with 2 parameters
-definefunction(lambda p: p[0] + p[1], 2, 'add')
-definefunction(lambda p: p[0] - p[1], 2, 'subtract')
-definefunction(lambda p: p[0] * p[1], 2, 'multiply')
+cdef long add(long param1, long param2):
+    return param1 + param2
+
+definefunction(add, 2, 'add')
+
+cdef long subtract(long param1, long param2):
+    return param1 - param2
+
+definefunction(subtract, 2, 'subtract')
+
+cdef long multiply(long param1, long param2):
+    return param1 * param2
+
+definefunction(multiply, 2, 'multiply')
+
 # > function
-def isgreater(l):
-    if l[0] > l[1]:
+
+cdef long isgreater(long param1, long param2):
+    if param1 > param2:
         return 1
     else:
         return 0
+
 definefunction(isgreater, 2, 'isgreater')
 
 # If Function (3 parameters)
-def iffunc(l):
-    if l[0] > 0:
-        return l[1]
+cdef long iffunc(long param1, long param2, long param3):
+    if param1 > 0:
+        return param2
     else:
-        return l[2]
+        return param3
 
 definefunction(iffunc, 3, 'if')
 
@@ -74,25 +89,26 @@ func_list = np.array(func_list)
 # TODO: Or use memoryviews (see above)
 
 #Fake Enum for Column Names
-TYPE_COL = 0
-FUNC_NUM = 1
-VALUE_OR_PARAM = 2
-LOCK = 3
-ID = 4
-CHILD1OFFSET = 5
-CHILDOFFSETS = CHILD1OFFSET
-CHILD1LENGTH = 6
-CHILD2OFFSET = 7
-CHILD2LENGTH = 8
-CHILD3OFFSET = 9
-CHILD3LENGTH = 10
-NUM_COLS = CHILD3LENGTH + 1
+cdef enum ColumnNames:
+    TYPE_COL = 0
+    FUNC_NUM = 1
+    VALUE_OR_PARAM = 2
+    LOCK = 3
+    ID = 4
+    CHILD1OFFSET = 5
+    CHILDOFFSETS = CHILD1OFFSET
+    CHILD1LENGTH = 6
+    CHILD2OFFSET = 7
+    CHILD2LENGTH = 8
+    CHILD3OFFSET = 9
+    CHILD3LENGTH = 10
+    NUM_COLS = CHILD3LENGTH + 1
 
-treecounter = 0
-nodes = 0
+cdef long treecounter = 0
+cdef long nodes = 0
 
 
-def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype='int64'):
+cdef createtree(NodeType node_type, int funcnum, children, int val_or_param=-1, bint lock=False):
     # Get node id
     global nodes
     id = nodes
@@ -116,7 +132,7 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype=
                 node.append(size)
                 index += size
                 if children_array is None:
-                    children_array = np.array(child, dtype=dtype).reshape(-1, NUM_COLS)
+                    children_array = np.array(child, dtype='int32').reshape(-1, NUM_COLS)
                 else:
                     children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
             else:
@@ -125,29 +141,29 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype=
         node = node + [-1,-1,-1,-1,-1,-1]
 
 
-    node = np.array(node, dtype=dtype)
+    node = np.array(node, dtype='int32')
     if node_type == FUNC_NODE:
         tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
     else:
-        tree = np.array(node, dtype=dtype).reshape(-1,NUM_COLS)
+        tree = np.array(node, dtype='int32').reshape(-1,NUM_COLS)
 
     return tree
 
 
-def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6, dtype='int64'):
+def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
     if random() < func_prob and maxdepth > 0:
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        return createtree(FUNC_NODE, func_num, children, dtype=dtype)
+        return createtree(FUNC_NODE, func_num, children)
     elif random() < param_prob:
-        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1), dtype=dtype)
+        return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1))
     else:
-        return createtree(CONST_NODE, -1, None, randint(0, 10), dtype=dtype)
+        return createtree(CONST_NODE, -1, None, randint(0, 10))
 
 
 
-def evaluate(treearray, input):
+cpdef evaluate(treearray, input):
     node = treearray[0]
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
@@ -162,7 +178,7 @@ def evaluate(treearray, input):
             col += 2
             val = evaluate(treearray[start:start+length], input)
             values.append(val)
-        return function(values)
+        return function(*values)
     elif node_type == PARAM_NODE:
         param = node[VALUE_OR_PARAM]
         return input[param]
