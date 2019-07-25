@@ -1,4 +1,5 @@
 import numpy as np
+cimport numpy as np
 from random import random, randint
 import time
 import gp
@@ -108,10 +109,13 @@ cdef long treecounter = 0
 cdef long nodes = 0
 
 
-cdef createtree(NodeType node_type, int funcnum, children, int val_or_param=-1, bint lock=False):
+cdef object createtree(NodeType node_type, int funcnum, np.ndarray[long, ndim=2, mode="c"] children, int val_or_param=-1, bint lock=False):
+    # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Get node id
     global nodes
-    id = nodes
+    cdef int id = nodes
+    cdef index, param_count
+    cdef Py_ssize_t i
     nodes += 1
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id]
@@ -127,7 +131,7 @@ cdef createtree(NodeType node_type, int funcnum, children, int val_or_param=-1, 
                 child = children[i].reshape(-1,NUM_COLS)
                 assert type(child) == np.ndarray
                 node.append(index)
-                # TODO: cdef Pyssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
+                # TODO: cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
                 size = len(child)
                 node.append(size)
                 index += size
@@ -155,6 +159,7 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
+        children = np.array(children).reshape(-1,NUM_COLS)
         return createtree(FUNC_NODE, func_num, children)
     elif random() < param_prob:
         return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1))

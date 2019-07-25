@@ -112,19 +112,18 @@ def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype=
                 child = children[i].reshape(-1,NUM_COLS)
                 assert type(child) == np.ndarray
                 node.append(index)
-                # TODO: cdef Pyssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
+                # TODO: cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
                 size = len(child)
                 node.append(size)
                 index += size
                 if children_array is None:
-                    children_array = np.array(child, dtype=dtype).reshape(-1, NUM_COLS)
+                    children_array = np.array(child, dtype='int32').reshape(-1, NUM_COLS)
                 else:
                     children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
             else:
                 node = node + [-1,-1]
     else:
         node = node + [-1,-1,-1,-1,-1,-1]
-
 
     node = np.array(node, dtype=dtype)
     if node_type == FUNC_NODE:
@@ -140,7 +139,7 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6, dtype
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        return createtree(FUNC_NODE, func_num, children, dtype=dtype)
+        return createtree(FUNC_NODE, func_num, children)
     elif random() < param_prob:
         return createtree(PARAM_NODE, -1, None, randint(0, param_count - 1), dtype=dtype)
     else:
@@ -180,17 +179,17 @@ def runexperiment():
 def timeit():
     runs = 250000
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc2.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        gpc2.evaluate(tree, input)
-
-    end = time.time()
-    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gpc2.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     gpc2.evaluate(tree, input)
+    #
+    # end = time.time()
+    # print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
     # start = time.time()
     # population = []
