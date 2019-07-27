@@ -4,8 +4,6 @@ from random import random, randint
 import time
 import gp
 import gpcython as gpc
-from cpython cimport array
-import array
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -14,11 +12,10 @@ import array
 # How to do it locally using decorators and with statement: https://github.com/cython/cython/wiki/enhancements-compilerdirectives
 #TODO: cimport cython
 
-# Enum for TYPE#
-cdef enum NodeType:
-    FUNC_NODE = 1
-    PARAM_NODE = 2
-    CONST_NODE = 3
+# Fake enum for TYPE#
+FUNC_NODE = 1
+PARAM_NODE = 2
+CONST_NODE = 3
 
 # Node format
 # [TYPE #, Function #, value or param indx, child1, child2, child3, lock, node id]
@@ -32,8 +29,8 @@ cdef enum NodeType:
 
 # Functions
 
-# Enum for Function List Columns
-cdef enum FuncListColumns:
+#Fake Enum for Function List Columns
+cdef enum NodeType:
     FUNCTION = 0
     PARAM_COUNT = 1
     NAME = 2
@@ -44,7 +41,7 @@ cdef int MAX_PARAMS = 3
 # Function List
 func_list = []
 
-cdef void definefunction(object function, int param_count, object name):
+cdef definefunction(function, param_count, name):
     func_list.append((function, param_count, name))
 
 # Functions with 2 parameters
@@ -92,7 +89,7 @@ func_list = np.array(func_list)
 # TODO: Dynamic 2d arrays in Cython: https://stackoverflow.com/questions/25917593/how-to-declare-2d-c-arrays-dynamically-in-cython
 # TODO: Or use memoryviews (see above)
 
-# Enum for Column Names
+#Fake Enum for Column Names
 cdef enum ColumnNames:
     TYPE_COL = 0
     FUNC_NUM = 1
@@ -112,7 +109,7 @@ cdef long treecounter = 0
 cdef long nodes = 0
 
 
-cdef np.ndarray[int, ndim=2] createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, np.ndarray[int, ndim=2] child1, np.ndarray[int, ndim=2] child2, np.ndarray[int, ndim=2] child3):
+cdef object createtree(NodeType node_type, int funcnum, int val_or_param=-1, bint lock=False, child1=None, child2=None, child3=None):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
@@ -120,18 +117,9 @@ cdef np.ndarray[int, ndim=2] createtree(NodeType node_type, int funcnum, int val
     cdef int id = nodes
     cdef index, param_count
     cdef Py_ssize_t i
-    cdef array.array np_node = array.array('i', [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-    cdef int[:] node = np_node
-    # cdef int node[11]
-    # node[:] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-    
     nodes += 1
     # Create base node
-    node[0] = node_type
-    node[1] = funcnum
-    node[2] = val_or_param
-    node[3] = lock
-    node[4] = id
+    node = [node_type, funcnum, val_or_param, lock, id]
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
@@ -142,26 +130,32 @@ cdef np.ndarray[int, ndim=2] createtree(NodeType node_type, int funcnum, int val
         if child1 is not None:
             assert type(child1) == np.ndarray
             size = len(child1)
-            node[5] = index
+            node.append(index)
             index += size
-            node[6] = size
+            node.append(size)
             children_array = np.array(child1, dtype='int32').reshape(-1, NUM_COLS)
+        else:
+            node = node + [-1,-1]
 
         if child2 is not None:
             assert type(child2) == np.ndarray
             size = len(child2)
-            node[7] = index
+            node.append(index)
             index += size
-            node[8] = size
+            node.append(size)
             children_array = np.concatenate([children_array, child2]).reshape(-1, NUM_COLS)
+        else:
+            node = node + [-1,-1]
 
         if child3 is not None:
             assert type(child3) == np.ndarray
             size = len(child3)
-            node[9] = index
+            node.append(index)
             index += size
-            node[10] = size
+            node.append(size)
             children_array = np.concatenate([children_array, child3]).reshape(-1, NUM_COLS)
+        else:
+            node = node + [-1,-1]            
         
         # for i in range(MAX_PARAMS):
         #     if i < len(children):
@@ -178,14 +172,17 @@ cdef np.ndarray[int, ndim=2] createtree(NodeType node_type, int funcnum, int val
         #             children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
         #     else:
         #         node = node + [-1,-1]
-
-
-    if node_type == FUNC_NODE:
-        tree = np.concatenate([np.array(node).reshape(-1, NUM_COLS),children_array])
     else:
-        tree = np.array(node).reshape(-1, NUM_COLS)
+        node = node + [-1,-1,-1,-1,-1,-1]
 
-    return np.array(tree).reshape(-1, NUM_COLS)
+
+    node = np.array(node, dtype='int32')
+    if node_type == FUNC_NODE:
+        tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
+    else:
+        tree = np.array(node, dtype='int32').reshape(-1,NUM_COLS)
+
+    return tree
 
 
 def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
