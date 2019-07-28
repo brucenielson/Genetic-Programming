@@ -152,12 +152,12 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
 
 
     if children is None:
-        return [node]
+        return np.asarray([node])
     else:
         children.insert(0, node)        
 
     tree = np.vstack(children)
-    return tree.tolist()
+    return tree
 
 
 def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
