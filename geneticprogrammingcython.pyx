@@ -129,8 +129,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef int id = nodes
     cdef index, param_count, position
     cdef Py_ssize_t i
-    cdef list node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
-    cdef object np_node
+    cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
 
     nodes += 1
     # If this is a function, get number of parameters expected vs of children given
@@ -152,18 +151,12 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
                 index += size
 
 
-    # np_node = np.asarray(node).reshape(-1, NUM_COLS)
-    # assert np_node.shape == (1,11)
-    if children is not None:
-        children.insert(0, node)
-    else:
+    if children is None:
         return [node]
+    else:
+        children.insert(0, node)        
 
-    # print("Children")
-    # print(children)
     tree = np.vstack(children)
-    # print("Tree")
-    # print(tree)
     return tree.tolist()
 
 
