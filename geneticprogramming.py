@@ -90,12 +90,12 @@ CHILD3LENGTH = 10
 NUM_COLS = CHILD3LENGTH + 1
 
 treecounter = 0
-nodes = 0
+nodescounter = 0
 
 
 def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype='int64'):
     # Get node id
-    global nodes
+    global nodescounter
     id = nodes
     nodes += 1
     # Create base node
@@ -218,17 +218,17 @@ def timeit():
     # print("Benchmark (gp.py): ", mid-start, end-mid)
 
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        evaluate(tree, input)
-
-    end = time.time()
-    print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     evaluate(tree, input)
+    #
+    # end = time.time()
+    # print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
 
 
 

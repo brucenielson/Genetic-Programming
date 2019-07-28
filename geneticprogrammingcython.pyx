@@ -4,6 +4,8 @@ from random import random, randint
 import time
 import gp
 import gpcython as gpc
+from cpython cimport array
+import array
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -106,20 +108,29 @@ cdef enum ColumnNames:
     NUM_COLS = CHILD3LENGTH + 1
 
 cdef long treecounter = 0
-cdef long nodes = 0
+cdef long nodescounter = 0
 
 
-cdef object createtree(NodeType node_type, int funcnum, int val_or_param=-1, bint lock=False, child1=None, child2=None, child3=None):
+cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, object child1, object child2, object child3):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
-    global nodes
-    cdef int id = nodes
+    global nodescounter
+    cdef int id = nodescounter
     cdef index, param_count
     cdef Py_ssize_t i
-    nodes += 1
+    cdef array.array cnode = array.array('i', [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    cdef int[:] node = cnode
+    
+    nodescounter += 1
     # Create base node
-    node = [node_type, funcnum, val_or_param, lock, id]
+    node[0] = node_type
+    node[1] = funcnum
+    node[2] = val_or_param
+    node[3] = lock
+    node[4] = id
+    # node = [node_type, funcnum, val_or_param, lock, id]
+
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
@@ -130,32 +141,37 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param=-1, bin
         if child1 is not None:
             assert type(child1) == np.ndarray
             size = len(child1)
-            node.append(index)
+            node[5] = index
             index += size
-            node.append(size)
+            node[6] = size
+            # node.append(index)
+            # index += size
+            # node.append(size)
             children_array = np.array(child1, dtype='int32').reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]
 
         if child2 is not None:
             assert type(child2) == np.ndarray
             size = len(child2)
-            node.append(index)
+            node[7] = index
             index += size
-            node.append(size)
+            node[8] = size
+            # node.append(index)
+            # index += size
+            # node.append(size)
             children_array = np.concatenate([children_array, child2]).reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]
+
 
         if child3 is not None:
             assert type(child3) == np.ndarray
             size = len(child3)
-            node.append(index)
+            node[9] = index
             index += size
-            node.append(size)
+            node[10] = size
+            # node.append(index)
+            # index += size
+            # node.append(size)
             children_array = np.concatenate([children_array, child3]).reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]            
+          
         
         # for i in range(MAX_PARAMS):
         #     if i < len(children):
@@ -172,15 +188,14 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param=-1, bin
         #             children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
         #     else:
         #         node = node + [-1,-1]
-    else:
-        node = node + [-1,-1,-1,-1,-1,-1]
 
 
-    node = np.array(node, dtype='int32')
+
+    np_node = np.asarray(node, dtype='int32')
     if node_type == FUNC_NODE:
-        tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
+        tree = np.concatenate([np_node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
     else:
-        tree = np.array(node, dtype='int32').reshape(-1,NUM_COLS)
+        tree = np.array(np_node, dtype='int32').reshape(-1,NUM_COLS)
 
     return tree
 
