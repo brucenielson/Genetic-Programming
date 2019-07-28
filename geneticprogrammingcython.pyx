@@ -121,15 +121,15 @@ cdef long nodes = 0
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, np.int32_t[:,:] child1, np.int32_t[:,:] child2, np.int32_t[:,:] child3):
+cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, list children):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
     global nodes
     cdef int id = nodes
-    cdef index, param_count
+    cdef index, param_count, position
     cdef Py_ssize_t i
-    cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
+    cdef list node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef object np_node
 
     nodes += 1
@@ -139,56 +139,32 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         # parameter count and number of children in the list must match or else we have an error
         # assert param_count == len(children)
         index = 1
-        children_array = None
-        if child1 is not None:
-            size = len(child1)
-            node[5] = index
-            index += size
-            node[6] = size
-            children_array = np.array(child1, dtype='int32')
-
-        if child2 is not None:
-            # assert type(child2) == np.ndarray
-            size = len(child2)
-            node[7] = index
-            index += size
-            node[8] = size
-            children_array = np.concatenate([children_array, child2])
-
-        if child3 is not None:
-            # assert type(child3) == np.ndarray
-            size = len(child3)
-            node[9] = index
-            index += size
-            node[10] = size
-            children_array = np.concatenate([children_array, child3])    
-        
-        # for i in range(MAX_PARAMS):
-        #     if i < len(children):
-        #         child = children[i].reshape(-1,NUM_COLS)
-        #         assert type(child) == np.ndarray
-        #         node.append(index)
-        #         # TODO: cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
-        #         size = len(child)
-        #         node.append(size)
-        #         index += size
-        #         if children_array is None:
-        #             children_array = np.array(child, dtype='int32').reshape(-1, NUM_COLS)
-        #         else:
-        #             children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
-        #     else:
-        #         node = node + [-1,-1]
+        position = 5
+        for i in range(param_count):
+            if i < len(children):
+                child = children[i] #.reshape(-1,NUM_COLS)
+                node[position] = index
+                position += 1
+                # TODO: cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
+                size = len(child)
+                node[position] = size
+                position += 1
+                index += size
 
 
-    np_node = np.asarray(node).reshape(-1, NUM_COLS)
-    assert np_node.shape == (1,11)
-    if node_type == FUNC_NODE:
-        assert children_array.shape[1] == 11
-        tree = np.concatenate([np_node,children_array])
+    # np_node = np.asarray(node).reshape(-1, NUM_COLS)
+    # assert np_node.shape == (1,11)
+    if children is not None:
+        children.insert(0, node)
     else:
-        tree = np.array(np_node, dtype='int32')
+        return [node]
 
-    return tree
+    # print("Children")
+    # print(children)
+    tree = np.vstack(children)
+    # print("Tree")
+    # print(tree)
+    return tree.tolist()
 
 
 def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
@@ -197,13 +173,11 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
 
-        while len(children) < 3:
-            children.append(None)
-        return createtree(FUNC_NODE, func_num, -1, False, children[0], children[1], children[2])
+        return createtree(FUNC_NODE, func_num, -1, False, children)
     elif random() < param_prob:
-        return createtree(PARAM_NODE, -1, randint(0, param_count - 1), False, None, None, None)
+        return createtree(PARAM_NODE, -1, randint(0, param_count - 1), False, None)
     else:
-        return createtree(CONST_NODE, -1, randint(0, 10), False, None, None, None)
+        return createtree(CONST_NODE, -1, randint(0, 10), False, None)
 
 
 
