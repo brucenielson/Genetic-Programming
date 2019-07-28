@@ -130,16 +130,8 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef int id = nodes
     cdef index, param_count
     cdef Py_ssize_t i
-    # cdef int[11] node
-    # node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
+    cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef object np_node
-    # How to use array.array with array.extend https://cython.readthedocs.io/en/latest/src/tutorial/array.html
-    cdef array.array node, child1array
-    node = array.array('i', [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1])
-    if child1 is not None:
-        assert type(child1) == np.ndarray
-        child1array = array.array('i', child1[0])
-
 
     nodes += 1
     # Create base node
