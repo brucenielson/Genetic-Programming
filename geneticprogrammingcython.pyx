@@ -131,13 +131,14 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef index, param_count
     cdef Py_ssize_t i
     # cdef int[11] node
+    # node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef object np_node
+    # How to use array.array with array.extend https://cython.readthedocs.io/en/latest/src/tutorial/array.html
     cdef array.array node = array.array('i', [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1])
 
 
     nodes += 1
     # Create base node
-    # node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
