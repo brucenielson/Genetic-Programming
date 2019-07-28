@@ -4,6 +4,7 @@ from random import random, randint
 import time
 import gp
 import gpcython as gpc
+cimport cython
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -13,7 +14,7 @@ import gpcython as gpc
 #TODO: cimport cython
 
 # Fake enum for TYPE#
-cdef enum NodeType:
+ctypedef enum NodeType:
     FUNC_NODE = 1
     PARAM_NODE = 2
     CONST_NODE = 3
@@ -31,7 +32,7 @@ cdef enum NodeType:
 # Functions
 
 #Fake Enum for Function List Columns
-cdef enum FunctionListCols:
+ctypedef enum FunctionListCols:
     FUNCTION = 0
     PARAM_COUNT = 1
     NAME = 2
@@ -91,7 +92,7 @@ func_list = np.array(func_list)
 # TODO: Or use memoryviews (see above)
 
 #Fake Enum for Column Names
-cdef enum ColumnNames:
+ctypedef enum ColumnNames:
     TYPE_COL = 0
     FUNC_NUM = 1
     VALUE_OR_PARAM = 2
@@ -109,7 +110,7 @@ cdef enum ColumnNames:
 cdef long treecounter = 0
 cdef long nodes = 0
 
-
+@cython.boundscheck(False)
 cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, object child1, object child2, object child3):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
@@ -120,6 +121,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef Py_ssize_t i
     cdef int[11] node
     cdef object np_node
+
     nodes += 1
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
@@ -171,8 +173,10 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         #         node = node + [-1,-1]
 
 
-    np_node = np.asarray(node).reshape(-1, NUM_COLS)  
+    np_node = np.asarray(node).reshape(-1, NUM_COLS)
+    assert np_node.shape == (1,11)
     if node_type == FUNC_NODE:
+        assert children_array.shape[1] == 11
         tree = np.concatenate([np_node,children_array])
     else:
         tree = np.array(np_node, dtype='int32')
