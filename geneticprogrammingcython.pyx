@@ -119,7 +119,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef Py_ssize_t i
     nodes += 1
     # Create base node
-    node = [node_type, funcnum, val_or_param, lock, id]
+    node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
@@ -130,32 +130,26 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         if child1 is not None:
             assert type(child1) == np.ndarray
             size = len(child1)
-            node.append(index)
+            node[5] = index
             index += size
-            node.append(size)
+            node[6] = size
             children_array = np.array(child1, dtype='int32').reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]
 
         if child2 is not None:
             assert type(child2) == np.ndarray
             size = len(child2)
-            node.append(index)
+            node[7] = index
             index += size
-            node.append(size)
+            node[8] = size
             children_array = np.concatenate([children_array, child2]).reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]
 
         if child3 is not None:
             assert type(child3) == np.ndarray
             size = len(child3)
-            node.append(index)
+            node[9] = index
             index += size
-            node.append(size)
-            children_array = np.concatenate([children_array, child3]).reshape(-1, NUM_COLS)
-        else:
-            node = node + [-1,-1]            
+            node[10] = size
+            children_array = np.concatenate([children_array, child3]).reshape(-1, NUM_COLS)      
         
         # for i in range(MAX_PARAMS):
         #     if i < len(children):
@@ -172,8 +166,6 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         #             children_array = np.concatenate([children_array, child]).reshape(-1, NUM_COLS)
         #     else:
         #         node = node + [-1,-1]
-    else:
-        node = node + [-1,-1,-1,-1,-1,-1]
 
 
     node = np.array(node, dtype='int32')
