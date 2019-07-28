@@ -117,6 +117,8 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef int id = nodes
     cdef index, param_count
     cdef Py_ssize_t i
+    cdef int[11] node
+    cdef object np_node
     nodes += 1
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
@@ -168,11 +170,11 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         #         node = node + [-1,-1]
 
 
-    node = np.array(node, dtype='int32')
+    np_node = np.asarray(node)
     if node_type == FUNC_NODE:
-        tree = np.concatenate([node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
+        tree = np.concatenate([np_node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
     else:
-        tree = np.array(node, dtype='int32').reshape(-1,NUM_COLS)
+        tree = np.array(np_node, dtype='int32').reshape(-1,NUM_COLS)
 
     return tree
 
