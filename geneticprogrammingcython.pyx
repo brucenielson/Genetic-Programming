@@ -171,11 +171,11 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         #         node = node + [-1,-1]
 
 
-    np_node = np.asarray(node)
+    np_node = np.asarray(node).reshape(-1, NUM_COLS)  
     if node_type == FUNC_NODE:
-        tree = np.concatenate([np_node.reshape(-1,NUM_COLS),children_array]).reshape(-1,NUM_COLS)
+        tree = np.concatenate([np_node,children_array])
     else:
-        tree = np.array(np_node, dtype='int32').reshape(-1,NUM_COLS)
+        tree = np.array(np_node, dtype='int32')
 
     return tree
 
