@@ -121,7 +121,7 @@ cdef long nodes = 0
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, object child1, object child2, object child3):
+cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, np.int32_t[:,:] child1, np.int32_t[:,:] child2, np.int32_t[:,:] child3):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
@@ -141,7 +141,6 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
         index = 1
         children_array = None
         if child1 is not None:
-            assert type(child1) == np.ndarray
             size = len(child1)
             node[5] = index
             index += size
@@ -149,7 +148,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
             children_array = np.array(child1, dtype='int32')
 
         if child2 is not None:
-            assert type(child2) == np.ndarray
+            # assert type(child2) == np.ndarray
             size = len(child2)
             node[7] = index
             index += size
@@ -157,7 +156,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
             children_array = np.concatenate([children_array, child2])
 
         if child3 is not None:
-            assert type(child3) == np.ndarray
+            # assert type(child3) == np.ndarray
             size = len(child3)
             node[9] = index
             index += size
