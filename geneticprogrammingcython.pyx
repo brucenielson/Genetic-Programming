@@ -40,7 +40,10 @@ ctypedef enum FunctionListCols:
 # CONSTANTS
 cdef int MAX_PARAMS = 3
 
-# Function Lists
+# Function Arrays
+ctypedef long (*func2param)(long param1, long param2)
+ctypedef long (*funct3param)(long param1, long param2, long param3)
+cdef void* func_array[5]
 func_list = []
 
 cdef list definefunction(function, param_count, name):
