@@ -120,6 +120,7 @@ cdef long treecounter = 0
 cdef long nodes = 0
 
 @cython.boundscheck(False)
+@cython.wraparound(False)
 cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, object child1, object child2, object child3):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
