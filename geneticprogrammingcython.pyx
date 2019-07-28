@@ -136,7 +136,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
             node[5] = index
             index += size
             node[6] = size
-            children_array = np.array(child1, dtype='int32').reshape(-1, NUM_COLS)
+            children_array = np.array(child1, dtype='int32')
 
         if child2 is not None:
             assert type(child2) == np.ndarray
@@ -144,7 +144,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
             node[7] = index
             index += size
             node[8] = size
-            children_array = np.concatenate([children_array, child2]).reshape(-1, NUM_COLS)
+            children_array = np.concatenate([children_array, child2])
 
         if child3 is not None:
             assert type(child3) == np.ndarray
@@ -152,7 +152,7 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
             node[9] = index
             index += size
             node[10] = size
-            children_array = np.concatenate([children_array, child3]).reshape(-1, NUM_COLS)      
+            children_array = np.concatenate([children_array, child3])    
         
         # for i in range(MAX_PARAMS):
         #     if i < len(children):
