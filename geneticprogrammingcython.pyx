@@ -44,10 +44,13 @@ cdef int MAX_PARAMS = 3
 ctypedef long (*func2param)(long param1, long param2)
 ctypedef long (*funct3param)(long param1, long param2, long param3)
 cdef void* func_array[5]
+cdef int param_array[5]
+cdef char* name_array[5]
 func_list = []
 
-cdef list definefunction(function, param_count, name):
+cdef list definefunction(function, param_count, name):    
     func_list.append((function, param_count, name))
+
 
 # Functions with 2 parameters
 cdef long add(long param1, long param2):
@@ -86,7 +89,10 @@ definefunction(iffunc, 3, 'if')
 
 func_list = np.array(func_list)
 # TODO: How to create a memory view to speed up numpy array: cdef int[:] func_list_cview = func_list. See NumPy Tutorial above. Except this won't work for the function array. I need a better way.
-
+for i in range(5):
+    param_array[i] = func_list[i,PARAM_COUNT]
+    # name_array[i] = func_list[i,NAME]
+    # func_array[i] = func_list[i,FUNCTION]
 
 
 # Program Trees: Lists or Dynamic arrays that follow this format:
