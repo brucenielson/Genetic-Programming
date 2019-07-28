@@ -5,8 +5,6 @@ import time
 import gp
 import gpcython as gpc
 cimport cython
-from cpython cimport array
-import array
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -134,7 +132,6 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     cdef object np_node
 
     nodes += 1
-    # Create base node
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
         param_count = func_list[funcnum][PARAM_COUNT]
