@@ -96,8 +96,8 @@ nodescounter = 0
 def createtree(node_type, funcnum, children, val_or_param=-1, lock=False, dtype='int64'):
     # Get node id
     global nodescounter
-    id = nodes
-    nodes += 1
+    id = nodescounter
+    nodescounter += 1
     # Create base node
     node = [node_type, funcnum, val_or_param, lock, id]
     # If this is a function, get number of parameters expected vs of children given
@@ -191,31 +191,31 @@ def timeit():
     end = time.time()
     print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
-    # start = time.time()
-    # population = []
-    # input = [10, 42]
-    # for i in range(runs):
-    #     population.append(gpc1.makerandomtree(2))
-    # mid = time.time()
-    # for tree in population:
-    #     tree.evaluate(input)
-    #
-    # end = time.time()
-    # print("Benchmark (gpcython.py): ", mid-start, end-mid)
-    #
-    #
-    #
-    # start = time.time()
-    # population = []
-    # input = [10, 42]
-    # for i in range(runs):
-    #     population.append(gp.makerandomtree(2))
-    # mid = time.time()
-    # for tree in population:
-    #     tree.evaluate(input)
-    #
-    # end = time.time()
-    # print("Benchmark (gp.py): ", mid-start, end-mid)
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(gpc1.makerandomtree(2))
+    mid = time.time()
+    for tree in population:
+        tree.evaluate(input)
+
+    end = time.time()
+    print("Benchmark (gpcython.py): ", mid-start, end-mid)
+
+
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(gp.makerandomtree(2))
+    mid = time.time()
+    for tree in population:
+        tree.evaluate(input)
+
+    end = time.time()
+    print("Benchmark (gp.py): ", mid-start, end-mid)
 
 
     # start = time.time()

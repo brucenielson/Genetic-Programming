@@ -128,9 +128,10 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
     global nodes
     cdef int id = nodes
     cdef index, param_count, position
-    cdef Py_ssize_t i
+    cdef int i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
-
+    cdef list tree = []
+    # print("Start Create Tree")
     nodes += 1
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
@@ -144,20 +145,25 @@ cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint l
                 child = children[i] #.reshape(-1,NUM_COLS)
                 node[position] = index
                 position += 1
-                # TODO: cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
                 size = len(child)
                 node[position] = size
                 position += 1
                 index += size
+                # print("child:",child)
+                for j in range(size):
+                    row = child[j]
+                    # print("row:",row)
+                    tree.append(row)
 
 
-    if children is None:
-        return np.asarray([node])
+
+    if len(tree) == 0:
+        # print("new node:", [node])
+        return [node]
     else:
-        children.insert(0, node)        
-
-    tree = np.vstack(children)
-    return tree
+        tree.insert(0, node)
+        # print("Tree:",tree)
+        return tree
 
 
 def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
@@ -165,7 +171,9 @@ def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
         func_num = randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-
+        # print("***")
+        # print("branch:",children)
+        # print("***")
         return createtree(FUNC_NODE, func_num, -1, False, children)
     elif random() < param_prob:
         return createtree(PARAM_NODE, -1, randint(0, param_count - 1), False, None)
