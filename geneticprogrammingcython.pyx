@@ -1,10 +1,12 @@
 import numpy as np
 cimport numpy as np
-from random import random, randint
+import random
 import time
 import gp
-import gpcython as gpc
 cimport cython
+import gpcython as gpc1
+import geneticprogramming as gp2
+
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
 #!python
@@ -121,68 +123,62 @@ cdef long nodes = 0
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef object createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, list children):
+cdef list createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, list children):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
     global nodes
     cdef int id = nodes
-    cdef index, param_count, position
-    cdef int i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
+    cdef int index, param_count, size, i, j
+    cdef Py_ssize_t position # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html 
     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef list tree = []
-    # print("Start Create Tree")
+
     nodes += 1
     # If this is a function, get number of parameters expected vs of children given
     if node_type == FUNC_NODE:
-        param_count = func_list[funcnum][PARAM_COUNT]
+        param_count = param_array[funcnum]
         # parameter count and number of children in the list must match or else we have an error
         # assert param_count == len(children)
         index = 1
         position = 5
         for i in range(param_count):
             if i < len(children):
-                child = children[i] #.reshape(-1,NUM_COLS)
+                child = children[i]
                 node[position] = index
                 position += 1
                 size = len(child)
                 node[position] = size
                 position += 1
                 index += size
-                # print("child:",child)
                 for j in range(size):
                     row = child[j]
-                    # print("row:",row)
                     tree.append(row)
 
-
-
     if len(tree) == 0:
-        # print("new node:", [node])
         return [node]
     else:
         tree.insert(0, node)
-        # print("Tree:",tree)
         return tree
 
 
-def makerandomtree(param_count, maxdepth=4, func_prob=0.5, param_prob=0.6):
-    if random() < func_prob and maxdepth > 0:
-        func_num = randint(0, len(func_list)-1)
+cpdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+    if random.random() < func_prob and maxdepth > 0:
+        func_num = random.randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
         # print("***")
         # print("branch:",children)
         # print("***")
         return createtree(FUNC_NODE, func_num, -1, False, children)
-    elif random() < param_prob:
-        return createtree(PARAM_NODE, -1, randint(0, param_count - 1), False, None)
+    elif random.random() < param_prob:
+        return createtree(PARAM_NODE, -1, random.randint(0, param_count - 1), False, None)
     else:
-        return createtree(CONST_NODE, -1, randint(0, 10), False, None)
+        return createtree(CONST_NODE, -1, random.randint(0, 10), False, None)
 
 
 
-cpdef evaluate(treearray, input):
+cpdef int evaluate(list treearray, list input):
     node = treearray[0]
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
@@ -211,14 +207,26 @@ def runexperiment():
     print(treearray)
     print(evaluate(treearray, [5,2]))
 
-def timeit():
+cdef timeit():
     runs = 250000
 
     start = time.time()
     population = []
     input = [10, 42]
     for i in range(runs):
-        population.append(gpc.makerandomtree(2))
+        population.append(makerandomtree(2))
+    mid = time.time()
+    for tree in population:
+        evaluate(tree, input)
+
+    end = time.time()
+    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
+
+    start = time.time()
+    population = []
+    input = [10, 42]
+    for i in range(runs):
+        population.append(gpc1.makerandomtree(2))
     mid = time.time()
     for tree in population:
         tree.evaluate(input)
@@ -241,22 +249,83 @@ def timeit():
     print("Benchmark (gp.py): ", mid-start, end-mid)
 
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        evaluate(tree, input)
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gp2.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     gp2.evaluate(tree, input)
 
-    end = time.time()
-    print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
+    # end = time.time()
+    # print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
+
+
+
+def test_evaluate():
+    tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
+            [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
+            [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
+            [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply
+            [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add
+            [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],
+            [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
+            [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
+            [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
+    treearray = np.array(tree)
+    input = [5,2]
+    assert evaluate(treearray, input) == 28
+    input = [2,5]
+    assert evaluate(treearray, input) == 70
+
+    tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF
+            [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
+            [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
+            [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],
+            [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply
+            [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],
+            [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],
+            [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
+            [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
+            [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
+    treearray = np.array(tree)
+    input = [5,2]
+    assert evaluate(treearray, input) == 2
+    input = [2,5]
+    assert evaluate(treearray, input) == 5
+    print("Pass test_evaluate")
+
+
+def test_makerandomtree():
+    random.seed(10)
+    treearray = np.asarray(makerandomtree(2))
+    assert treearray.shape == (1,11)
+    assert  evaluate(treearray, [5, 2]) == 5
+
+    treearray = np.asarray(makerandomtree(2))
+    assert treearray.shape == (9,11)
+    assert evaluate(treearray, [100, 200]) == 1
+
+    treearray = np.asarray(makerandomtree(3))
+    assert treearray.shape == (3,11)
+    assert evaluate(treearray, [1, 2, 3]) == -1
+
+    treearray = np.asarray(makerandomtree(4))
+    assert treearray.shape == (1,11)
+    assert evaluate(treearray, [4, 3, 2, 1]) == 2
+
+    treearray = np.asarray(makerandomtree(5))
+    assert treearray.shape == (1,11)
+    assert evaluate(treearray, [2, 4, 6, 8, 10]) == 10
+    print("Pass test_makerandomtree")
 
 
 
 def main():
     # runexperiment()
+    test_evaluate()
+    test_makerandomtree()
     timeit()
 
 if __name__ == "__main__":
