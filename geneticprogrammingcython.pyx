@@ -13,9 +13,10 @@ import gpcython as gpc
 #TODO: cimport cython
 
 # Fake enum for TYPE#
-FUNC_NODE = 1
-PARAM_NODE = 2
-CONST_NODE = 3
+cdef enum NodeType:
+    FUNC_NODE = 1
+    PARAM_NODE = 2
+    CONST_NODE = 3
 
 # Node format
 # [TYPE #, Function #, value or param indx, child1, child2, child3, lock, node id]
@@ -30,7 +31,7 @@ CONST_NODE = 3
 # Functions
 
 #Fake Enum for Function List Columns
-cdef enum NodeType:
+cdef enum FunctionListCols:
     FUNCTION = 0
     PARAM_COUNT = 1
     NAME = 2
