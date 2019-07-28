@@ -40,10 +40,10 @@ ctypedef enum FunctionListCols:
 # CONSTANTS
 cdef int MAX_PARAMS = 3
 
-# Function List
+# Function Lists
 func_list = []
 
-cdef definefunction(function, param_count, name):
+cdef list definefunction(function, param_count, name):
     func_list.append((function, param_count, name))
 
 # Functions with 2 parameters
@@ -81,7 +81,7 @@ cdef long iffunc(long param1, long param2, long param3):
 
 definefunction(iffunc, 3, 'if')
 
-# func_list = np.array(func_list)
+func_list = np.array(func_list)
 # TODO: How to create a memory view to speed up numpy array: cdef int[:] func_list_cview = func_list. See NumPy Tutorial above. Except this won't work for the function array. I need a better way.
 
 
@@ -205,8 +205,8 @@ cpdef evaluate(treearray, input):
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
         func_num = node[FUNC_NUM]
-        function = func_list[func_num][FUNCTION]
-        param_count = func_list[func_num][PARAM_COUNT]
+        function = func_list[func_num, FUNCTION]
+        param_count = func_list[func_num, PARAM_COUNT]
         values = []
         col = CHILDOFFSETS
         for i in range(param_count):
