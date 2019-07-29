@@ -6,6 +6,8 @@ import gp
 cimport cython
 import gpcython as gpc1
 import geneticprogramming as gp2
+from libc.stdlib cimport rand, RAND_MAX, srand
+
 
 
 # How do turn on c-division and turn off bound checking for whole file (if at top of file)
@@ -13,7 +15,6 @@ import geneticprogramming as gp2
 #cython: boundscheck=False
 #cython: cdivision=True
 # How to do it locally using decorators and with statement: https://github.com/cython/cython/wiki/enhancements-compilerdirectives
-#TODO: cimport cython
 
 # Enum for TYPE#
 # ctypedef enum NodeType:
@@ -96,6 +97,8 @@ cdef long iffunc(long param1, long param2, long param3):
 definefunction(iffunc, 3, 'if')
 
 func_list = np.array(func_list)
+cdef Py_ssize_t numfuncs = len(func_list)
+
 # TODO: How to create a memory view to speed up numpy array: cdef int[:] func_list_cview = func_list. See NumPy Tutorial above. Except this won't work for the function array. I need a better way.
 for i in range(5):
     param_array[i] = func_list[i,PARAM_COUNT]
@@ -128,6 +131,15 @@ cdef Py_ssize_t TYPE_COL = 0,FUNC_NUM = 1,VALUE_OR_PARAM = 2,LOCK = 3,ID = 4,CHI
 
 cdef long treecounter = 0
 cdef long nodes = 0
+
+@cython.cdivision(True)
+cdef float crandom() except -1: 
+    return  <float>rand() / <float>RAND_MAX
+
+@cython.cdivision(True)
+cdef int crandint(int lower, int upper) except -1:
+    return (rand() % (upper - lower + 1)) + lower
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -171,22 +183,23 @@ cdef list createtree(Py_ssize_t node_type, int funcnum, int val_or_param, bint l
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
-    cdef list children
-    if random.random() < func_prob and maxdepth > 0:
-        func_num = random.randint(0, len(func_list)-1)
-        children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
-                    for i in range(func_list[func_num][PARAM_COUNT])]
+cdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+    cdef list children = []
+    cdef Py_ssize_t i
+    if crandom() < func_prob and maxdepth > 0:
+        func_num = crandint(0, numfuncs-1)
+        for i in range(param_array[func_num]):
+            children.append(makerandomtree(param_count, maxdepth - 1, func_prob, param_prob))
         return createtree(FUNC_NODE, func_num, -1, False, children)
-    elif random.random() < param_prob:
-        return createtree(PARAM_NODE, -1, random.randint(0, param_count - 1), False, None)
+    elif crandom() < param_prob:
+        return createtree(PARAM_NODE, -1, crandint(0, param_count - 1), False, None)
     else:
-        return createtree(CONST_NODE, -1, random.randint(0, 10), False, None)
+        return createtree(CONST_NODE, -1, crandint(0, 10), False, None)
 
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef long evaluate(list treearray, list input):
+cdef long evaluate(list treearray, list input):
     cdef list values
     cdef long node[11]
     cdef Py_ssize_t node_type
@@ -288,11 +301,11 @@ def test_evaluate():
             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
-    treearray = np.array(tree)
+
     input = [5,2]
-    assert evaluate(treearray, input) == 28
+    assert evaluate(tree, input) == 28
     input = [2,5]
-    assert evaluate(treearray, input) == 70
+    assert evaluate(tree, input) == 70
 
     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF
             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
@@ -304,35 +317,46 @@ def test_evaluate():
             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
-    treearray = np.array(tree)
+
     input = [5,2]
-    assert evaluate(treearray, input) == 2
+    assert evaluate(tree, input) == 2
     input = [2,5]
-    assert evaluate(treearray, input) == 5
+    assert evaluate(tree, input) == 5
     print("Pass test_evaluate")
 
 
 def test_makerandomtree():
-    random.seed(10)
-    treearray = np.asarray(makerandomtree(2))
-    assert treearray.shape == (1,11)
-    assert  evaluate(treearray, [5, 2]) == 5
+    srand(10)
+    treearray = makerandomtree(2)
+    # print(np.asarray(treearray).shape)
+    # print(evaluate(treearray, [5, 2]))
+    assert np.asarray(treearray).shape == (41,11)
+    assert  evaluate(treearray, [5, 2]) == 36
 
-    treearray = np.asarray(makerandomtree(2))
-    assert treearray.shape == (9,11)
-    assert evaluate(treearray, [100, 200]) == 1
+    treearray = makerandomtree(2)
+    # print(np.asarray(treearray).shape)
+    # print(evaluate(treearray, [100, 200]))
+    assert np.asarray(treearray).shape == (1,11)
+    assert evaluate(treearray, [100, 200]) == 5
 
-    treearray = np.asarray(makerandomtree(3))
-    assert treearray.shape == (3,11)
-    assert evaluate(treearray, [1, 2, 3]) == -1
+    treearray = makerandomtree(3)
+    # print(np.asarray(treearray).shape)
+    # print(evaluate(treearray, [1, 2, 3]))
+    assert np.asarray(treearray).shape == (1,11)
+    assert evaluate(treearray, [1, 2, 3]) == 2
 
-    treearray = np.asarray(makerandomtree(4))
-    assert treearray.shape == (1,11)
-    assert evaluate(treearray, [4, 3, 2, 1]) == 2
+    treearray = makerandomtree(4)
+    # print(np.asarray(treearray).shape)
+    # print(evaluate(treearray, [4, 3, 2, 1]))
+    assert np.asarray(treearray).shape == (7,11)
+    assert evaluate(treearray, [4, 3, 2, 1]) == 0
 
-    treearray = np.asarray(makerandomtree(5))
-    assert treearray.shape == (1,11)
-    assert evaluate(treearray, [2, 4, 6, 8, 10]) == 10
+    treearray = makerandomtree(5)
+    # print(np.asarray(treearray).shape)
+    # print(evaluate(treearray, [2, 4, 6, 8, 10]))   
+    assert np.asarray(treearray).shape == (1,11)
+    assert evaluate(treearray, [2, 4, 6, 8, 10]) == 8
+    
     print("Pass test_makerandomtree")
 
 
