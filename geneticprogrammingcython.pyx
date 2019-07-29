@@ -15,11 +15,14 @@ import geneticprogramming as gp2
 # How to do it locally using decorators and with statement: https://github.com/cython/cython/wiki/enhancements-compilerdirectives
 #TODO: cimport cython
 
-# Fake enum for TYPE#
-ctypedef enum NodeType:
-    FUNC_NODE = 1
-    PARAM_NODE = 2
-    CONST_NODE = 3
+# Enum for TYPE#
+# ctypedef enum NodeType:
+#     FUNC_NODE = 1
+#     PARAM_NODE = 2
+#     CONST_NODE = 3
+
+cdef Py_ssize_t FUNC_NODE = 1, PARAM_NODE = 2, CONST_NODE = 3
+
 
 # Node format
 # [TYPE #, Function #, value or param indx, child1, child2, child3, lock, node id]
@@ -34,10 +37,13 @@ ctypedef enum NodeType:
 # Functions
 
 #Fake Enum for Function List Columns
-ctypedef enum FunctionListCols:
-    FUNCTION = 0
-    PARAM_COUNT = 1
-    NAME = 2
+# ctypedef enum FunctionListCols:
+#     FUNCTION = 0
+#     PARAM_COUNT = 1
+#     NAME = 2
+
+cdef Py_ssize_t FUNCTION = 0, PARAM_COUNT = 1, NAME = 2
+
 
 # CONSTANTS
 cdef int MAX_PARAMS = 3
@@ -103,34 +109,36 @@ for i in range(5):
 # TODO: Or use memoryviews (see above)
 
 #Fake Enum for Column Names
-ctypedef enum ColumnNames:
-    TYPE_COL = 0
-    FUNC_NUM = 1
-    VALUE_OR_PARAM = 2
-    LOCK = 3
-    ID = 4
-    CHILD1OFFSET = 5
-    CHILDOFFSETS = CHILD1OFFSET
-    CHILD1LENGTH = 6
-    CHILD2OFFSET = 7
-    CHILD2LENGTH = 8
-    CHILD3OFFSET = 9
-    CHILD3LENGTH = 10
-    NUM_COLS = CHILD3LENGTH + 1
+# ctypedef enum ColumnNames:
+#     TYPE_COL = 0
+#     FUNC_NUM = 1
+#     VALUE_OR_PARAM = 2
+#     LOCK = 3
+#     ID = 4
+#     CHILD1OFFSET = 5
+#     CHILDOFFSETS = CHILD1OFFSET
+#     CHILD1LENGTH = 6
+#     CHILD2OFFSET = 7
+#     CHILD2LENGTH = 8
+#     CHILD3OFFSET = 9
+#     CHILD3LENGTH = 10
+#     NUM_COLS = CHILD3LENGTH + 1
+
+cdef Py_ssize_t TYPE_COL = 0,FUNC_NUM = 1,VALUE_OR_PARAM = 2,LOCK = 3,ID = 4,CHILD1OFFSET = 5,CHILDOFFSETS = CHILD1OFFSET,CHILD1LENGTH = 6,CHILD2OFFSET = 7,CHILD2LENGTH = 8,CHILD3OFFSET = 9,CHILD3LENGTH = 10,NUM_COLS = CHILD3LENGTH + 1
 
 cdef long treecounter = 0
 cdef long nodes = 0
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef list createtree(NodeType node_type, int funcnum, int val_or_param, bint lock, list children):
+cdef list createtree(Py_ssize_t node_type, int funcnum, int val_or_param, bint lock, list children):
     # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
     # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
     # Get node id
     global nodes
     cdef int id = nodes
-    cdef int index, param_count, size, i, j
-    cdef Py_ssize_t position # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html 
+    cdef int index, param_count
+    cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html 
     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef list tree = []
 
@@ -161,15 +169,14 @@ cdef list createtree(NodeType node_type, int funcnum, int val_or_param, bint loc
         tree.insert(0, node)
         return tree
 
-
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cpdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+    cdef list children
     if random.random() < func_prob and maxdepth > 0:
         func_num = random.randint(0, len(func_list)-1)
         children = [makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
                     for i in range(func_list[func_num][PARAM_COUNT])]
-        # print("***")
-        # print("branch:",children)
-        # print("***")
         return createtree(FUNC_NODE, func_num, -1, False, children)
     elif random.random() < param_prob:
         return createtree(PARAM_NODE, -1, random.randint(0, param_count - 1), False, None)
@@ -177,14 +184,22 @@ cpdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, 
         return createtree(CONST_NODE, -1, random.randint(0, 10), False, None)
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef long evaluate(list treearray, list input):
+    cdef list values
+    cdef int node[11]
+    cdef Py_ssize_t node_type
+    cdef int func_num, param_count, i, param, start, length
+    cdef Py_ssize_t col
+    cdef long val
 
-cpdef int evaluate(list treearray, list input):
     node = treearray[0]
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
         func_num = node[FUNC_NUM]
         function = func_list[func_num, FUNCTION]
-        param_count = func_list[func_num, PARAM_COUNT]
+        param_count = param_array[func_num]
         values = []
         col = CHILDOFFSETS
         for i in range(param_count):
