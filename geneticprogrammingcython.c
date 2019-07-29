@@ -1859,9 +1859,9 @@ static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *, PyObject *, 
 static PyObject *__pyx_f_24geneticprogrammingcython_timeit(void); /*proto*/
 static PyObject *__Pyx_CFunc_long____long____long___to_py(long (*)(long, long)); /*proto*/
 static PyObject *__Pyx_CFunc_long____long____long____long___to_py(long (*)(long, long, long)); /*proto*/
-static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *, Py_ssize_t); /*proto*/
-static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *, Py_ssize_t); /*proto*/
-static int __Pyx_carray_from_py_int(PyObject *, int *, Py_ssize_t); /*proto*/
+static CYTHON_INLINE PyObject *__Pyx_carray_to_py_long(long *, Py_ssize_t); /*proto*/
+static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_long(long *, Py_ssize_t); /*proto*/
+static int __Pyx_carray_from_py_long(PyObject *, long *, Py_ssize_t); /*proto*/
 #define __Pyx_MODULE_NAME "geneticprogrammingcython"
 extern int __pyx_module_is_main_geneticprogrammingcython;
 int __pyx_module_is_main_geneticprogrammingcython = 0;
@@ -2411,13 +2411,13 @@ static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t __pyx_
   Py_ssize_t __pyx_v_size;
   Py_ssize_t __pyx_v_i;
   Py_ssize_t __pyx_v_j;
-  int __pyx_v_node[11];
+  long __pyx_v_node[11];
   PyObject *__pyx_v_tree = 0;
   PyObject *__pyx_v_child = NULL;
   PyObject *__pyx_v_row = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1[11];
+  long __pyx_t_1[11];
   PyObject *__pyx_t_2 = NULL;
   int __pyx_t_3;
   int __pyx_t_4;
@@ -2442,7 +2442,7 @@ static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t __pyx_
   /* "geneticprogrammingcython.pyx":142
  *     cdef int index, param_count
  *     cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
- *     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]             # <<<<<<<<<<<<<<
+ *     cdef long[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]             # <<<<<<<<<<<<<<
  *     cdef list tree = []
  * 
  */
@@ -2451,17 +2451,17 @@ static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t __pyx_
   __pyx_t_1[2] = __pyx_v_val_or_param;
   __pyx_t_1[3] = __pyx_v_lock;
   __pyx_t_1[4] = __pyx_v_id;
-  __pyx_t_1[5] = -1;
-  __pyx_t_1[6] = -1;
-  __pyx_t_1[7] = -1;
-  __pyx_t_1[8] = -1;
-  __pyx_t_1[9] = -1;
-  __pyx_t_1[10] = -1;
+  __pyx_t_1[5] = -1L;
+  __pyx_t_1[6] = -1L;
+  __pyx_t_1[7] = -1L;
+  __pyx_t_1[8] = -1L;
+  __pyx_t_1[9] = -1L;
+  __pyx_t_1[10] = -1L;
   memcpy(&(__pyx_v_node[0]), __pyx_t_1, sizeof(__pyx_v_node[0]) * (11));
 
   /* "geneticprogrammingcython.pyx":143
  *     cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html
- *     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
+ *     cdef long[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
  *     cdef list tree = []             # <<<<<<<<<<<<<<
  * 
  *     nodes += 1
@@ -2687,7 +2687,7 @@ static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t __pyx_
  *         tree.insert(0, node)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_2 = __Pyx_carray_to_py_int(__pyx_v_node, 11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_carray_to_py_long(__pyx_v_node, 11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_11 = PyList_New(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
@@ -2715,7 +2715,7 @@ static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t __pyx_
  * 
  */
   /*else*/ {
-    __pyx_t_11 = __Pyx_carray_to_py_int(__pyx_v_node, 11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_carray_to_py_long(__pyx_v_node, 11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_10 = PyList_Insert(__pyx_v_tree, 0, __pyx_t_11); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3333,26 +3333,26 @@ static PyObject *__pyx_pf_24geneticprogrammingcython_makerandomtree(CYTHON_UNUSE
  * @cython.wraparound(False)
  * cpdef long evaluate(list treearray, list input):             # <<<<<<<<<<<<<<
  *     cdef list values
- *     cdef int node[11]
+ *     cdef long node[11]
  */
 
 static PyObject *__pyx_pw_24geneticprogrammingcython_3evaluate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *__pyx_v_treearray, PyObject *__pyx_v_input, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyObject *__pyx_v_values = 0;
-  int __pyx_v_node[11];
+  long __pyx_v_node[11];
   Py_ssize_t __pyx_v_node_type;
   int __pyx_v_func_num;
   int __pyx_v_param_count;
   CYTHON_UNUSED int __pyx_v_i;
-  int __pyx_v_param;
-  int __pyx_v_start;
-  int __pyx_v_length;
   Py_ssize_t __pyx_v_col;
+  Py_ssize_t __pyx_v_start;
+  Py_ssize_t __pyx_v_length;
+  Py_ssize_t __pyx_v_param;
   long __pyx_v_val;
   PyObject *__pyx_v_function = NULL;
   long __pyx_r;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1[11];
+  long __pyx_t_1[11];
   int __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
@@ -3376,7 +3376,7 @@ static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *__pyx_v_treear
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(0, 197, __pyx_L1_error)
   }
-  if (unlikely(__Pyx_carray_from_py_int(PyList_GET_ITEM(__pyx_v_treearray, 0), __pyx_t_1, 11) < 0)) __PYX_ERR(0, 197, __pyx_L1_error)
+  if (unlikely(__Pyx_carray_from_py_long(PyList_GET_ITEM(__pyx_v_treearray, 0), __pyx_t_1, 11) < 0)) __PYX_ERR(0, 197, __pyx_L1_error)
   memcpy(&(__pyx_v_node[0]), __pyx_t_1, sizeof(__pyx_v_node[0]) * (11));
 
   /* "geneticprogrammingcython.pyx":198
@@ -3636,7 +3636,7 @@ static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *__pyx_v_treear
  * @cython.wraparound(False)
  * cpdef long evaluate(list treearray, list input):             # <<<<<<<<<<<<<<
  *     cdef list values
- *     cdef int node[11]
+ *     cdef long node[11]
  */
 
   /* function exit code */
@@ -9225,13 +9225,13 @@ static PyObject *__Pyx_CFunc_long____long____long____long___to_py(long (*__pyx_v
 
 /* "carray.to_py":112
  * 
- * @cname("__Pyx_carray_to_py_int")
- * cdef inline list __Pyx_carray_to_py_int(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_to_py_long")
+ * cdef inline list __Pyx_carray_to_py_long(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
  *     cdef size_t i
  *     cdef object value
  */
 
-static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t __pyx_v_length) {
+static CYTHON_INLINE PyObject *__Pyx_carray_to_py_long(long *__pyx_v_v, Py_ssize_t __pyx_v_length) {
   size_t __pyx_v_i;
   PyObject *__pyx_v_value = 0;
   PyObject *__pyx_v_l = NULL;
@@ -9241,7 +9241,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t
   size_t __pyx_t_2;
   size_t __pyx_t_3;
   size_t __pyx_t_4;
-  __Pyx_RefNannySetupContext("__Pyx_carray_to_py_int", 0);
+  __Pyx_RefNannySetupContext("__Pyx_carray_to_py_long", 0);
 
   /* "carray.to_py":115
  *     cdef size_t i
@@ -9274,7 +9274,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t
  *         Py_INCREF(value)
  *         PyList_SET_ITEM(l, i, value)
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_v[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 117, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_long((__pyx_v_v[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_XDECREF_SET(__pyx_v_value, __pyx_t_1);
     __pyx_t_1 = 0;
@@ -9312,8 +9312,8 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t
 
   /* "carray.to_py":112
  * 
- * @cname("__Pyx_carray_to_py_int")
- * cdef inline list __Pyx_carray_to_py_int(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_to_py_long")
+ * cdef inline list __Pyx_carray_to_py_long(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
  *     cdef size_t i
  *     cdef object value
  */
@@ -9321,7 +9321,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("carray.to_py.__Pyx_carray_to_py_int", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("carray.to_py.__Pyx_carray_to_py_long", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_value);
@@ -9333,13 +9333,13 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_py_int(int *__pyx_v_v, Py_ssize_t
 
 /* "carray.to_py":124
  * 
- * @cname("__Pyx_carray_to_tuple_int")
- * cdef inline tuple __Pyx_carray_to_tuple_int(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_to_tuple_long")
+ * cdef inline tuple __Pyx_carray_to_tuple_long(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
  *     cdef size_t i
  *     cdef object value
  */
 
-static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssize_t __pyx_v_length) {
+static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_long(long *__pyx_v_v, Py_ssize_t __pyx_v_length) {
   size_t __pyx_v_i;
   PyObject *__pyx_v_value = 0;
   PyObject *__pyx_v_t = NULL;
@@ -9349,7 +9349,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssiz
   size_t __pyx_t_2;
   size_t __pyx_t_3;
   size_t __pyx_t_4;
-  __Pyx_RefNannySetupContext("__Pyx_carray_to_tuple_int", 0);
+  __Pyx_RefNannySetupContext("__Pyx_carray_to_tuple_long", 0);
 
   /* "carray.to_py":127
  *     cdef size_t i
@@ -9382,7 +9382,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssiz
  *         Py_INCREF(value)
  *         PyTuple_SET_ITEM(t, i, value)
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_v[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 129, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_long((__pyx_v_v[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_XDECREF_SET(__pyx_v_value, __pyx_t_1);
     __pyx_t_1 = 0;
@@ -9417,8 +9417,8 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssiz
 
   /* "carray.to_py":124
  * 
- * @cname("__Pyx_carray_to_tuple_int")
- * cdef inline tuple __Pyx_carray_to_tuple_int(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_to_tuple_long")
+ * cdef inline tuple __Pyx_carray_to_tuple_long(base_type *v, Py_ssize_t length):             # <<<<<<<<<<<<<<
  *     cdef size_t i
  *     cdef object value
  */
@@ -9426,7 +9426,7 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssiz
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("carray.to_py.__Pyx_carray_to_tuple_int", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("carray.to_py.__Pyx_carray_to_tuple_long", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_value);
@@ -9438,13 +9438,13 @@ static CYTHON_INLINE PyObject *__Pyx_carray_to_tuple_int(int *__pyx_v_v, Py_ssiz
 
 /* "carray.from_py":77
  * 
- * @cname("__Pyx_carray_from_py_int")
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_from_py_long")
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t i = length
  *     try:
  */
 
-static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssize_t __pyx_v_length) {
+static int __Pyx_carray_from_py_long(PyObject *__pyx_v_o, long *__pyx_v_v, Py_ssize_t __pyx_v_length) {
   Py_ssize_t __pyx_v_i;
   PyObject *__pyx_v_item = NULL;
   int __pyx_r;
@@ -9459,12 +9459,13 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
   Py_ssize_t __pyx_t_8;
   PyObject *(*__pyx_t_9)(PyObject *);
   PyObject *__pyx_t_10 = NULL;
-  char const *__pyx_t_11;
-  __Pyx_RefNannySetupContext("__Pyx_carray_from_py_int", 0);
+  long __pyx_t_11;
+  char const *__pyx_t_12;
+  __Pyx_RefNannySetupContext("__Pyx_carray_from_py_long", 0);
 
   /* "carray.from_py":78
- * @cname("__Pyx_carray_from_py_int")
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:
+ * @cname("__Pyx_carray_from_py_long")
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:
  *     cdef Py_ssize_t i = length             # <<<<<<<<<<<<<<
  *     try:
  *         i = len(o)
@@ -9472,7 +9473,7 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
   __pyx_v_i = __pyx_v_length;
 
   /* "carray.from_py":79
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:
  *     cdef Py_ssize_t i = length
  *     try:             # <<<<<<<<<<<<<<
  *         i = len(o)
@@ -9498,7 +9499,7 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
       __pyx_v_i = __pyx_t_4;
 
       /* "carray.from_py":79
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:
  *     cdef Py_ssize_t i = length
  *     try:             # <<<<<<<<<<<<<<
  *         i = len(o)
@@ -9527,7 +9528,7 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
     __pyx_L5_except_error:;
 
     /* "carray.from_py":79
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:
  *     cdef Py_ssize_t i = length
  *     try:             # <<<<<<<<<<<<<<
  *         i = len(o)
@@ -9643,8 +9644,8 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
  *         else:
  *             i += 1  # convert index to length
  */
-      __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_item); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(2, 87, __pyx_L1_error)
-      (__pyx_v_v[__pyx_v_i]) = __pyx_t_5;
+      __pyx_t_11 = __Pyx_PyInt_As_long(__pyx_v_item); if (unlikely((__pyx_t_11 == (long)-1) && PyErr_Occurred())) __PYX_ERR(2, 87, __pyx_L1_error)
+      (__pyx_v_v[__pyx_v_i]) = __pyx_t_11;
 
       /* "carray.from_py":84
  *         pass
@@ -9723,9 +9724,9 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
  *         length, i)
  */
   if (((__pyx_v_i >= __pyx_v_length) != 0)) {
-    __pyx_t_11 = ((char const *)"too many values found during array assignment, expected %zd");
+    __pyx_t_12 = ((char const *)"too many values found during array assignment, expected %zd");
   } else {
-    __pyx_t_11 = ((char const *)"not enough values found during array assignment, expected %zd, got %zd");
+    __pyx_t_12 = ((char const *)"not enough values found during array assignment, expected %zd, got %zd");
   }
 
   /* "carray.from_py":93
@@ -9735,14 +9736,14 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
  *         IndexError,
  *         ("too many values found during array assignment, expected %zd"
  */
-  __pyx_t_7 = PyErr_Format(__pyx_builtin_IndexError, __pyx_t_11, __pyx_v_length, __pyx_v_i); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 93, __pyx_L1_error)
+  __pyx_t_7 = PyErr_Format(__pyx_builtin_IndexError, __pyx_t_12, __pyx_v_length, __pyx_v_i); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 93, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "carray.from_py":77
  * 
- * @cname("__Pyx_carray_from_py_int")
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_from_py_long")
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t i = length
  *     try:
  */
@@ -9753,7 +9754,7 @@ static int __Pyx_carray_from_py_int(PyObject *__pyx_v_o, int *__pyx_v_v, Py_ssiz
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_AddTraceback("carray.from_py.__Pyx_carray_from_py_int", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("carray.from_py.__Pyx_carray_from_py_long", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_item);
@@ -10991,8 +10992,8 @@ if (!__Pyx_RefNanny) {
 
   /* "carray.from_py":77
  * 
- * @cname("__Pyx_carray_from_py_int")
- * cdef int __Pyx_carray_from_py_int(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
+ * @cname("__Pyx_carray_from_py_long")
+ * cdef int __Pyx_carray_from_py_long(object o, base_type *v, Py_ssize_t length) except -1:             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t i = length
  *     try:
  */

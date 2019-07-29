@@ -139,7 +139,7 @@ cdef list createtree(Py_ssize_t node_type, int funcnum, int val_or_param, bint l
     cdef int id = nodes
     cdef int index, param_count
     cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html 
-    cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
+    cdef long[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
     cdef list tree = []
 
     nodes += 1
@@ -188,10 +188,10 @@ cpdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, 
 @cython.wraparound(False)
 cpdef long evaluate(list treearray, list input):
     cdef list values
-    cdef int node[11]
+    cdef long node[11]
     cdef Py_ssize_t node_type
-    cdef int func_num, param_count, i, param, start, length
-    cdef Py_ssize_t col
+    cdef int func_num, param_count, i
+    cdef Py_ssize_t col, start, length, param
     cdef long val
 
     node = treearray[0]

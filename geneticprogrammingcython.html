@@ -678,7 +678,7 @@ body.cython { font-family: courier; font-size: 12; }
   Py_ssize_t __pyx_v_size;
   Py_ssize_t __pyx_v_i;
   Py_ssize_t __pyx_v_j;
-  int __pyx_v_node[11];
+  long __pyx_v_node[11];
   PyObject *__pyx_v_tree = 0;
   PyObject *__pyx_v_child = NULL;
   PyObject *__pyx_v_row = NULL;
@@ -708,18 +708,18 @@ body.cython { font-family: courier; font-size: 12; }
 <pre class='cython code score-0 '>  __pyx_v_id = __pyx_v_24geneticprogrammingcython_nodes;
 </pre><pre class="cython line score-0">&#xA0;<span class="">140</span>:     cdef int index, param_count</pre>
 <pre class="cython line score-0">&#xA0;<span class="">141</span>:     cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html</pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">142</span>:     cdef int[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]</pre>
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">142</span>:     cdef long[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]</pre>
 <pre class='cython code score-0 '>  __pyx_t_1[0] = __pyx_v_node_type;
   __pyx_t_1[1] = __pyx_v_funcnum;
   __pyx_t_1[2] = __pyx_v_val_or_param;
   __pyx_t_1[3] = __pyx_v_lock;
   __pyx_t_1[4] = __pyx_v_id;
-  __pyx_t_1[5] = -1;
-  __pyx_t_1[6] = -1;
-  __pyx_t_1[7] = -1;
-  __pyx_t_1[8] = -1;
-  __pyx_t_1[9] = -1;
-  __pyx_t_1[10] = -1;
+  __pyx_t_1[5] = -1L;
+  __pyx_t_1[6] = -1L;
+  __pyx_t_1[7] = -1L;
+  __pyx_t_1[8] = -1L;
+  __pyx_t_1[9] = -1L;
+  __pyx_t_1[10] = -1L;
   memcpy(&amp;(__pyx_v_node[0]), __pyx_t_1, sizeof(__pyx_v_node[0]) * (11));
 </pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">143</span>:     cdef list tree = []</pre>
 <pre class='cython code score-5 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(0);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 143, __pyx_L1_error)</span>
@@ -803,7 +803,7 @@ body.cython { font-family: courier; font-size: 12; }
   }
 </pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">167</span>:         return [node]</pre>
 <pre class='cython code score-7 '>    <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
-    __pyx_t_2 = __Pyx_carray_to_py_int(__pyx_v_node, 11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)</span>
+    __pyx_t_2 = __Pyx_carray_to_py_long(__pyx_v_node, 11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
     __pyx_t_11 = <span class='py_c_api'>PyList_New</span>(1);<span class='error_goto'> if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 167, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_11);
@@ -816,7 +816,7 @@ body.cython { font-family: courier; font-size: 12; }
 </pre><pre class="cython line score-0">&#xA0;<span class="">168</span>:     else:</pre>
 <pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">169</span>:         tree.insert(0, node)</pre>
 <pre class='cython code score-6 '>  /*else*/ {
-    __pyx_t_11 = __Pyx_carray_to_py_int(__pyx_v_node, 11);<span class='error_goto'> if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)</span>
+    __pyx_t_11 = __Pyx_carray_to_py_long(__pyx_v_node, 11);<span class='error_goto'> if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_11);
     __pyx_t_10 = <span class='py_c_api'>PyList_Insert</span>(__pyx_v_tree, 0, __pyx_t_11);<span class='error_goto'> if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 169, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_11); __pyx_t_11 = 0;
@@ -1309,15 +1309,15 @@ struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree {
 <pre class='cython code score-42 '>static PyObject *__pyx_pw_24geneticprogrammingcython_3evaluate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *__pyx_v_treearray, PyObject *__pyx_v_input, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyObject *__pyx_v_values = 0;
-  int __pyx_v_node[11];
+  long __pyx_v_node[11];
   Py_ssize_t __pyx_v_node_type;
   int __pyx_v_func_num;
   int __pyx_v_param_count;
   CYTHON_UNUSED int __pyx_v_i;
-  int __pyx_v_param;
-  int __pyx_v_start;
-  int __pyx_v_length;
   Py_ssize_t __pyx_v_col;
+  Py_ssize_t __pyx_v_start;
+  Py_ssize_t __pyx_v_length;
+  Py_ssize_t __pyx_v_param;
   long __pyx_v_val;
   PyObject *__pyx_v_function = NULL;
   long __pyx_r;
@@ -1430,10 +1430,10 @@ static PyObject *__pyx_pf_24geneticprogrammingcython_2evaluate(CYTHON_UNUSED PyO
   return __pyx_r;
 }
 </pre><pre class="cython line score-0">&#xA0;<span class="">190</span>:     cdef list values</pre>
-<pre class="cython line score-0">&#xA0;<span class="">191</span>:     cdef int node[11]</pre>
+<pre class="cython line score-0">&#xA0;<span class="">191</span>:     cdef long node[11]</pre>
 <pre class="cython line score-0">&#xA0;<span class="">192</span>:     cdef Py_ssize_t node_type</pre>
-<pre class="cython line score-0">&#xA0;<span class="">193</span>:     cdef int func_num, param_count, i, param, start, length</pre>
-<pre class="cython line score-0">&#xA0;<span class="">194</span>:     cdef Py_ssize_t col</pre>
+<pre class="cython line score-0">&#xA0;<span class="">193</span>:     cdef int func_num, param_count, i</pre>
+<pre class="cython line score-0">&#xA0;<span class="">194</span>:     cdef Py_ssize_t col, start, length, param</pre>
 <pre class="cython line score-0">&#xA0;<span class="">195</span>:     cdef long val</pre>
 <pre class="cython line score-0">&#xA0;<span class="">196</span>: </pre>
 <pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">197</span>:     node = treearray[0]</pre>
@@ -1441,7 +1441,7 @@ static PyObject *__pyx_pf_24geneticprogrammingcython_2evaluate(CYTHON_UNUSED PyO
     <span class='py_c_api'>PyErr_SetString</span>(PyExc_TypeError, "'NoneType' object is not subscriptable");
     <span class='error_goto'>__PYX_ERR(0, 197, __pyx_L1_error)</span>
   }
-  if (unlikely(__Pyx_carray_from_py_int(<span class='py_macro_api'>PyList_GET_ITEM</span>(__pyx_v_treearray, 0), __pyx_t_1, 11) &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 197, __pyx_L1_error)</span>
+  if (unlikely(__Pyx_carray_from_py_long(<span class='py_macro_api'>PyList_GET_ITEM</span>(__pyx_v_treearray, 0), __pyx_t_1, 11) &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 197, __pyx_L1_error)</span>
   memcpy(&amp;(__pyx_v_node[0]), __pyx_t_1, sizeof(__pyx_v_node[0]) * (11));
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">198</span>:     node_type = node[TYPE_COL]</pre>
 <pre class='cython code score-0 '>  __pyx_v_node_type = (__pyx_v_node[__pyx_v_24geneticprogrammingcython_TYPE_COL]);
