@@ -52,9 +52,9 @@ cdef int MAX_PARAMS = 3
 # Function Arrays
 ctypedef long (*func2param)(long param1, long param2)
 ctypedef long (*funct3param)(long param1, long param2, long param3)
-cdef void* func_array[5]
 cdef int param_array[5]
-cdef char* name_array[5]
+cdef list name_array = []
+cdef list func_array = []
 func_list = []
 
 cdef list definefunction(function, param_count, name):    
@@ -96,14 +96,14 @@ cdef long iffunc(long param1, long param2, long param3):
 
 definefunction(iffunc, 3, 'if')
 
-func_list = np.array(func_list)
+# func_list = np.array(func_list)
 cdef Py_ssize_t numfuncs = len(func_list)
 
 # TODO: How to create a memory view to speed up numpy array: cdef int[:] func_list_cview = func_list. See NumPy Tutorial above. Except this won't work for the function array. I need a better way.
 for i in range(5):
-    param_array[i] = func_list[i,PARAM_COUNT]
-    # name_array[i] = func_list[i,NAME]
-    # func_array[i] = func_list[i,FUNCTION]
+    param_array[i] = func_list[i][PARAM_COUNT]
+    name_array.append(func_list[i][NAME])
+    func_array.append(func_list[i][FUNCTION])
 
 
 # Program Trees: Lists or Dynamic arrays that follow this format:
@@ -211,7 +211,7 @@ cdef long evaluate(list treearray, list input):
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
         func_num = node[FUNC_NUM]
-        function = func_list[func_num, FUNCTION]
+        function = func_array[func_num]
         param_count = param_array[func_num]
         values = []
         col = CHILDOFFSETS
