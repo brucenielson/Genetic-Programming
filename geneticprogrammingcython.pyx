@@ -199,7 +199,7 @@ cdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, f
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef long evaluate(list treearray, list input):
+cdef long evaluate(long[:,:] treearray, list input):
     # TODO: Can evaluate be speed up by not doing splicing or moving to Numpy once after creation?
     # TODO: Can I redo the old object oriented approach to be faster using the trick of not storing the function in the class and just referencing it in a list?
     cdef list values
@@ -209,7 +209,10 @@ cdef long evaluate(list treearray, list input):
     cdef Py_ssize_t col, start, length, param
     cdef long val
 
-    node = treearray[0]
+    # print("Shape:", treearray.shape)
+    for i in range(11):
+        node[i] = treearray[0,i]    
+    # node = treearray[0]
     node_type = node[TYPE_COL]
     if node_type == FUNC_NODE:
         func_num = node[FUNC_NUM]
@@ -244,7 +247,8 @@ cdef timeit():
     population = []
     input = [10, 42]
     for i in range(runs):
-        population.append(makerandomtree(2))
+        population.append(np.asarray(makerandomtree(2)))
+
     mid = time.time()
     for tree in population:
         evaluate(tree, input)
@@ -257,6 +261,7 @@ cdef timeit():
     input = [10, 42]
     for i in range(runs):
         population.append(gpc1.makerandomtree(2))
+    
     mid = time.time()
     for tree in population:
         tree.evaluate(input)
@@ -304,6 +309,7 @@ def test_evaluate():
             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
 
+    tree = np.asarray(tree)
     input = [5,2]
     assert evaluate(tree, input) == 28
     input = [2,5]
@@ -320,6 +326,7 @@ def test_evaluate():
             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
 
+    tree = np.asarray(tree)
     input = [5,2]
     assert evaluate(tree, input) == 2
     input = [2,5]
@@ -330,30 +337,35 @@ def test_evaluate():
 def test_makerandomtree():
     srand(10)
     treearray = makerandomtree(2)
+    treearray = np.asarray(treearray)
     # print(np.asarray(treearray).shape)
     # print(evaluate(treearray, [5, 2]))
     assert np.asarray(treearray).shape == (41,11)
     assert  evaluate(treearray, [5, 2]) == 36
 
     treearray = makerandomtree(2)
+    treearray = np.asarray(treearray)
     # print(np.asarray(treearray).shape)
     # print(evaluate(treearray, [100, 200]))
     assert np.asarray(treearray).shape == (1,11)
     assert evaluate(treearray, [100, 200]) == 5
 
     treearray = makerandomtree(3)
+    treearray = np.asarray(treearray)
     # print(np.asarray(treearray).shape)
     # print(evaluate(treearray, [1, 2, 3]))
     assert np.asarray(treearray).shape == (1,11)
     assert evaluate(treearray, [1, 2, 3]) == 2
 
     treearray = makerandomtree(4)
+    treearray = np.asarray(treearray)
     # print(np.asarray(treearray).shape)
     # print(evaluate(treearray, [4, 3, 2, 1]))
     assert np.asarray(treearray).shape == (7,11)
     assert evaluate(treearray, [4, 3, 2, 1]) == 0
 
     treearray = makerandomtree(5)
+    treearray = np.asarray(treearray)
     # print(np.asarray(treearray).shape)
     # print(evaluate(treearray, [2, 4, 6, 8, 10]))   
     assert np.asarray(treearray).shape == (1,11)

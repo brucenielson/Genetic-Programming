@@ -42,3 +42,8 @@ python setup.py build_ext --inplace
 
 How to compile Nuitka:
 python -m nuitka --standalone --show-scons  --mingw64 hello.py
+
+
+('Benchmark (geneticprogrammingcython.py):  ', 1.7029762268066406, 0.2423560619354248)
+('Benchmark (gpcython.py): ', 2.4172420501708984, 0.11968302726745605)
+('Benchmark (gp.py): ', 4.945305347442627, 0.4537932872772217)
