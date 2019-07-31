@@ -200,6 +200,8 @@ cdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, f
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef long evaluate(list treearray, list input):
+    # TODO: Can evaluate be speed up by not doing splicing or moving to Numpy once after creation?
+    # TODO: Can I redo the old object oriented approach to be faster using the trick of not storing the function in the class and just referencing it in a list?
     cdef list values
     cdef long node[11]
     cdef Py_ssize_t node_type
