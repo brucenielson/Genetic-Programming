@@ -6,5 +6,6 @@ import Cython.Compiler.Options
 Cython.Compiler.Options.annotate = True
 
 setup(
-    ext_modules = cythonize("geneticprogrammingcython.pyx", annotate=True), include_dirs=[numpy.get_include()]
+    # ext_modules = cythonize("geneticprogrammingcython2.pyx", annotate=True), include_dirs=[numpy.get_include()]
+    ext_modules = cythonize("Test2.pyx", annotate=True), include_dirs=[numpy.get_include()]
 )
