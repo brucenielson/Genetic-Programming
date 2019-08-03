@@ -144,101 +144,112 @@ cdef int crandint(int lower, int upper) except -1:
     return (rand() % (upper - lower + 1)) + lower
 
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cdef list createtree(Py_ssize_t node_type, int funcnum, int val_or_param, bint lock, list children):
-    # NumPy to C Array: https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
-    # Numpy arrays as parameters: https://stackoverflow.com/questions/4641200/cython-inline-function-with-numpy-array-as-parameter
-    # Get node id
-    global nodes
-    cdef int id = nodes
-    cdef int index, param_count
-    cdef Py_ssize_t position, size, i, j # cdef Py_ssize_t see http://docs.cython.org/en/latest/src/userguide/numpy_tutorial.html 
-    cdef long[11] node = [node_type, funcnum, val_or_param, lock, id, -1, -1, -1, -1, -1, -1]
-    cdef list tree = []
 
-    nodes += 1
-    # If this is a function, get number of parameters expected vs of children given
-    if node_type == FUNC_NODE:
-        param_count = param_array[funcnum]
-        # parameter count and number of children in the list must match or else we have an error
-        # assert param_count == len(children)
-        index = 1
-        position = 5
-        for i in range(param_count):
-            if i < len(children):
-                child = children[i]
-                node[position] = index
-                position += 1
-                size = len(child)
-                node[position] = size
-                position += 1
-                index += size
-                for j in range(size):
-                    row = child[j]
-                    tree.append(row)
+# node objects
+cdef class node:
+    cdef public object function
+    cdef public object name
+    cdef public object children
+    cdef int func_num
+    cdef int lock
+    cdef int param_num
 
-    if len(tree) == 0:
-        return [node]
-    else:
-        tree.insert(0, node)
-        return tree
+    def __init__(self, int func_num, object children):
+        self.func_num = func_num
+        self.function = func_array[func_num]
+        self.name = name_array[func_num]
+        self.param_num = param_array[func_num]
+        self.children = children
+        self.lock = False
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+
+    cdef double evaluate(self, list inp):
+        cdef int size 
+        cdef double results[3]
+        size = len(self.children)
+        for i in range(size):
+            results[i] = (<node>(self.children[i])).evaluate(inp)
+            # if type(self.children[i]) == node:
+            #     results[i] = (<node>(self.children[i])).evaluate(inp)
+            # elif type(self.children[i]) == constnode:
+            #     results[i] = (<constnode>(self.children[i])).evaluate(inp)
+            # else:
+            #     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+
+        if size == 1:
+            return self.function(results[0])
+        elif size == 2:
+            return self.function(results[0], results[1])
+        elif size == 3:
+            return self.function(results[0], results[1], results[2])
+        # TODO: fix to use return self.function(*results)
+
+
+    def display(self, indent=0):
+        if self.lock:
+            add = "*"
+        else:
+            add = ""
+        name = str(self.name)
+        print( (' ' * indent) + name + add)
+        for c in self.children:
+            c.display(indent + 1)
+
+
+cdef class paramnode(node):
+    cdef int idx
+
+    def __init__(self, int idx):
+        self.idx = idx
+
+    cdef double evaluate(self, list inp):
+        return inp[self.idx]
+
+    def display(self, indent=0):
+        print('%sp%d' % (' ' * indent, self.idx))
+
+
+cdef class constnode(node):
+    cdef double value
+
+    def __init__(self, double value):
+        self.value = value
+
+    cdef double evaluate(self, list inp):
+        return self.value
+
+    def display(self, indent=0):
+        print('%s%d' % (' ' * indent, self.value))
+
+
+
+
+
+
+
+# @cython.boundscheck(False)
+# @cython.wraparound(False)
+cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
     if crandom() < func_prob and maxdepth > 0:
         func_num = crandint(0, numfuncs-1)
         for i in range(param_array[func_num]):
-            children.append(makerandomtree(param_count, maxdepth - 1, func_prob, param_prob))
-        return createtree(FUNC_NODE, func_num, -1, False, children)
+            tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
+            children.append(tree)
+        return node(func_num, children)
     elif crandom() < param_prob:
-        return createtree(PARAM_NODE, -1, crandint(0, param_count - 1), False, None)
+        return paramnode(crandint(0, param_count - 1))
     else:
-        return createtree(CONST_NODE, -1, crandint(0, 10), False, None)
-
-
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cdef long evaluate(list treearray, list input):
-    # TODO: Can evaluate be speed up by not doing splicing or moving to Numpy once after creation?
-    # TODO: Can I redo the old object oriented approach to be faster using the trick of not storing the function in the class and just referencing it in a list?
-    cdef list values
-    cdef long node[11]
-    cdef Py_ssize_t node_type
-    cdef int func_num, param_count, i
-    cdef Py_ssize_t col, start, length, param
-    cdef long val
-
-    node = treearray[0]
-    node_type = node[TYPE_COL]
-    if node_type == FUNC_NODE:
-        func_num = node[FUNC_NUM]
-        function = func_array[func_num]
-        param_count = param_array[func_num]
-        values = []
-        col = CHILDOFFSETS
-        for i in range(param_count):
-            start = node[col]
-            length = node[col + 1]
-            col += 2
-            val = evaluate(treearray[start:start+length], input)
-            values.append(val)
-        return function(*values)
-    elif node_type == PARAM_NODE:
-        param = node[VALUE_OR_PARAM]
-        return input[param]
-    elif node_type == CONST_NODE:
-        return node[VALUE_OR_PARAM]
+        return constnode(crandint(0, 10))
 
 
 
 def runexperiment():
-    treearray = makerandomtree(2)
-    print(treearray)
-    print(evaluate(treearray, [5,2]))
+    tree = makerandomtree(2)
+    tree.display()
+    print(tree.evaluate([5,2]))
+
 
 cdef timeit():
     runs = 250000
@@ -250,8 +261,7 @@ cdef timeit():
         population.append(makerandomtree(2))
     mid = time.time()
     for tree in population:
-        evaluate(tree, input)
-
+        (<node>tree).evaluate(input)
     end = time.time()
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
@@ -278,7 +288,6 @@ cdef timeit():
     mid = time.time()
     for tree in population:
         tree.evaluate(input)
-
     end = time.time()
     print("Benchmark (gpcython.py): ", mid-start, end-mid)
 
@@ -310,7 +319,6 @@ cdef timeit():
     # print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)
 
 
-
 def test_evaluate():
     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
@@ -322,10 +330,11 @@ def test_evaluate():
             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
 
+
     input = [5,2]
-    assert evaluate(tree, input) == 28
+    assert tree.evaluate(input) == 28
     input = [2,5]
-    assert evaluate(tree, input) == 70
+    assert tree.evaluate(input) == 70
 
     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF
             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
@@ -339,43 +348,33 @@ def test_evaluate():
             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
 
     input = [5,2]
-    assert evaluate(tree, input) == 2
+    assert tree.evaluate(input) == 2
     input = [2,5]
-    assert evaluate(tree, input) == 5
+    assert tree.evaluate(input) == 5
     print("Pass test_evaluate")
 
 
-def test_makerandomtree():
+cdef test_makerandomtree():
     srand(10)
-    treearray = makerandomtree(2)
-    # print(np.asarray(treearray).shape)
-    # print(evaluate(treearray, [5, 2]))
-    assert np.asarray(treearray).shape == (41,11)
-    assert  evaluate(treearray, [5, 2]) == 36
+    tree = makerandomtree(2)
+    # print(treearray.evaluate([5, 2]))
+    assert tree.evaluate([5, 2]) == 36
 
-    treearray = makerandomtree(2)
-    # print(np.asarray(treearray).shape)
-    # print(evaluate(treearray, [100, 200]))
-    assert np.asarray(treearray).shape == (1,11)
-    assert evaluate(treearray, [100, 200]) == 5
+    tree = makerandomtree(2)
+    # print(treearray.evaluate([100, 200]))
+    assert tree.evaluate([100, 200]) == 5
 
-    treearray = makerandomtree(3)
-    # print(np.asarray(treearray).shape)
-    # print(evaluate(treearray, [1, 2, 3]))
-    assert np.asarray(treearray).shape == (1,11)
-    assert evaluate(treearray, [1, 2, 3]) == 2
+    tree = makerandomtree(3)
+    # print(treearray.evaluate([1, 2, 3]))
+    assert tree.evaluate([1, 2, 3]) == 2
 
-    treearray = makerandomtree(4)
-    # print(np.asarray(treearray).shape)
-    # print(evaluate(treearray, [4, 3, 2, 1]))
-    assert np.asarray(treearray).shape == (7,11)
-    assert evaluate(treearray, [4, 3, 2, 1]) == 0
+    tree = makerandomtree(4)
+    # print(treearray.evaluate([4, 3, 2, 1]))
+    assert tree.evaluate([4, 3, 2, 1]) == 0
 
-    treearray = makerandomtree(5)
-    # print(np.asarray(treearray).shape)
-    # print(evaluate(treearray, [2, 4, 6, 8, 10]))   
-    assert np.asarray(treearray).shape == (1,11)
-    assert evaluate(treearray, [2, 4, 6, 8, 10]) == 8
+    tree = makerandomtree(5)
+    # print(treearray.evaluate([2, 4, 6, 8, 10]))   
+    assert tree.evaluate([2, 4, 6, 8, 10]) == 8
     
     print("Pass test_makerandomtree")
 
@@ -383,7 +382,7 @@ def test_makerandomtree():
 
 def main():
     # runexperiment()
-    test_evaluate()
+    # test_evaluate()
     test_makerandomtree()
     timeit()
 
