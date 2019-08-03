@@ -163,18 +163,12 @@ cdef class node:
         self.lock = False
 
 
-    cdef double evaluate(self, list inp):
+    cpdef double evaluate(self, list inp):
         cdef int size 
         cdef double results[3]
         size = len(self.children)
         for i in range(size):
-            results[i] = (<node>(self.children[i])).evaluate(inp)
-            # if type(self.children[i]) == node:
-            #     results[i] = (<node>(self.children[i])).evaluate(inp)
-            # elif type(self.children[i]) == constnode:
-            #     results[i] = (<constnode>(self.children[i])).evaluate(inp)
-            # else:
-            #     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+            results[i] = self.children[i].evaluate(inp)
 
         if size == 1:
             return self.function(results[0])
@@ -196,26 +190,26 @@ cdef class node:
             c.display(indent + 1)
 
 
-cdef class paramnode(node):
+cdef class paramnode:
     cdef int idx
 
     def __init__(self, int idx):
         self.idx = idx
 
-    cdef double evaluate(self, list inp):
+    cpdef double evaluate(self, list inp):
         return inp[self.idx]
 
     def display(self, indent=0):
         print('%sp%d' % (' ' * indent, self.idx))
 
 
-cdef class constnode(node):
+cdef class constnode:
     cdef double value
 
     def __init__(self, double value):
         self.value = value
 
-    cdef double evaluate(self, list inp):
+    cpdef double evaluate(self, list inp):
         return self.value
 
     def display(self, indent=0):
@@ -229,7 +223,7 @@ cdef class constnode(node):
 
 # @cython.boundscheck(False)
 # @cython.wraparound(False)
-cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
     if crandom() < func_prob and maxdepth > 0:
@@ -261,7 +255,7 @@ cdef timeit():
         population.append(makerandomtree(2))
     mid = time.time()
     for tree in population:
-        (<node>tree).evaluate(input)
+        tree.evaluate(input)
     end = time.time()
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
