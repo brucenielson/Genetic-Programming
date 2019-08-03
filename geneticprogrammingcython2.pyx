@@ -149,7 +149,7 @@ cdef int crandint(int lower, int upper) except -1:
 cdef class node:
     cdef public object function
     cdef public object name
-    cdef public object children
+    cdef public list children
     cdef int func_num
     cdef int lock
     cdef int param_num
@@ -162,16 +162,19 @@ cdef class node:
         self.children = children
         self.lock = False
 
-
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
-        cdef int size 
-        cdef double results[3]
+        cdef int size
+        cdef long results[3]
+        cdef object t
         size = len(self.children)
         for i in range(size):
-            # results[i] = self.children[i]).evaluate(inp)
-            if type(self.children[i]) == node:
+            t = type(self.children[i]) 
+            if t == node:
                 results[i] = (<node>(self.children[i])).evaluate(inp)
-            elif type(self.children[i]) == constnode:
+            elif t == constnode:
                 results[i] = (<constnode>(self.children[i])).evaluate(inp)
             else:
                 results[i] = (<paramnode>(self.children[i])).evaluate(inp)
