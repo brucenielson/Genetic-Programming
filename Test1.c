@@ -1012,6 +1012,9 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 /* CheckBinaryVersion.proto */
 static int __Pyx_check_binary_version(void);
 
+/* FunctionExport.proto */
+static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig);
+
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
@@ -1049,7 +1052,8 @@ static PyObject *__pyx_pf_5Test1_main(CYTHON_UNUSED PyObject *__pyx_self); /* pr
 static PyObject *__pyx_codeobj_;
 /* Late includes */
 
-/* "Test1.pyx":1
+/* "Test1.pyx":2
+ * # https://cython.readthedocs.io/en/latest/src/userguide/sharing_declarations.html
  * cdef test1():             # <<<<<<<<<<<<<<
  *     print("Do Something In Test 1")
  * 
@@ -1060,15 +1064,17 @@ static PyObject *__pyx_f_5Test1_test1(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("test1", 0);
 
-  /* "Test1.pyx":2
+  /* "Test1.pyx":3
+ * # https://cython.readthedocs.io/en/latest/src/userguide/sharing_declarations.html
  * cdef test1():
  *     print("Do Something In Test 1")             # <<<<<<<<<<<<<<
  * 
  * def main():
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Do_Something_In_Test_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Do_Something_In_Test_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
 
-  /* "Test1.pyx":1
+  /* "Test1.pyx":2
+ * # https://cython.readthedocs.io/en/latest/src/userguide/sharing_declarations.html
  * cdef test1():             # <<<<<<<<<<<<<<
  *     print("Do Something In Test 1")
  * 
@@ -1086,7 +1092,7 @@ static PyObject *__pyx_f_5Test1_test1(void) {
   return __pyx_r;
 }
 
-/* "Test1.pyx":4
+/* "Test1.pyx":5
  *     print("Do Something In Test 1")
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -1114,17 +1120,17 @@ static PyObject *__pyx_pf_5Test1_main(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("main", 0);
 
-  /* "Test1.pyx":5
+  /* "Test1.pyx":6
  * 
  * def main():
  *     test1()             # <<<<<<<<<<<<<<
  * 
  */
-  __pyx_t_1 = __pyx_f_5Test1_test1(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5Test1_test1(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "Test1.pyx":4
+  /* "Test1.pyx":5
  *     print("Do Something In Test 1")
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -1212,14 +1218,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "Test1.pyx":4
+  /* "Test1.pyx":5
  *     print("Do Something In Test 1")
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     test1()
  * 
  */
-  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Test1_pyx, __pyx_n_s_main_2, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Test1_pyx, __pyx_n_s_main_2, 5, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1262,8 +1268,12 @@ static int __Pyx_modinit_function_export_code(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_modinit_function_export_code", 0);
   /*--- Function export code ---*/
+  if (__Pyx_ExportFunction("test1", (void (*)(void))__pyx_f_5Test1_test1, "PyObject *(void)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
+  __pyx_L1_error:;
+  __Pyx_RefNannyFinishContext();
+  return -1;
 }
 
 static int __Pyx_modinit_type_init_code(void) {
@@ -1485,7 +1495,7 @@ if (!__Pyx_RefNanny) {
   /*--- Global type/function init code ---*/
   (void)__Pyx_modinit_global_init_code();
   (void)__Pyx_modinit_variable_export_code();
-  (void)__Pyx_modinit_function_export_code();
+  if (unlikely(__Pyx_modinit_function_export_code() != 0)) goto __pyx_L1_error;
   (void)__Pyx_modinit_type_init_code();
   (void)__Pyx_modinit_type_import_code();
   (void)__Pyx_modinit_variable_import_code();
@@ -1495,22 +1505,22 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "Test1.pyx":4
+  /* "Test1.pyx":5
  *     print("Do Something In Test 1")
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     test1()
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5Test1_1main, NULL, __pyx_n_s_Test1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5Test1_1main, NULL, __pyx_n_s_Test1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_1) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "Test1.pyx":1
- * cdef test1():             # <<<<<<<<<<<<<<
+ * # https://cython.readthedocs.io/en/latest/src/userguide/sharing_declarations.html             # <<<<<<<<<<<<<<
+ * cdef test1():
  *     print("Do Something In Test 1")
- * 
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -2518,6 +2528,43 @@ static int __Pyx_check_binary_version(void) {
         return PyErr_WarnEx(NULL, message, 1);
     }
     return 0;
+}
+
+/* FunctionExport */
+static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig) {
+    PyObject *d = 0;
+    PyObject *cobj = 0;
+    union {
+        void (*fp)(void);
+        void *p;
+    } tmp;
+    d = PyObject_GetAttrString(__pyx_m, (char *)"__pyx_capi__");
+    if (!d) {
+        PyErr_Clear();
+        d = PyDict_New();
+        if (!d)
+            goto bad;
+        Py_INCREF(d);
+        if (PyModule_AddObject(__pyx_m, (char *)"__pyx_capi__", d) < 0)
+            goto bad;
+    }
+    tmp.fp = f;
+#if PY_VERSION_HEX >= 0x02070000
+    cobj = PyCapsule_New(tmp.p, sig, 0);
+#else
+    cobj = PyCObject_FromVoidPtrAndDesc(tmp.p, (void *)sig, 0);
+#endif
+    if (!cobj)
+        goto bad;
+    if (PyDict_SetItemString(d, name, cobj) < 0)
+        goto bad;
+    Py_DECREF(cobj);
+    Py_DECREF(d);
+    return 0;
+bad:
+    Py_XDECREF(cobj);
+    Py_XDECREF(d);
+    return -1;
 }
 
 /* InitStrings */

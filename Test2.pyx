@@ -1,4 +1,4 @@
-import Test1
+cimport Test1
 
 cdef test2():
     print("Do Something In Test 2")
