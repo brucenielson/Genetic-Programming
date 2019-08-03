@@ -163,7 +163,7 @@ cdef class node:
         self.lock = False
 
 
-    cpdef double evaluate(self, list inp):
+    cdef long evaluate(self, list inp):
         cdef int size 
         cdef double results[3]
         size = len(self.children)
@@ -202,7 +202,7 @@ cdef class paramnode:
     def __init__(self, int idx):
         self.idx = idx
 
-    cpdef double evaluate(self, list inp):
+    cdef long evaluate(self, list inp):
         return inp[self.idx]
 
     def display(self, indent=0):
@@ -210,12 +210,12 @@ cdef class paramnode:
 
 
 cdef class constnode:
-    cdef double value
+    cdef long value
 
-    def __init__(self, double value):
+    def __init__(self, long value):
         self.value = value
 
-    cpdef double evaluate(self, list inp):
+    cdef long evaluate(self, list inp):
         return self.value
 
     def display(self, indent=0):
@@ -250,6 +250,14 @@ def runexperiment():
     tree.display()
     print(tree.evaluate([5,2]))
 
+cdef long evaluate(object tree, list inp):
+    if type(tree) == node:
+        return (<node>(tree)).evaluate(inp)
+    elif type(tree) == constnode:
+        return (<constnode>(tree)).evaluate(inp)
+    else:
+        return (<paramnode>(tree)).evaluate(inp)
+
 
 cdef timeit():
     runs = 250000
@@ -261,7 +269,7 @@ cdef timeit():
         population.append(makerandomtree(2))
     mid = time.time()
     for tree in population:
-        tree.evaluate(input)
+        evaluate(tree, input)
     end = time.time()
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
@@ -358,23 +366,23 @@ cdef test_makerandomtree():
     srand(10)
     tree = makerandomtree(2)
     # print(treearray.evaluate([5, 2]))
-    assert tree.evaluate([5, 2]) == 36
+    assert evaluate(tree, [5, 2]) == 36
 
     tree = makerandomtree(2)
     # print(treearray.evaluate([100, 200]))
-    assert tree.evaluate([100, 200]) == 5
+    assert evaluate(tree, [100, 200]) == 5
 
     tree = makerandomtree(3)
     # print(treearray.evaluate([1, 2, 3]))
-    assert tree.evaluate([1, 2, 3]) == 2
+    assert evaluate(tree, [1, 2, 3]) == 2
 
     tree = makerandomtree(4)
     # print(treearray.evaluate([4, 3, 2, 1]))
-    assert tree.evaluate([4, 3, 2, 1]) == 0
+    assert evaluate(tree, [4, 3, 2, 1]) == 0
 
     tree = makerandomtree(5)
     # print(treearray.evaluate([2, 4, 6, 8, 10]))   
-    assert tree.evaluate([2, 4, 6, 8, 10]) == 8
+    assert evaluate(tree, [2, 4, 6, 8, 10]) == 8
     
     print("Pass test_makerandomtree")
 
