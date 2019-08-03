@@ -8,7 +8,8 @@ import gpcython as gpc1
 import geneticprogramming as gp2
 from libc.stdlib cimport rand, RAND_MAX, srand
 import geneticprogrammingcython as gpc2
-# cimport geneticprogrammingcython as gpc2
+cimport geneticprogrammingcython as gpc2
+
 
 
 

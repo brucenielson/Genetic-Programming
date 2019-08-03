@@ -1101,6 +1101,18 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree;
 
+/* "geneticprogrammingcython.pxd":4
+ * # See Optional Arguments under https://cython.readthedocs.io/en/latest/src/userguide/language_basics.html
+ * # It says to not include optional arguments in header
+ * cdef list makerandomtree(int, int maxdepth=*, float func_prob=*, float param_prob=*)             # <<<<<<<<<<<<<<
+ */
+struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree {
+  int __pyx_n;
+  int maxdepth;
+  float func_prob;
+  float param_prob;
+};
+
 /* "geneticprogrammingcython.pyx":53
  * 
  * # Function Arrays
@@ -1118,20 +1130,6 @@ typedef long (*__pyx_t_24geneticprogrammingcython_func2param)(long, long);
  * cdef list name_array = []
  */
 typedef long (*__pyx_t_24geneticprogrammingcython_funct3param)(long, long, long);
-
-/* "geneticprogrammingcython.pyx":186
- * @cython.boundscheck(False)
- * @cython.wraparound(False)
- * cdef list makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):             # <<<<<<<<<<<<<<
- *     cdef list children = []
- *     cdef Py_ssize_t i
- */
-struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree {
-  int __pyx_n;
-  int maxdepth;
-  float func_prob;
-  float param_prob;
-};
 
 /* "cfunc.to_py":64
  * 
@@ -1764,6 +1762,9 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 /* CheckBinaryVersion.proto */
 static int __Pyx_check_binary_version(void);
 
+/* FunctionExport.proto */
+static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig);
+
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
@@ -1830,6 +1831,8 @@ static Py_ssize_t __pyx_v_24geneticprogrammingcython_CHILD3LENGTH;
 static Py_ssize_t __pyx_v_24geneticprogrammingcython_NUM_COLS;
 static long __pyx_v_24geneticprogrammingcython_treecounter;
 static long __pyx_v_24geneticprogrammingcython_nodes;
+static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *, PyObject *); /*proto*/
+static PyObject *__pyx_f_24geneticprogrammingcython_makerandomtree(int, struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_24geneticprogrammingcython_definefunction(PyObject *, PyObject *, PyObject *); /*proto*/
 static long __pyx_f_24geneticprogrammingcython_add(long, long); /*proto*/
 static long __pyx_f_24geneticprogrammingcython_subtract(long, long); /*proto*/
@@ -1839,8 +1842,6 @@ static long __pyx_f_24geneticprogrammingcython_iffunc(long, long, long); /*proto
 static float __pyx_f_24geneticprogrammingcython_crandom(void); /*proto*/
 static int __pyx_f_24geneticprogrammingcython_crandint(int, int); /*proto*/
 static PyObject *__pyx_f_24geneticprogrammingcython_createtree(Py_ssize_t, int, int, int, PyObject *); /*proto*/
-static PyObject *__pyx_f_24geneticprogrammingcython_makerandomtree(int, struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree *__pyx_optional_args); /*proto*/
-static long __pyx_f_24geneticprogrammingcython_evaluate(PyObject *, PyObject *); /*proto*/
 static PyObject *__pyx_f_24geneticprogrammingcython_timeit(void); /*proto*/
 static PyObject *__Pyx_CFunc_long____long____long___to_py(long (*)(long, long)); /*proto*/
 static PyObject *__Pyx_CFunc_long____long____long____long___to_py(long (*)(long, long, long)); /*proto*/
@@ -9780,8 +9781,13 @@ static int __Pyx_modinit_function_export_code(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_modinit_function_export_code", 0);
   /*--- Function export code ---*/
+  if (__Pyx_ExportFunction("evaluate", (void (*)(void))__pyx_f_24geneticprogrammingcython_evaluate, "long (PyObject *, PyObject *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("makerandomtree", (void (*)(void))__pyx_f_24geneticprogrammingcython_makerandomtree, "PyObject *(int, struct __pyx_opt_args_24geneticprogrammingcython_makerandomtree *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
+  __pyx_L1_error:;
+  __Pyx_RefNannyFinishContext();
+  return -1;
 }
 
 static int __Pyx_modinit_type_init_code(void) {
@@ -10058,7 +10064,7 @@ if (!__Pyx_RefNanny) {
   /*--- Global type/function init code ---*/
   (void)__Pyx_modinit_global_init_code();
   (void)__Pyx_modinit_variable_export_code();
-  (void)__Pyx_modinit_function_export_code();
+  if (unlikely(__Pyx_modinit_function_export_code() != 0)) goto __pyx_L1_error;
   if (unlikely(__Pyx_modinit_type_init_code() != 0)) goto __pyx_L1_error;
   if (unlikely(__Pyx_modinit_type_import_code() != 0)) goto __pyx_L1_error;
   (void)__Pyx_modinit_variable_import_code();
@@ -14213,6 +14219,43 @@ static int __Pyx_check_binary_version(void) {
         return PyErr_WarnEx(NULL, message, 1);
     }
     return 0;
+}
+
+/* FunctionExport */
+static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig) {
+    PyObject *d = 0;
+    PyObject *cobj = 0;
+    union {
+        void (*fp)(void);
+        void *p;
+    } tmp;
+    d = PyObject_GetAttrString(__pyx_m, (char *)"__pyx_capi__");
+    if (!d) {
+        PyErr_Clear();
+        d = PyDict_New();
+        if (!d)
+            goto bad;
+        Py_INCREF(d);
+        if (PyModule_AddObject(__pyx_m, (char *)"__pyx_capi__", d) < 0)
+            goto bad;
+    }
+    tmp.fp = f;
+#if PY_VERSION_HEX >= 0x02070000
+    cobj = PyCapsule_New(tmp.p, sig, 0);
+#else
+    cobj = PyCObject_FromVoidPtrAndDesc(tmp.p, (void *)sig, 0);
+#endif
+    if (!cobj)
+        goto bad;
+    if (PyDict_SetItemString(d, name, cobj) < 0)
+        goto bad;
+    Py_DECREF(cobj);
+    Py_DECREF(d);
+    return 0;
+bad:
+    Py_XDECREF(cobj);
+    Py_XDECREF(d);
+    return -1;
 }
 
 /* InitStrings */
