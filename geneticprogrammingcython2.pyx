@@ -168,7 +168,13 @@ cdef class node:
         cdef double results[3]
         size = len(self.children)
         for i in range(size):
-            results[i] = self.children[i].evaluate(inp)
+            # results[i] = self.children[i]).evaluate(inp)
+            if type(self.children[i]) == node:
+                results[i] = (<node>(self.children[i])).evaluate(inp)
+            elif type(self.children[i]) == constnode:
+                results[i] = (<constnode>(self.children[i])).evaluate(inp)
+            else:
+                results[i] = (<paramnode>(self.children[i])).evaluate(inp)
 
         if size == 1:
             return self.function(results[0])
