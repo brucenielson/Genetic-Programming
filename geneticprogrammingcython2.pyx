@@ -162,17 +162,17 @@ cdef class node:
     cdef void setnode(self, int node_type, long value, list children):
         self.node_type = node_type
         self.value = value
-        if self.node_type == FUNC_NODE:
+        if node_type == PARAM_NODE:
+            self.value = value
+        elif node_type == CONST_NODE:
+            self.value = value
+        else:
             self.lock = False
             self.function = func_array[self.value]
             self.name = name_array[self.value]
             self.param_num = param_array[self.value]
             self.children = children
             self.size = len(children)
-        elif node_type == PARAM_NODE:
-            self.value = value
-        else:
-            self.value = value
 
 
     @cython.boundscheck(False)
@@ -182,7 +182,11 @@ cdef class node:
         cdef int size
         cdef long results[3]
         cdef object t
-        if self.node_type == FUNC_NODE:
+        if self.node_type == PARAM_NODE:
+            return inp[self.value]
+        elif self.node_type == CONST_NODE:
+            return self.value
+        else:
             size = len(self.children)        
             for i in range(size):
                 t = type(self.children[i]) 
@@ -200,10 +204,6 @@ cdef class node:
             elif size == 3:
                 return self.function(results[0], results[1], results[2])
             # TODO: fix to use return self.function(*results)
-        elif self.node_type == PARAM_NODE:
-            return inp[self.value]
-        else:
-            return self.value
 
 
     def display(self, indent=0):
