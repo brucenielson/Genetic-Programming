@@ -287,6 +287,7 @@ cdef long evaluate(object tree, list inp):
 cdef timeit():
     runs = 5000000
 
+    # 20.821658849716187, 2.0441694259643555; 16.92554783821106, 2.061018705368042; 17.349987030029297, 2.0460333824157715
     start = time.time()
     population = []
     input = [10, 42]
@@ -299,17 +300,18 @@ cdef timeit():
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc2.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        gpc2.evaluate(tree, input)
+    # # 32.76694297790527, 5.336438894271851; 34.19974899291992, 5.901979446411133; 31.23992419242859, 5.255947113037109
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gpc2.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     gpc2.evaluate(tree, input)
 
-    end = time.time()
-    print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
+    # end = time.time()
+    # print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
 
 
 

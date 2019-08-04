@@ -2098,10 +2098,11 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">288</span>:     runs = 5000000</pre>
 <pre class='cython code score-0 '>  __pyx_v_runs = 0x4C4B40;
 </pre><pre class="cython line score-0">&#xA0;<span class="">289</span>: </pre>
-<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">290</span>:     start = time.time()</pre>
-<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)</span>
+<pre class="cython line score-0">&#xA0;<span class="">290</span>:     # 20.821658849716187, 2.0441694259643555; 16.92554783821106, 2.061018705368042; 17.349987030029297, 2.0460333824157715</pre>
+<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">291</span>:     start = time.time()</pre>
+<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)</span>
+  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 291, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2116,18 +2117,18 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   }
   __pyx_t_1 = (__pyx_t_2) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_3, __pyx_t_2) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 290, __pyx_L1_error)</span>
+  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 291, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_start = __pyx_t_1;
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">291</span>:     population = []</pre>
-<pre class='cython code score-5 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)</span>
+</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">292</span>:     population = []</pre>
+<pre class='cython code score-5 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_v_population = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-9" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">292</span>:     input = [10, 42]</pre>
-<pre class='cython code score-9 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)</span>
+</pre><pre class="cython line score-9" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">293</span>:     input = [10, 42]</pre>
+<pre class='cython code score-9 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_10);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_10);
@@ -2137,21 +2138,21 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 1, __pyx_int_42);
   __pyx_v_input = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">293</span>:     for i in range(runs):</pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">294</span>:     for i in range(runs):</pre>
 <pre class='cython code score-0 '>  __pyx_t_4 = __pyx_v_runs;
   __pyx_t_5 = __pyx_t_4;
   for (__pyx_t_6 = 0; __pyx_t_6 &lt; __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
-</pre><pre class="cython line score-3" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">294</span>:         population.append(makerandomtree(2))</pre>
-<pre class='cython code score-3 '>    __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)</span>
+</pre><pre class="cython line score-3" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">295</span>:         population.append(makerandomtree(2))</pre>
+<pre class='cython code score-3 '>    __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-    __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyList_Append</span>(__pyx_v_population, __pyx_t_1);<span class='error_goto'> if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 294, __pyx_L1_error)</span>
+    __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyList_Append</span>(__pyx_v_population, __pyx_t_1);<span class='error_goto'> if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 295, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
-</pre><pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">295</span>:     mid = time.time()</pre>
-<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 295, __pyx_L1_error)</span>
+</pre><pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">296</span>:     mid = time.time()</pre>
+<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 295, __pyx_L1_error)</span>
+  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -2166,19 +2167,19 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   }
   __pyx_t_1 = (__pyx_t_3) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_2, __pyx_t_3) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 295, __pyx_L1_error)</span>
+  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 296, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_mid = __pyx_t_1;
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">296</span>:     for tree in population:</pre>
+</pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">297</span>:     for tree in population:</pre>
 <pre class='cython code score-7 '>  __pyx_t_1 = __pyx_v_population; <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_1); __pyx_t_8 = 0;
   for (;;) {
     if (__pyx_t_8 &gt;= <span class='py_macro_api'>PyList_GET_SIZE</span>(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS &amp;&amp; !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = <span class='py_macro_api'>PyList_GET_ITEM</span>(__pyx_t_1, __pyx_t_8); <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_2); __pyx_t_8++; if (unlikely(0 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 296, __pyx_L1_error)</span>
+    __pyx_t_2 = <span class='py_macro_api'>PyList_GET_ITEM</span>(__pyx_t_1, __pyx_t_8); <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_2); __pyx_t_8++; if (unlikely(0 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 297, __pyx_L1_error)</span>
     #else
-    __pyx_t_2 = <span class='py_macro_api'>PySequence_ITEM</span>(__pyx_t_1, __pyx_t_8); __pyx_t_8++;<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)</span>
+    __pyx_t_2 = <span class='py_macro_api'>PySequence_ITEM</span>(__pyx_t_1, __pyx_t_8); __pyx_t_8++;<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
     #endif
     <span class='pyx_macro_api'>__Pyx_XDECREF_SET</span>(__pyx_v_tree, __pyx_t_2);
@@ -2186,12 +2187,12 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
 /* … */
   }
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">297</span>:         evaluate(tree, input)</pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">298</span>:         evaluate(tree, input)</pre>
 <pre class='cython code score-0 '>    (void)(__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, __pyx_v_input));
-</pre><pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">298</span>:     end = time.time()</pre>
-<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 298, __pyx_L1_error)</span>
+</pre><pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">299</span>:     end = time.time()</pre>
+<pre class='cython code score-21 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)</span>
+  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_2, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2206,17 +2207,17 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   }
   __pyx_t_1 = (__pyx_t_2) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_3, __pyx_t_2) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 298, __pyx_L1_error)</span>
+  if (unlikely(!__pyx_t_1)) <span class='error_goto'>__PYX_ERR(0, 299, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_end = __pyx_t_1;
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">299</span>:     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)</pre>
-<pre class='cython code score-22 '>  __pyx_t_1 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_mid, __pyx_v_start);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)</span>
+</pre><pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">300</span>:     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)</pre>
+<pre class='cython code score-22 '>  __pyx_t_1 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_mid, __pyx_v_start);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  __pyx_t_3 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_end, __pyx_v_mid);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L1_error)</span>
+  __pyx_t_3 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_end, __pyx_v_mid);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 300, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_t_2 = <span class='py_c_api'>PyTuple_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)</span>
+  __pyx_t_2 = <span class='py_c_api'>PyTuple_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_kp_s_Benchmark_geneticprogrammingcyth);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_kp_s_Benchmark_geneticprogrammingcyth);
@@ -2227,186 +2228,65 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_2, 2, __pyx_t_3);
   __pyx_t_1 = 0;
   __pyx_t_3 = 0;
-  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 299, __pyx_L1_error)</span>
+  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 300, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">300</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">301</span>: </pre>
-<pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">302</span>:     start = time.time()</pre>
-<pre class='cython code score-22 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 302, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS &amp;&amp; unlikely(<span class='py_c_api'>PyMethod_Check</span>(__pyx_t_1))) {
-    __pyx_t_3 = <span class='py_macro_api'>PyMethod_GET_SELF</span>(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = <span class='py_macro_api'>PyMethod_GET_FUNCTION</span>(__pyx_t_1);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_3);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(function);
-      <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_3) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_1, __pyx_t_3) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_1);
-  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) <span class='error_goto'>__PYX_ERR(0, 302, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-  <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_start, __pyx_t_2);
-  __pyx_t_2 = 0;
-</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">303</span>:     population = []</pre>
-<pre class='cython code score-6 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(0);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_population, ((PyObject*)__pyx_t_2));
-  __pyx_t_2 = 0;
-</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">304</span>:     input = [10, 42]</pre>
-<pre class='cython code score-10 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_10);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_10);
-  <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_2, 0, __pyx_int_10);
-  <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_42);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_42);
-  <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_2, 1, __pyx_int_42);
-  <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_input, ((PyObject*)__pyx_t_2));
-  __pyx_t_2 = 0;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">305</span>:     for i in range(runs):</pre>
-<pre class='cython code score-0 '>  __pyx_t_4 = __pyx_v_runs;
-  __pyx_t_5 = __pyx_t_4;
-  for (__pyx_t_6 = 0; __pyx_t_6 &lt; __pyx_t_5; __pyx_t_6+=1) {
-    __pyx_v_i = __pyx_t_6;
-</pre><pre class="cython line score-3" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">306</span>:         population.append(gpc2.makerandomtree(2))</pre>
-<pre class='cython code score-3 '>    __pyx_t_2 = __pyx_f_24geneticprogrammingcython_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)</span>
-    <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-    __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyList_Append</span>(__pyx_v_population, __pyx_t_2);<span class='error_goto'> if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 306, __pyx_L1_error)</span>
-    <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-  }
-</pre><pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">307</span>:     mid = time.time()</pre>
-<pre class='cython code score-22 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_1, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 307, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_1, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 307, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS &amp;&amp; unlikely(<span class='py_c_api'>PyMethod_Check</span>(__pyx_t_3))) {
-    __pyx_t_1 = <span class='py_macro_api'>PyMethod_GET_SELF</span>(__pyx_t_3);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = <span class='py_macro_api'>PyMethod_GET_FUNCTION</span>(__pyx_t_3);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_1);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(function);
-      <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_1) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_3, __pyx_t_1) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_3);
-  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_2)) <span class='error_goto'>__PYX_ERR(0, 307, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_mid, __pyx_t_2);
-  __pyx_t_2 = 0;
-</pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">308</span>:     for tree in population:</pre>
-<pre class='cython code score-7 '>  __pyx_t_2 = __pyx_v_population; <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_2); __pyx_t_8 = 0;
-  for (;;) {
-    if (__pyx_t_8 &gt;= <span class='py_macro_api'>PyList_GET_SIZE</span>(__pyx_t_2)) break;
-    #if CYTHON_ASSUME_SAFE_MACROS &amp;&amp; !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_3 = <span class='py_macro_api'>PyList_GET_ITEM</span>(__pyx_t_2, __pyx_t_8); <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_3); __pyx_t_8++; if (unlikely(0 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 308, __pyx_L1_error)</span>
-    #else
-    __pyx_t_3 = <span class='py_macro_api'>PySequence_ITEM</span>(__pyx_t_2, __pyx_t_8); __pyx_t_8++;<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 308, __pyx_L1_error)</span>
-    <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-    #endif
-    <span class='pyx_macro_api'>__Pyx_XDECREF_SET</span>(__pyx_v_tree, __pyx_t_3);
-    __pyx_t_3 = 0;
-/* … */
-  }
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">309</span>:         gpc2.evaluate(tree, input)</pre>
-<pre class='cython code score-10 '>    if (!(likely(<span class='py_c_api'>PyList_CheckExact</span>(__pyx_v_tree))||((__pyx_v_tree) == Py_None)||(<span class='py_c_api'>PyErr_Format</span>(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_tree)-&gt;tp_name), 0))) <span class='error_goto'>__PYX_ERR(0, 309, __pyx_L1_error)</span>
-    (void)(__pyx_f_24geneticprogrammingcython_evaluate(((PyObject*)__pyx_v_tree), __pyx_v_input));
-</pre><pre class="cython line score-0">&#xA0;<span class="">310</span>: </pre>
-<pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">311</span>:     end = time.time()</pre>
-<pre class='cython code score-22 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 311, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_3, __pyx_n_s_time);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS &amp;&amp; unlikely(<span class='py_c_api'>PyMethod_Check</span>(__pyx_t_1))) {
-    __pyx_t_3 = <span class='py_macro_api'>PyMethod_GET_SELF</span>(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = <span class='py_macro_api'>PyMethod_GET_FUNCTION</span>(__pyx_t_1);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_3);
-      <span class='pyx_macro_api'>__Pyx_INCREF</span>(function);
-      <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_3) ? <span class='pyx_c_api'>__Pyx_PyObject_CallOneArg</span>(__pyx_t_1, __pyx_t_3) : <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_1);
-  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) <span class='error_goto'>__PYX_ERR(0, 311, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-  <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_end, __pyx_t_2);
-  __pyx_t_2 = 0;
-</pre><pre class="cython line score-22" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">312</span>:     print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)</pre>
-<pre class='cython code score-22 '>  __pyx_t_2 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_mid, __pyx_v_start);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 312, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  __pyx_t_1 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_end, __pyx_v_mid);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  __pyx_t_3 = <span class='py_c_api'>PyTuple_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_kp_s_Benchmark_geneticprogrammingcyth_2);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_kp_s_Benchmark_geneticprogrammingcyth_2);
-  <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_3, 0, __pyx_kp_s_Benchmark_geneticprogrammingcyth_2);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_2);
-  <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_3, 1, __pyx_t_2);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_1);
-  <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_3, 2, __pyx_t_1);
-  __pyx_t_2 = 0;
-  __pyx_t_1 = 0;
-  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_t_3) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 312, __pyx_L1_error)</span>
-  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">313</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">314</span>: </pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">301</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">302</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">303</span>:     # # 32.76694297790527, 5.336438894271851; 34.19974899291992, 5.901979446411133; 31.23992419242859, 5.255947113037109</pre>
+<pre class="cython line score-0">&#xA0;<span class="">304</span>:     # start = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">305</span>:     # population = []</pre>
+<pre class="cython line score-0">&#xA0;<span class="">306</span>:     # input = [10, 42]</pre>
+<pre class="cython line score-0">&#xA0;<span class="">307</span>:     # for i in range(runs):</pre>
+<pre class="cython line score-0">&#xA0;<span class="">308</span>:     #     population.append(gpc2.makerandomtree(2))</pre>
+<pre class="cython line score-0">&#xA0;<span class="">309</span>:     # mid = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">310</span>:     # for tree in population:</pre>
+<pre class="cython line score-0">&#xA0;<span class="">311</span>:     #     gpc2.evaluate(tree, input)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">312</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">313</span>:     # end = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">314</span>:     # print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)</pre>
 <pre class="cython line score-0">&#xA0;<span class="">315</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">316</span>:     # start = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">317</span>:     # population = []</pre>
-<pre class="cython line score-0">&#xA0;<span class="">318</span>:     # input = [10, 42]</pre>
-<pre class="cython line score-0">&#xA0;<span class="">319</span>:     # for i in range(runs):</pre>
-<pre class="cython line score-0">&#xA0;<span class="">320</span>:     #     population.append(gpc1.makerandomtree(2))</pre>
-<pre class="cython line score-0">&#xA0;<span class="">321</span>:     # mid = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">322</span>:     # for tree in population:</pre>
-<pre class="cython line score-0">&#xA0;<span class="">323</span>:     #     tree.evaluate(input)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">324</span>:     # end = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">325</span>:     # print("Benchmark (gpcython.py): ", mid-start, end-mid)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">326</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">327</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">316</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">317</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">318</span>:     # start = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">319</span>:     # population = []</pre>
+<pre class="cython line score-0">&#xA0;<span class="">320</span>:     # input = [10, 42]</pre>
+<pre class="cython line score-0">&#xA0;<span class="">321</span>:     # for i in range(runs):</pre>
+<pre class="cython line score-0">&#xA0;<span class="">322</span>:     #     population.append(gpc1.makerandomtree(2))</pre>
+<pre class="cython line score-0">&#xA0;<span class="">323</span>:     # mid = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">324</span>:     # for tree in population:</pre>
+<pre class="cython line score-0">&#xA0;<span class="">325</span>:     #     tree.evaluate(input)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">326</span>:     # end = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">327</span>:     # print("Benchmark (gpcython.py): ", mid-start, end-mid)</pre>
 <pre class="cython line score-0">&#xA0;<span class="">328</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">329</span>:     # start = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">330</span>:     # population = []</pre>
-<pre class="cython line score-0">&#xA0;<span class="">331</span>:     # input = [10, 42]</pre>
-<pre class="cython line score-0">&#xA0;<span class="">332</span>:     # for i in range(runs):</pre>
-<pre class="cython line score-0">&#xA0;<span class="">333</span>:     #     population.append(gp.makerandomtree(2))</pre>
-<pre class="cython line score-0">&#xA0;<span class="">334</span>:     # mid = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">335</span>:     # for tree in population:</pre>
-<pre class="cython line score-0">&#xA0;<span class="">336</span>:     #     tree.evaluate(input)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">337</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">338</span>:     # end = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">339</span>:     # print("Benchmark (gp.py): ", mid-start, end-mid)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">340</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">341</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">342</span>:     # start = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">343</span>:     # population = []</pre>
-<pre class="cython line score-0">&#xA0;<span class="">344</span>:     # input = [10, 42]</pre>
-<pre class="cython line score-0">&#xA0;<span class="">345</span>:     # for i in range(runs):</pre>
-<pre class="cython line score-0">&#xA0;<span class="">346</span>:     #     population.append(gp2.makerandomtree(2))</pre>
-<pre class="cython line score-0">&#xA0;<span class="">347</span>:     # mid = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">348</span>:     # for tree in population:</pre>
-<pre class="cython line score-0">&#xA0;<span class="">349</span>:     #     gp2.evaluate(tree, input)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">350</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">351</span>:     # end = time.time()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">352</span>:     # print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)</pre>
-<pre class="cython line score-0">&#xA0;<span class="">353</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">354</span>: </pre>
-<pre class="cython line score-29" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">355</span>: def test_evaluate():</pre>
+<pre class="cython line score-0">&#xA0;<span class="">329</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">330</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">331</span>:     # start = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">332</span>:     # population = []</pre>
+<pre class="cython line score-0">&#xA0;<span class="">333</span>:     # input = [10, 42]</pre>
+<pre class="cython line score-0">&#xA0;<span class="">334</span>:     # for i in range(runs):</pre>
+<pre class="cython line score-0">&#xA0;<span class="">335</span>:     #     population.append(gp.makerandomtree(2))</pre>
+<pre class="cython line score-0">&#xA0;<span class="">336</span>:     # mid = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">337</span>:     # for tree in population:</pre>
+<pre class="cython line score-0">&#xA0;<span class="">338</span>:     #     tree.evaluate(input)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">339</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">340</span>:     # end = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">341</span>:     # print("Benchmark (gp.py): ", mid-start, end-mid)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">342</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">343</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">344</span>:     # start = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">345</span>:     # population = []</pre>
+<pre class="cython line score-0">&#xA0;<span class="">346</span>:     # input = [10, 42]</pre>
+<pre class="cython line score-0">&#xA0;<span class="">347</span>:     # for i in range(runs):</pre>
+<pre class="cython line score-0">&#xA0;<span class="">348</span>:     #     population.append(gp2.makerandomtree(2))</pre>
+<pre class="cython line score-0">&#xA0;<span class="">349</span>:     # mid = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">350</span>:     # for tree in population:</pre>
+<pre class="cython line score-0">&#xA0;<span class="">351</span>:     #     gp2.evaluate(tree, input)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">352</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">353</span>:     # end = time.time()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">354</span>:     # print("Benchmark (geneticprogramming.py):  ", mid-start, end-mid)</pre>
+<pre class="cython line score-0">&#xA0;<span class="">355</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">356</span>: </pre>
+<pre class="cython line score-29" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">357</span>: def test_evaluate():</pre>
 <pre class='cython code score-29 '>/* Python wrapper */
 static PyObject *__pyx_pw_25geneticprogrammingcython2_3test_evaluate(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyMethodDef __pyx_mdef_25geneticprogrammingcython2_3test_evaluate = {"test_evaluate", (PyCFunction)__pyx_pw_25geneticprogrammingcython2_3test_evaluate, METH_NOARGS, 0};
@@ -2453,17 +2333,17 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   return __pyx_r;
 }
 /* … */
-  __pyx_tuple__17 = <span class='py_c_api'>PyTuple_Pack</span>(2, __pyx_n_s_tree, __pyx_n_s_input);<span class='error_goto'> if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 355, __pyx_L1_error)</span>
+  __pyx_tuple__17 = <span class='py_c_api'>PyTuple_Pack</span>(2, __pyx_n_s_tree, __pyx_n_s_input);<span class='error_goto'> if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 357, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_tuple__17);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_tuple__17);
 /* … */
-  __pyx_t_2 = PyCFunction_NewEx(&amp;__pyx_mdef_25geneticprogrammingcython2_3test_evaluate, NULL, __pyx_n_s_geneticprogrammingcython2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 355, __pyx_L1_error)</span>
+  __pyx_t_2 = PyCFunction_NewEx(&amp;__pyx_mdef_25geneticprogrammingcython2_3test_evaluate, NULL, __pyx_n_s_geneticprogrammingcython2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 357, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_test_evaluate, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 355, __pyx_L1_error)</span>
+  if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_test_evaluate, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 357, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_codeobj__18 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_test_evaluate, 355, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 355, __pyx_L1_error)</span>
-</pre><pre class="cython line score-41" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">356</span>:     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply</pre>
-<pre class='cython code score-41 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 356, __pyx_L1_error)</span>
+  __pyx_codeobj__18 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_test_evaluate, 357, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 357, __pyx_L1_error)</span>
+</pre><pre class="cython line score-41" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">358</span>:     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply</pre>
+<pre class='cython code score-41 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2499,7 +2379,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 10, __pyx_int_neg_1);
 /* … */
-  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(9);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 356, __pyx_L1_error)</span>
+  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(9);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 358, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_10);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_10, 0, __pyx_t_1);
@@ -2530,8 +2410,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __pyx_t_9 = 0;
   __pyx_v_tree = ((PyObject*)__pyx_t_10);
   __pyx_t_10 = 0;
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">357</span>:             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 357, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">359</span>:             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 359, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_3);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_3);
@@ -2566,8 +2446,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_2, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">358</span>:             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract</pre>
-<pre class='cython code score-27 '>  __pyx_t_3 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 358, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">360</span>:             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract</pre>
+<pre class='cython code score-27 '>  __pyx_t_3 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 360, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2602,8 +2482,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_3, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">359</span>:             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply</pre>
-<pre class='cython code score-27 '>  __pyx_t_4 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 359, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">361</span>:             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply</pre>
+<pre class='cython code score-27 '>  __pyx_t_4 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 361, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2638,8 +2518,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_4, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">360</span>:             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add</pre>
-<pre class='cython code score-27 '>  __pyx_t_5 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 360, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">362</span>:             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add</pre>
+<pre class='cython code score-27 '>  __pyx_t_5 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 362, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2674,8 +2554,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_5, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">361</span>:             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_6 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 361, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">363</span>:             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_6 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 363, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_3);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_3);
@@ -2710,8 +2590,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_6, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">362</span>:             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_7 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 362, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">364</span>:             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_7 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 364, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_7);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -2746,8 +2626,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_7, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">363</span>:             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_8 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 363, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">365</span>:             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_8 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 365, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_8);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -2782,8 +2662,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_8, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">364</span>:             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]</pre>
-<pre class='cython code score-27 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 364, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">366</span>:             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]</pre>
+<pre class='cython code score-27 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 366, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_9);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_3);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_3);
@@ -2818,10 +2698,10 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_9, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-0">&#xA0;<span class="">365</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">366</span>: </pre>
-<pre class="cython line score-9" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">367</span>:     input = [5,2]</pre>
-<pre class='cython code score-9 '>  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 367, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">367</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">368</span>: </pre>
+<pre class="cython line score-9" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">369</span>:     input = [5,2]</pre>
+<pre class='cython code score-9 '>  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 369, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_10);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_5);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_5);
@@ -2831,24 +2711,24 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_10, 1, __pyx_int_2);
   __pyx_v_input = ((PyObject*)__pyx_t_10);
   __pyx_t_10 = 0;
-</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">368</span>:     assert tree.evaluate(input) == 28</pre>
+</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">370</span>:     assert tree.evaluate(input) == 28</pre>
 <pre class='cython code score-11 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_10 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 368, __pyx_L1_error)</span>
+    __pyx_t_10 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 370, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_10);
-    __pyx_t_9 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_10, __pyx_int_28, 28, 0);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 368, __pyx_L1_error)</span>
+    __pyx_t_9 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_10, __pyx_int_28, 28, 0);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 370, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_9);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_10); __pyx_t_10 = 0;
-    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_9); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 368, __pyx_L1_error)</span>
+    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_9); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 370, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_9); __pyx_t_9 = 0;
     if (unlikely(!__pyx_t_11)) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 368, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 370, __pyx_L1_error)</span>
     }
   }
   #endif
-</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">369</span>:     input = [2,5]</pre>
-<pre class='cython code score-10 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 369, __pyx_L1_error)</span>
+</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">371</span>:     input = [2,5]</pre>
+<pre class='cython code score-10 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 371, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_9);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -2858,25 +2738,25 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_9, 1, __pyx_int_5);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_input, ((PyObject*)__pyx_t_9));
   __pyx_t_9 = 0;
-</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">370</span>:     assert tree.evaluate(input) == 70</pre>
+</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">372</span>:     assert tree.evaluate(input) == 70</pre>
 <pre class='cython code score-11 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_9 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 370, __pyx_L1_error)</span>
+    __pyx_t_9 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 372, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_9);
-    __pyx_t_10 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_9, __pyx_int_70, 70, 0);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 370, __pyx_L1_error)</span>
+    __pyx_t_10 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_9, __pyx_int_70, 70, 0);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 372, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_10);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_9); __pyx_t_9 = 0;
-    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_10); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 370, __pyx_L1_error)</span>
+    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_10); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 372, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_10); __pyx_t_10 = 0;
     if (unlikely(!__pyx_t_11)) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 370, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 372, __pyx_L1_error)</span>
     }
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">371</span>: </pre>
-<pre class="cython line score-43" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">372</span>:     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF</pre>
-<pre class='cython code score-43 '>  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 372, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">373</span>: </pre>
+<pre class="cython line score-43" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">374</span>:     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF</pre>
+<pre class='cython code score-43 '>  __pyx_t_10 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 374, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_10);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2912,7 +2792,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_10, 10, __pyx_int_1);
 /* … */
-  __pyx_t_12 = <span class='py_c_api'>PyList_New</span>(10);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 372, __pyx_L1_error)</span>
+  __pyx_t_12 = <span class='py_c_api'>PyList_New</span>(10);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 374, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_12);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_10);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_12, 0, __pyx_t_10);
@@ -2946,8 +2826,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __pyx_t_1 = 0;
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_tree, ((PyObject*)__pyx_t_12));
   __pyx_t_12 = 0;
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">373</span>:             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add</pre>
-<pre class='cython code score-27 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 373, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">375</span>:             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add</pre>
+<pre class='cython code score-27 '>  __pyx_t_9 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 375, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_9);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -2982,8 +2862,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_9, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">374</span>:             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # &gt;</pre>
-<pre class='cython code score-27 '>  __pyx_t_8 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 374, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">376</span>:             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # &gt;</pre>
+<pre class='cython code score-27 '>  __pyx_t_8 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 376, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_8);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -3018,8 +2898,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_8, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">375</span>:             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_7 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 375, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">377</span>:             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_7 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 377, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_7);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3054,8 +2934,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_7, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">376</span>:             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply</pre>
-<pre class='cython code score-27 '>  __pyx_t_6 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 376, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">378</span>:             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply</pre>
+<pre class='cython code score-27 '>  __pyx_t_6 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 378, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_6);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -3090,8 +2970,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_6, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">377</span>:             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_5 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 377, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">379</span>:             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_5 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 379, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_3);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_3);
@@ -3126,8 +3006,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_5, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">378</span>:             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_4 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 378, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">380</span>:             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_4 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 380, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3162,8 +3042,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_4, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">379</span>:             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_3 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 379, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">381</span>:             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_3 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 381, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3198,8 +3078,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_3, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">380</span>:             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],</pre>
-<pre class='cython code score-27 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 380, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">382</span>:             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],</pre>
+<pre class='cython code score-27 '>  __pyx_t_2 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 382, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3234,8 +3114,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_2, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">381</span>:             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]</pre>
-<pre class='cython code score-27 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 381, __pyx_L1_error)</span>
+</pre><pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">383</span>:             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]</pre>
+<pre class='cython code score-27 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(11);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 383, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3270,9 +3150,9 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_neg_1);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_neg_1);
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 10, __pyx_int_neg_1);
-</pre><pre class="cython line score-0">&#xA0;<span class="">382</span>: </pre>
-<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">383</span>:     input = [5,2]</pre>
-<pre class='cython code score-10 '>  __pyx_t_12 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 383, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">384</span>: </pre>
+<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">385</span>:     input = [5,2]</pre>
+<pre class='cython code score-10 '>  __pyx_t_12 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 385, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_12);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_5);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_5);
@@ -3282,24 +3162,24 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_12, 1, __pyx_int_2);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_input, ((PyObject*)__pyx_t_12));
   __pyx_t_12 = 0;
-</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">384</span>:     assert tree.evaluate(input) == 2</pre>
+</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">386</span>:     assert tree.evaluate(input) == 2</pre>
 <pre class='cython code score-11 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_12 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 384, __pyx_L1_error)</span>
+    __pyx_t_12 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 386, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_12);
-    __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_12, __pyx_int_2, 2, 0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 384, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_12, __pyx_int_2, 2, 0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_12); __pyx_t_12 = 0;
-    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_1); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 384, __pyx_L1_error)</span>
+    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_1); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 386, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_11)) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 384, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 386, __pyx_L1_error)</span>
     }
   }
   #endif
-</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">385</span>:     input = [2,5]</pre>
-<pre class='cython code score-10 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 385, __pyx_L1_error)</span>
+</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">387</span>:     input = [2,5]</pre>
+<pre class='cython code score-10 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 387, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3309,27 +3189,27 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 1, __pyx_int_5);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_input, ((PyObject*)__pyx_t_1));
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">386</span>:     assert tree.evaluate(input) == 5</pre>
+</pre><pre class="cython line score-11" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">388</span>:     assert tree.evaluate(input) == 5</pre>
 <pre class='cython code score-11 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)</span>
+    __pyx_t_1 = __Pyx_CallUnboundCMethod1(&amp;__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 388, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-    __pyx_t_12 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_1, __pyx_int_5, 5, 0);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 386, __pyx_L1_error)</span>
+    __pyx_t_12 = <span class='pyx_c_api'>__Pyx_PyInt_EqObjC</span>(__pyx_t_1, __pyx_int_5, 5, 0);<span class='error_goto'> if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 388, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_12);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_12); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 386, __pyx_L1_error)</span>
+    __pyx_t_11 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_12); if (unlikely(__pyx_t_11 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 388, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_12); __pyx_t_12 = 0;
     if (unlikely(!__pyx_t_11)) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 386, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 388, __pyx_L1_error)</span>
     }
   }
   #endif
-</pre><pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">387</span>:     print("Pass test_evaluate")</pre>
-<pre class='cython code score-2 '>  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_kp_s_Pass_test_evaluate) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 387, __pyx_L1_error)</span>
-</pre><pre class="cython line score-0">&#xA0;<span class="">388</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">389</span>: </pre>
-<pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">390</span>: cdef test_makerandomtree():</pre>
+</pre><pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">389</span>:     print("Pass test_evaluate")</pre>
+<pre class='cython code score-2 '>  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_kp_s_Pass_test_evaluate) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 389, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">390</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">391</span>: </pre>
+<pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">392</span>: cdef test_makerandomtree():</pre>
 <pre class='cython code score-5 '>static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
   PyObject *__pyx_v_tree = NULL;
   PyObject *__pyx_r = NULL;
@@ -3349,18 +3229,18 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">391</span>:     srand(10)</pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">393</span>:     srand(10)</pre>
 <pre class='cython code score-0 '>  srand(10);
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">392</span>:     tree = makerandomtree(2)</pre>
-<pre class='cython code score-0 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">394</span>:     tree = makerandomtree(2)</pre>
+<pre class='cython code score-0 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 394, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_v_tree = __pyx_t_1;
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">393</span>:     # print(tree.evaluate([5, 2]))</pre>
-<pre class="cython line score-15" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">394</span>:     assert evaluate(tree, [5, 2]) == 36</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">395</span>:     # print(tree.evaluate([5, 2]))</pre>
+<pre class="cython line score-15" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">396</span>:     assert evaluate(tree, [5, 2]) == 36</pre>
 <pre class='cython code score-15 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 394, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_5);
     <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_5);
@@ -3370,22 +3250,22 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
     <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 1, __pyx_int_2);
     if (unlikely(!((__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 36) != 0))) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 394, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 396, __pyx_L1_error)</span>
     }
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">395</span>: </pre>
-<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">396</span>:     tree = makerandomtree(2)</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">397</span>: </pre>
+<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">398</span>:     tree = makerandomtree(2)</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_tree, __pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">397</span>:     # print(treearray.evaluate([100, 200]))</pre>
-<pre class="cython line score-15" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">398</span>:     assert evaluate(tree, [100, 200]) == 5</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">399</span>:     # print(treearray.evaluate([100, 200]))</pre>
+<pre class="cython line score-15" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">400</span>:     assert evaluate(tree, [100, 200]) == 5</pre>
 <pre class='cython code score-15 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_100);
     <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_100);
@@ -3395,22 +3275,22 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
     <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 1, __pyx_int_200);
     if (unlikely(!((__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 5) != 0))) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 398, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L1_error)</span>
     }
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">399</span>: </pre>
-<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">400</span>:     tree = makerandomtree(3)</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(3, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">401</span>: </pre>
+<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">402</span>:     tree = makerandomtree(3)</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(3, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 402, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_tree, __pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">401</span>:     # print(treearray.evaluate([1, 2, 3]))</pre>
-<pre class="cython line score-17" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">402</span>:     assert evaluate(tree, [1, 2, 3]) == 2</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">403</span>:     # print(treearray.evaluate([1, 2, 3]))</pre>
+<pre class="cython line score-17" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">404</span>:     assert evaluate(tree, [1, 2, 3]) == 2</pre>
 <pre class='cython code score-17 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 402, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
     <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_1);
@@ -3423,22 +3303,22 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
     <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 2, __pyx_int_3);
     if (unlikely(!((__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 2) != 0))) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 402, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 404, __pyx_L1_error)</span>
     }
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">403</span>: </pre>
-<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">404</span>:     tree = makerandomtree(4)</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(4, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">405</span>: </pre>
+<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">406</span>:     tree = makerandomtree(4)</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(4, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 406, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_tree, __pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">405</span>:     # print(treearray.evaluate([4, 3, 2, 1]))</pre>
-<pre class="cython line score-19" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">406</span>:     assert evaluate(tree, [4, 3, 2, 1]) == 0</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">407</span>:     # print(treearray.evaluate([4, 3, 2, 1]))</pre>
+<pre class="cython line score-19" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">408</span>:     assert evaluate(tree, [4, 3, 2, 1]) == 0</pre>
 <pre class='cython code score-19 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(4);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 406, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(4);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_4);
     <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_4);
@@ -3454,22 +3334,22 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
     <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 3, __pyx_int_1);
     if (unlikely(!((__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 0) != 0))) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 406, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 408, __pyx_L1_error)</span>
     }
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">407</span>: </pre>
-<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">408</span>:     tree = makerandomtree(5)</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(5, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">409</span>: </pre>
+<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">410</span>:     tree = makerandomtree(5)</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_makerandomtree(5, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_tree, __pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">409</span>:     # print(treearray.evaluate([2, 4, 6, 8, 10]))</pre>
-<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">410</span>:     assert evaluate(tree, [2, 4, 6, 8, 10]) == 8</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">411</span>:     # print(treearray.evaluate([2, 4, 6, 8, 10]))</pre>
+<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">412</span>:     assert evaluate(tree, [2, 4, 6, 8, 10]) == 8</pre>
 <pre class='cython code score-21 '>  #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(5);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(5);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 412, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_2);
     <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_2);
@@ -3488,18 +3368,18 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
     <span class='py_macro_api'>PyList_SET_ITEM</span>(__pyx_t_1, 4, __pyx_int_10);
     if (unlikely(!((__pyx_f_25geneticprogrammingcython2_evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 8) != 0))) {
       <span class='py_c_api'>PyErr_SetNone</span>(PyExc_AssertionError);
-      <span class='error_goto'>__PYX_ERR(0, 410, __pyx_L1_error)</span>
+      <span class='error_goto'>__PYX_ERR(0, 412, __pyx_L1_error)</span>
     }
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
-</pre><pre class="cython line score-0">&#xA0;<span class="">411</span>: </pre>
-<pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">412</span>:     print("Pass test_makerandomtree")</pre>
-<pre class='cython code score-2 '>  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_kp_s_Pass_test_makerandomtree) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 412, __pyx_L1_error)</span>
 </pre><pre class="cython line score-0">&#xA0;<span class="">413</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">414</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">415</span>: </pre>
-<pre class="cython line score-12" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">416</span>: def main():</pre>
+<pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">414</span>:     print("Pass test_makerandomtree")</pre>
+<pre class='cython code score-2 '>  if (<span class='pyx_c_api'>__Pyx_PrintOne</span>(0, __pyx_kp_s_Pass_test_makerandomtree) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 414, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">415</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">416</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">417</span>: </pre>
+<pre class="cython line score-12" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">418</span>: def main():</pre>
 <pre class='cython code score-12 '>/* Python wrapper */
 static PyObject *__pyx_pw_25geneticprogrammingcython2_5main(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyMethodDef __pyx_mdef_25geneticprogrammingcython2_5main = {"main", (PyCFunction)__pyx_pw_25geneticprogrammingcython2_5main, METH_NOARGS, 0};
@@ -3532,35 +3412,35 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4main(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 /* … */
-  __pyx_t_2 = PyCFunction_NewEx(&amp;__pyx_mdef_25geneticprogrammingcython2_5main, NULL, __pyx_n_s_geneticprogrammingcython2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 416, __pyx_L1_error)</span>
+  __pyx_t_2 = PyCFunction_NewEx(&amp;__pyx_mdef_25geneticprogrammingcython2_5main, NULL, __pyx_n_s_geneticprogrammingcython2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 418, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_main_2, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 416, __pyx_L1_error)</span>
+  if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_main_2, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 418, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
 /* … */
-  __pyx_codeobj__19 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_main_2, 416, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 416, __pyx_L1_error)</span>
-</pre><pre class="cython line score-0">&#xA0;<span class="">417</span>:     # runexperiment()</pre>
-<pre class="cython line score-0">&#xA0;<span class="">418</span>:     # test_evaluate()</pre>
-<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">419</span>:     test_makerandomtree()</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_test_makerandomtree();<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 419, __pyx_L1_error)</span>
+  __pyx_codeobj__19 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_main_2, 418, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 418, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">419</span>:     # runexperiment()</pre>
+<pre class="cython line score-0">&#xA0;<span class="">420</span>:     # test_evaluate()</pre>
+<pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">421</span>:     test_makerandomtree()</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_test_makerandomtree();<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 421, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-</pre><pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">420</span>:     timeit()</pre>
-<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_timeit();<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 420, __pyx_L1_error)</span>
+</pre><pre class="cython line score-1" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">422</span>:     timeit()</pre>
+<pre class='cython code score-1 '>  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_timeit();<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 422, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">421</span>: </pre>
-<pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">422</span>: if __name__ == "__main__":</pre>
-<pre class='cython code score-5 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_name);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 422, __pyx_L1_error)</span>
+</pre><pre class="cython line score-0">&#xA0;<span class="">423</span>: </pre>
+<pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">424</span>: if __name__ == "__main__":</pre>
+<pre class='cython code score-5 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_name);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 424, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-  __pyx_t_8 = (<span class='pyx_c_api'>__Pyx_PyString_Equals</span>(__pyx_t_2, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_8 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 422, __pyx_L1_error)</span>
+  __pyx_t_8 = (<span class='pyx_c_api'>__Pyx_PyString_Equals</span>(__pyx_t_2, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_8 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 424, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_8) {
 /* … */
   }
-</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">423</span>:     main()</pre>
-<pre class='cython code score-6 '>    <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_main_2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)</span>
+</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">425</span>:     main()</pre>
+<pre class='cython code score-6 '>    <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_2, __pyx_n_s_main_2);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 425, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-    __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_CallNoArg</span>(__pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
