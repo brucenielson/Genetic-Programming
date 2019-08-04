@@ -3162,7 +3162,7 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
  *                 child = self.children[i]
  *                 # t = type(self.children[i])
  *                 if child.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 elif child.node_type == CONST_NODE:
  */
       __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_child, __pyx_n_s_node_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 197, __pyx_L1_error)
@@ -3179,21 +3179,36 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
         /* "geneticprogrammingcython2.pyx":198
  *                 # t = type(self.children[i])
  *                 if child.node_type == FUNC_NODE:
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)             # <<<<<<<<<<<<<<
+ *                     results[i] = child.evaluate(inp)             # <<<<<<<<<<<<<<
  *                 elif child.node_type == CONST_NODE:
- *                     results[i] = (<constnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  */
-        if (unlikely(__pyx_v_self->children == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 198, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_child, __pyx_n_s_evaluate); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 198, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_3 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+          __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_8);
+          if (likely(__pyx_t_3)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+            __Pyx_INCREF(__pyx_t_3);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_8, function);
+          }
         }
-        (__pyx_v_results[__pyx_v_i]) = ((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)((struct __pyx_obj_25geneticprogrammingcython2_node *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i))->__pyx_vtab)->evaluate(((struct __pyx_obj_25geneticprogrammingcython2_node *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i)), __pyx_v_inp);
+        __pyx_t_9 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_3, __pyx_v_inp) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_v_inp);
+        __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+        if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 198, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_2 = __Pyx_PyInt_As_long(__pyx_t_9); if (unlikely((__pyx_t_2 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 198, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        (__pyx_v_results[__pyx_v_i]) = __pyx_t_2;
 
         /* "geneticprogrammingcython2.pyx":197
  *                 child = self.children[i]
  *                 # t = type(self.children[i])
  *                 if child.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 elif child.node_type == CONST_NODE:
  */
         goto __pyx_L6;
@@ -3201,9 +3216,9 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
 
       /* "geneticprogrammingcython2.pyx":199
  *                 if child.node_type == FUNC_NODE:
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 elif child.node_type == CONST_NODE:             # <<<<<<<<<<<<<<
- *                     results[i] = (<constnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 else:
  */
       __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_child, __pyx_n_s_node_type); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 199, __pyx_L1_error)
@@ -3218,47 +3233,77 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       if (__pyx_t_1) {
 
         /* "geneticprogrammingcython2.pyx":200
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 elif child.node_type == CONST_NODE:
- *                     results[i] = (<constnode>(self.children[i])).evaluate(inp)             # <<<<<<<<<<<<<<
+ *                     results[i] = child.evaluate(inp)             # <<<<<<<<<<<<<<
  *                 else:
- *                     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  */
-        if (unlikely(__pyx_v_self->children == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 200, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_child, __pyx_n_s_evaluate); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 200, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
+          if (likely(__pyx_t_9)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_8, function);
+          }
         }
-        (__pyx_v_results[__pyx_v_i]) = ((struct __pyx_vtabstruct_25geneticprogrammingcython2_constnode *)((struct __pyx_obj_25geneticprogrammingcython2_constnode *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i))->__pyx_vtab)->evaluate(((struct __pyx_obj_25geneticprogrammingcython2_constnode *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i)), __pyx_v_inp);
+        __pyx_t_3 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_v_inp) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_v_inp);
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_2 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_2 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        (__pyx_v_results[__pyx_v_i]) = __pyx_t_2;
 
         /* "geneticprogrammingcython2.pyx":199
  *                 if child.node_type == FUNC_NODE:
- *                     results[i] = (<node>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 elif child.node_type == CONST_NODE:             # <<<<<<<<<<<<<<
- *                     results[i] = (<constnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 else:
  */
         goto __pyx_L6;
       }
 
       /* "geneticprogrammingcython2.pyx":202
- *                     results[i] = (<constnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  *                 else:
- *                     results[i] = (<paramnode>(self.children[i])).evaluate(inp)             # <<<<<<<<<<<<<<
+ *                     results[i] = child.evaluate(inp)             # <<<<<<<<<<<<<<
  * 
  *             if size == 1:
  */
       /*else*/ {
-        if (unlikely(__pyx_v_self->children == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_child, __pyx_n_s_evaluate); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
+          if (likely(__pyx_t_9)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_8, function);
+          }
         }
-        (__pyx_v_results[__pyx_v_i]) = ((struct __pyx_vtabstruct_25geneticprogrammingcython2_paramnode *)((struct __pyx_obj_25geneticprogrammingcython2_paramnode *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i))->__pyx_vtab)->evaluate(((struct __pyx_obj_25geneticprogrammingcython2_paramnode *)PyList_GET_ITEM(__pyx_v_self->children, __pyx_v_i)), __pyx_v_inp);
+        __pyx_t_3 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_v_inp) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_v_inp);
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_2 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_2 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 202, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        (__pyx_v_results[__pyx_v_i]) = __pyx_t_2;
       }
       __pyx_L6:;
     }
 
     /* "geneticprogrammingcython2.pyx":204
- *                     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  * 
  *             if size == 1:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0])
@@ -3299,7 +3344,7 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       goto __pyx_L0;
 
       /* "geneticprogrammingcython2.pyx":204
- *                     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+ *                     results[i] = child.evaluate(inp)
  * 
  *             if size == 1:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0])
