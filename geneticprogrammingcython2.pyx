@@ -147,12 +147,12 @@ cdef long crandint(int lower, int upper) except -1:
 
 # node objects
 cdef class node:
+    cdef public Py_ssize_t node_type
     cdef str name
     cdef object function
     cdef list children
     cdef bint lock
     cdef long value
-    cdef Py_ssize_t node_type
     cdef Py_ssize_t param_num
     cdef Py_ssize_t size
 
@@ -192,10 +192,11 @@ cdef class node:
         else:
             size = len(self.children)        
             for i in range(size):
-                t = type(self.children[i]) 
-                if t == node:
+                child = self.children[i]
+                # t = type(self.children[i]) 
+                if child.node_type == FUNC_NODE:
                     results[i] = (<node>(self.children[i])).evaluate(inp)
-                elif t == constnode:
+                elif child.node_type == CONST_NODE:
                     results[i] = (<constnode>(self.children[i])).evaluate(inp)
                 else:
                     results[i] = (<paramnode>(self.children[i])).evaluate(inp)
@@ -227,10 +228,12 @@ cdef class node:
 
 
 cdef class paramnode:
+    cdef public Py_ssize_t node_type
     cdef Py_ssize_t idx
 
     def __init__(self, int idx):
         self.idx = idx
+        self.node_type = PARAM_NODE
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
@@ -243,10 +246,12 @@ cdef class paramnode:
 
 
 cdef class constnode:
+    cdef public Py_ssize_t node_type
     cdef long value
 
     def __init__(self, long value):
         self.value = value
+        self.node_type = CONST_NODE
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
