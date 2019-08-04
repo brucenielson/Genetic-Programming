@@ -1151,21 +1151,20 @@ struct __pyx_opt_args_25geneticprogrammingcython2_makerandomtree {
  * 
  * # node objects
  * cdef class node:             # <<<<<<<<<<<<<<
- *     cdef public object function
- *     cdef public object name
+ *     cdef str name
+ *     cdef object function
  */
 struct __pyx_obj_25geneticprogrammingcython2_node {
   PyObject_HEAD
   struct __pyx_vtabstruct_25geneticprogrammingcython2_node *__pyx_vtab;
-  PyObject *function;
   PyObject *name;
+  PyObject *function;
   PyObject *children;
-  int node_type;
-  int func_num;
   int lock;
-  int param_num;
-  int param_idx;
-  int const_value;
+  long value;
+  Py_ssize_t node_type;
+  Py_ssize_t param_num;
+  Py_ssize_t size;
 };
 
 
@@ -1192,11 +1191,12 @@ struct __pyx_obj___pyx_scope_struct____Pyx_CFunc_long____long____long____long___
  * 
  * # node objects
  * cdef class node:             # <<<<<<<<<<<<<<
- *     cdef public object function
- *     cdef public object name
+ *     cdef str name
+ *     cdef object function
  */
 
 struct __pyx_vtabstruct_25geneticprogrammingcython2_node {
+  void (*setnode)(struct __pyx_obj_25geneticprogrammingcython2_node *, PyObject *);
   long (*evaluate)(struct __pyx_obj_25geneticprogrammingcython2_node *, PyObject *);
 };
 static struct __pyx_vtabstruct_25geneticprogrammingcython2_node *__pyx_vtabptr_25geneticprogrammingcython2_node;
@@ -1408,34 +1408,6 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
     const char* function_name);
 
-/* ArgTypeTest.proto */
-#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
-    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
-        __Pyx__ArgTypeTest(obj, type, name, exact))
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
-
-/* GetItemInt.proto */
-#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
-    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
-               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
-#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
-                                                     int is_list, int wraparound, int boundscheck);
-
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
@@ -1534,6 +1506,28 @@ static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
 
 /* RaiseException.proto */
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
+
+/* GetItemInt.proto */
+#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
+    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
+               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
+#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
+                                                     int is_list, int wraparound, int boundscheck);
 
 /* HasAttr.proto */
 static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
@@ -1723,9 +1717,6 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
-
-/* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* Print.proto */
@@ -1734,6 +1725,9 @@ static int __Pyx_Print(PyObject*, PyObject *, int);
 static PyObject* __pyx_print = 0;
 static PyObject* __pyx_print_kwargs = 0;
 #endif
+
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
@@ -1837,10 +1831,10 @@ static PyObject* __pyx_print_kwargs = 0;
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
+static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
+static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
 /* PrintOne.proto */
 static int __Pyx_PrintOne(PyObject* stream, PyObject *o);
@@ -1867,6 +1861,7 @@ static int __Pyx_ImportFunction(PyObject *module, const char *funcname, void (**
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
+static void __pyx_f_25geneticprogrammingcython2_4node_setnode(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_children); /* proto*/
 static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_inp); /* proto*/
 
 /* Module declarations from 'cpython.buffer' */
@@ -1943,7 +1938,7 @@ static long __pyx_f_25geneticprogrammingcython2_multiply(long, long); /*proto*/
 static long __pyx_f_25geneticprogrammingcython2_isgreater(long, long); /*proto*/
 static long __pyx_f_25geneticprogrammingcython2_iffunc(long, long, long); /*proto*/
 static float __pyx_f_25geneticprogrammingcython2_crandom(void); /*proto*/
-static int __pyx_f_25geneticprogrammingcython2_crandint(int, int); /*proto*/
+static long __pyx_f_25geneticprogrammingcython2_crandint(int, int); /*proto*/
 static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogrammingcython2_makerandomtree(int, struct __pyx_opt_args_25geneticprogrammingcython2_makerandomtree *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void); /*proto*/
 static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void); /*proto*/
@@ -2000,7 +1995,6 @@ static const char __pyx_k_random[] = "random";
 static const char __pyx_k_reduce[] = "__reduce__";
 static const char __pyx_k_update[] = "update";
 static const char __pyx_k_display[] = "display";
-static const char __pyx_k_children[] = "children";
 static const char __pyx_k_evaluate[] = "evaluate";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_gpcython[] = "gpcython";
@@ -2025,14 +2019,12 @@ static const char __pyx_k_stringsource[] = "stringsource";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_runexperiment[] = "runexperiment";
 static const char __pyx_k_test_evaluate[] = "test_evaluate";
-static const char __pyx_k_makerandomtree[] = "makerandomtree";
 static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_pyx_unpickle_node[] = "__pyx_unpickle_node";
 static const char __pyx_k_Pass_test_evaluate[] = "Pass test_evaluate";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_geneticprogramming[] = "geneticprogramming";
-static const char __pyx_k_Benchmark_gpcython_py[] = "Benchmark (gpcython.py): ";
 static const char __pyx_k_Pass_test_makerandomtree[] = "Pass test_makerandomtree";
 static const char __pyx_k_geneticprogrammingcython[] = "geneticprogrammingcython";
 static const char __pyx_k_geneticprogrammingcython2[] = "geneticprogrammingcython2";
@@ -2043,7 +2035,7 @@ static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multia
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Benchmark_geneticprogrammingcyth[] = "Benchmark (geneticprogrammingcython2.py):  ";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x92[] = "Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x0f[] = "Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_Pyx_CFunc_long____long____long_2[] = "__Pyx_CFunc_long____long____long____long___to_py.<locals>.wrap";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
@@ -2053,11 +2045,10 @@ static const char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string 
 static PyObject *__pyx_kp_s_;
 static PyObject *__pyx_kp_s_Benchmark_geneticprogrammingcyth;
 static PyObject *__pyx_kp_s_Benchmark_geneticprogrammingcyth_2;
-static PyObject *__pyx_kp_s_Benchmark_gpcython_py;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x92;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x0f;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_kp_s_Pass_test_evaluate;
 static PyObject *__pyx_kp_s_Pass_test_makerandomtree;
@@ -2071,7 +2062,6 @@ static PyObject *__pyx_kp_s__3;
 static PyObject *__pyx_n_s_add;
 static PyObject *__pyx_n_s_append;
 static PyObject *__pyx_n_s_cfunc_to_py;
-static PyObject *__pyx_n_s_children;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_dict;
 static PyObject *__pyx_n_s_display;
@@ -2097,7 +2087,6 @@ static PyObject *__pyx_n_s_input;
 static PyObject *__pyx_n_s_isgreater;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_main_2;
-static PyObject *__pyx_n_s_makerandomtree;
 static PyObject *__pyx_n_s_multiply;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
@@ -2141,19 +2130,8 @@ static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_s_value;
 static PyObject *__pyx_n_s_wrap;
-static int __pyx_pf_25geneticprogrammingcython2_4node___init__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, int __pyx_v_node_type, int __pyx_v_value, PyObject *__pyx_v_children); /* proto */
+static int __pyx_pf_25geneticprogrammingcython2_4node___init__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, int __pyx_v_node_type, long __pyx_v_value); /* proto */
 static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_indent); /* proto */
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_8function___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_8function_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_8function_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4name___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_4name_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_4name_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_8children___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_8children_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_8children_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_9node_type___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
-static int __pyx_pf_25geneticprogrammingcython2_4node_9node_type_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_6__setstate_cython__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
@@ -2194,7 +2172,7 @@ static PyObject *__pyx_int_42;
 static PyObject *__pyx_int_70;
 static PyObject *__pyx_int_100;
 static PyObject *__pyx_int_200;
-static PyObject *__pyx_int_153554213;
+static PyObject *__pyx_int_16127908;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_tuple__4;
 static PyObject *__pyx_tuple__5;
@@ -2567,19 +2545,19 @@ static float __pyx_f_25geneticprogrammingcython2_crandom(void) {
 /* "geneticprogrammingcython2.pyx":143
  * 
  * @cython.cdivision(True)
- * cdef int crandint(int lower, int upper) except -1:             # <<<<<<<<<<<<<<
+ * cdef long crandint(int lower, int upper) except -1:             # <<<<<<<<<<<<<<
  *     return (rand() % (upper - lower + 1)) + lower
  * 
  */
 
-static int __pyx_f_25geneticprogrammingcython2_crandint(int __pyx_v_lower, int __pyx_v_upper) {
-  int __pyx_r;
+static long __pyx_f_25geneticprogrammingcython2_crandint(int __pyx_v_lower, int __pyx_v_upper) {
+  long __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("crandint", 0);
 
   /* "geneticprogrammingcython2.pyx":144
  * @cython.cdivision(True)
- * cdef int crandint(int lower, int upper) except -1:
+ * cdef long crandint(int lower, int upper) except -1:
  *     return (rand() % (upper - lower + 1)) + lower             # <<<<<<<<<<<<<<
  * 
  * 
@@ -2590,7 +2568,7 @@ static int __pyx_f_25geneticprogrammingcython2_crandint(int __pyx_v_lower, int _
   /* "geneticprogrammingcython2.pyx":143
  * 
  * @cython.cdivision(True)
- * cdef int crandint(int lower, int upper) except -1:             # <<<<<<<<<<<<<<
+ * cdef long crandint(int lower, int upper) except -1:             # <<<<<<<<<<<<<<
  *     return (rand() % (upper - lower + 1)) + lower
  * 
  */
@@ -2601,33 +2579,29 @@ static int __pyx_f_25geneticprogrammingcython2_crandint(int __pyx_v_lower, int _
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":160
- *     cdef int const_value
+/* "geneticprogrammingcython2.pyx":159
+ *     cdef Py_ssize_t size
  * 
- *     def __init__(self, int node_type, int value, list children=None):             # <<<<<<<<<<<<<<
+ *     def __init__(self, int node_type, long value):             # <<<<<<<<<<<<<<
  *         self.node_type = node_type
- *         self.lock = False
+ *         self.value = value
  */
 
 /* Python wrapper */
 static int __pyx_pw_25geneticprogrammingcython2_4node_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static int __pyx_pw_25geneticprogrammingcython2_4node_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_node_type;
-  int __pyx_v_value;
-  PyObject *__pyx_v_children = 0;
+  long __pyx_v_value;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_node_type,&__pyx_n_s_value,&__pyx_n_s_children,0};
-    PyObject* values[3] = {0,0,0};
-    values[2] = ((PyObject*)Py_None);
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_node_type,&__pyx_n_s_value,0};
+    PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         CYTHON_FALLTHROUGH;
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -2644,149 +2618,161 @@ static int __pyx_pw_25geneticprogrammingcython2_4node_1__init__(PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_value)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 3, 1); __PYX_ERR(0, 160, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_children);
-          if (value) { values[2] = value; kw_args--; }
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); __PYX_ERR(0, 159, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 160, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 159, __pyx_L3_error)
       }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
     } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        break;
-        default: goto __pyx_L5_argtuple_error;
-      }
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_node_type = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_node_type == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L3_error)
-    __pyx_v_value = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_value == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L3_error)
-    __pyx_v_children = ((PyObject*)values[2]);
+    __pyx_v_node_type = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_node_type == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L3_error)
+    __pyx_v_value = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_value == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 160, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 159, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("geneticprogrammingcython2.node.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_children), (&PyList_Type), 1, "children", 1))) __PYX_ERR(0, 160, __pyx_L1_error)
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node___init__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), __pyx_v_node_type, __pyx_v_value, __pyx_v_children);
+  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node___init__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), __pyx_v_node_type, __pyx_v_value);
 
   /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = -1;
-  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_25geneticprogrammingcython2_4node___init__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, int __pyx_v_node_type, int __pyx_v_value, PyObject *__pyx_v_children) {
+static int __pyx_pf_25geneticprogrammingcython2_4node___init__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, int __pyx_v_node_type, long __pyx_v_value) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "geneticprogrammingcython2.pyx":161
+  /* "geneticprogrammingcython2.pyx":160
  * 
- *     def __init__(self, int node_type, int value, list children=None):
+ *     def __init__(self, int node_type, long value):
  *         self.node_type = node_type             # <<<<<<<<<<<<<<
- *         self.lock = False
- *         if node_type == FUNC_NODE:
+ *         self.value = value
+ * 
  */
   __pyx_v_self->node_type = __pyx_v_node_type;
 
-  /* "geneticprogrammingcython2.pyx":162
- *     def __init__(self, int node_type, int value, list children=None):
+  /* "geneticprogrammingcython2.pyx":161
+ *     def __init__(self, int node_type, long value):
  *         self.node_type = node_type
- *         self.lock = False             # <<<<<<<<<<<<<<
- *         if node_type == FUNC_NODE:
- *             self.func_num = value
+ *         self.value = value             # <<<<<<<<<<<<<<
+ * 
+ * 
  */
-  __pyx_v_self->lock = 0;
+  __pyx_v_self->value = __pyx_v_value;
 
-  /* "geneticprogrammingcython2.pyx":163
+  /* "geneticprogrammingcython2.pyx":159
+ *     cdef Py_ssize_t size
+ * 
+ *     def __init__(self, int node_type, long value):             # <<<<<<<<<<<<<<
  *         self.node_type = node_type
- *         self.lock = False
- *         if node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *             self.func_num = value
- *             self.function = func_array[self.func_num]
+ *         self.value = value
  */
-  __pyx_t_1 = ((__pyx_v_node_type == __pyx_v_25geneticprogrammingcython2_FUNC_NODE) != 0);
+
+  /* function exit code */
+  __pyx_r = 0;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "geneticprogrammingcython2.pyx":167
+ *     @cython.wraparound(False)
+ *     @cython.nonecheck(False)
+ *     cdef void setnode(self, list children):             # <<<<<<<<<<<<<<
+ *         if self.node_type == FUNC_NODE:
+ *             self.lock = False
+ */
+
+static void __pyx_f_25geneticprogrammingcython2_4node_setnode(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_children) {
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  Py_ssize_t __pyx_t_3;
+  __Pyx_RefNannySetupContext("setnode", 0);
+
+  /* "geneticprogrammingcython2.pyx":168
+ *     @cython.nonecheck(False)
+ *     cdef void setnode(self, list children):
+ *         if self.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
+ *             self.lock = False
+ *             self.function = func_array[self.value]
+ */
+  __pyx_t_1 = ((__pyx_v_self->node_type == __pyx_v_25geneticprogrammingcython2_FUNC_NODE) != 0);
   if (__pyx_t_1) {
 
-    /* "geneticprogrammingcython2.pyx":164
- *         self.lock = False
- *         if node_type == FUNC_NODE:
- *             self.func_num = value             # <<<<<<<<<<<<<<
- *             self.function = func_array[self.func_num]
- *             self.name = name_array[self.func_num]
+    /* "geneticprogrammingcython2.pyx":169
+ *     cdef void setnode(self, list children):
+ *         if self.node_type == FUNC_NODE:
+ *             self.lock = False             # <<<<<<<<<<<<<<
+ *             self.function = func_array[self.value]
+ *             self.name = name_array[self.value]
  */
-    __pyx_v_self->func_num = __pyx_v_value;
+    __pyx_v_self->lock = 0;
 
-    /* "geneticprogrammingcython2.pyx":165
- *         if node_type == FUNC_NODE:
- *             self.func_num = value
- *             self.function = func_array[self.func_num]             # <<<<<<<<<<<<<<
- *             self.name = name_array[self.func_num]
- *             self.param_num = param_array[self.func_num]
+    /* "geneticprogrammingcython2.pyx":170
+ *         if self.node_type == FUNC_NODE:
+ *             self.lock = False
+ *             self.function = func_array[self.value]             # <<<<<<<<<<<<<<
+ *             self.name = name_array[self.value]
+ *             self.param_num = param_array[self.value]
  */
     if (unlikely(__pyx_v_25geneticprogrammingcython2_func_array == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 165, __pyx_L1_error)
+      __PYX_ERR(0, 170, __pyx_L1_error)
     }
-    __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_25geneticprogrammingcython2_func_array, __pyx_v_self->func_num, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_v_25geneticprogrammingcython2_func_array, __pyx_v_self->value);
+    __Pyx_INCREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_2);
     __Pyx_GOTREF(__pyx_v_self->function);
     __Pyx_DECREF(__pyx_v_self->function);
     __pyx_v_self->function = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "geneticprogrammingcython2.pyx":166
- *             self.func_num = value
- *             self.function = func_array[self.func_num]
- *             self.name = name_array[self.func_num]             # <<<<<<<<<<<<<<
- *             self.param_num = param_array[self.func_num]
+    /* "geneticprogrammingcython2.pyx":171
+ *             self.lock = False
+ *             self.function = func_array[self.value]
+ *             self.name = name_array[self.value]             # <<<<<<<<<<<<<<
+ *             self.param_num = param_array[self.value]
  *             self.children = children
  */
     if (unlikely(__pyx_v_25geneticprogrammingcython2_name_array == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 166, __pyx_L1_error)
+      __PYX_ERR(0, 171, __pyx_L1_error)
     }
-    __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_25geneticprogrammingcython2_name_array, __pyx_v_self->func_num, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 166, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    if (!(likely(PyString_CheckExact(PyList_GET_ITEM(__pyx_v_25geneticprogrammingcython2_name_array, __pyx_v_self->value)))||((PyList_GET_ITEM(__pyx_v_25geneticprogrammingcython2_name_array, __pyx_v_self->value)) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(PyList_GET_ITEM(__pyx_v_25geneticprogrammingcython2_name_array, __pyx_v_self->value))->tp_name), 0))) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_v_25geneticprogrammingcython2_name_array, __pyx_v_self->value);
+    __Pyx_INCREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_2);
     __Pyx_GOTREF(__pyx_v_self->name);
     __Pyx_DECREF(__pyx_v_self->name);
-    __pyx_v_self->name = __pyx_t_2;
+    __pyx_v_self->name = ((PyObject*)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "geneticprogrammingcython2.pyx":167
- *             self.function = func_array[self.func_num]
- *             self.name = name_array[self.func_num]
- *             self.param_num = param_array[self.func_num]             # <<<<<<<<<<<<<<
+    /* "geneticprogrammingcython2.pyx":172
+ *             self.function = func_array[self.value]
+ *             self.name = name_array[self.value]
+ *             self.param_num = param_array[self.value]             # <<<<<<<<<<<<<<
  *             self.children = children
- *         elif node_type == PARAM_NODE:
+ *             self.size = len(children)
  */
-    __pyx_v_self->param_num = (__pyx_v_25geneticprogrammingcython2_param_array[__pyx_v_self->func_num]);
+    __pyx_v_self->param_num = (__pyx_v_25geneticprogrammingcython2_param_array[__pyx_v_self->value]);
 
-    /* "geneticprogrammingcython2.pyx":168
- *             self.name = name_array[self.func_num]
- *             self.param_num = param_array[self.func_num]
+    /* "geneticprogrammingcython2.pyx":173
+ *             self.name = name_array[self.value]
+ *             self.param_num = param_array[self.value]
  *             self.children = children             # <<<<<<<<<<<<<<
- *         elif node_type == PARAM_NODE:
- *             self.param_idx = value
+ *             self.size = len(children)
+ * 
  */
     __Pyx_INCREF(__pyx_v_children);
     __Pyx_GIVEREF(__pyx_v_children);
@@ -2794,96 +2780,64 @@ static int __pyx_pf_25geneticprogrammingcython2_4node___init__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_v_self->children);
     __pyx_v_self->children = __pyx_v_children;
 
-    /* "geneticprogrammingcython2.pyx":163
- *         self.node_type = node_type
- *         self.lock = False
- *         if node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *             self.func_num = value
- *             self.function = func_array[self.func_num]
- */
-    goto __pyx_L3;
-  }
-
-  /* "geneticprogrammingcython2.pyx":169
- *             self.param_num = param_array[self.func_num]
+    /* "geneticprogrammingcython2.pyx":174
+ *             self.param_num = param_array[self.value]
  *             self.children = children
- *         elif node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             self.param_idx = value
- *         else:
- */
-  __pyx_t_1 = ((__pyx_v_node_type == __pyx_v_25geneticprogrammingcython2_PARAM_NODE) != 0);
-  if (__pyx_t_1) {
-
-    /* "geneticprogrammingcython2.pyx":170
- *             self.children = children
- *         elif node_type == PARAM_NODE:
- *             self.param_idx = value             # <<<<<<<<<<<<<<
- *         else:
- *             self.const_value = value
- */
-    __pyx_v_self->param_idx = __pyx_v_value;
-
-    /* "geneticprogrammingcython2.pyx":169
- *             self.param_num = param_array[self.func_num]
- *             self.children = children
- *         elif node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             self.param_idx = value
- *         else:
- */
-    goto __pyx_L3;
-  }
-
-  /* "geneticprogrammingcython2.pyx":172
- *             self.param_idx = value
- *         else:
- *             self.const_value = value             # <<<<<<<<<<<<<<
+ *             self.size = len(children)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  /*else*/ {
-    __pyx_v_self->const_value = __pyx_v_value;
-  }
-  __pyx_L3:;
+    if (unlikely(__pyx_v_children == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+      __PYX_ERR(0, 174, __pyx_L1_error)
+    }
+    __pyx_t_3 = PyList_GET_SIZE(__pyx_v_children); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_v_self->size = __pyx_t_3;
 
-  /* "geneticprogrammingcython2.pyx":160
- *     cdef int const_value
- * 
- *     def __init__(self, int node_type, int value, list children=None):             # <<<<<<<<<<<<<<
- *         self.node_type = node_type
- *         self.lock = False
+    /* "geneticprogrammingcython2.pyx":168
+ *     @cython.nonecheck(False)
+ *     cdef void setnode(self, list children):
+ *         if self.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
+ *             self.lock = False
+ *             self.function = func_array[self.value]
+ */
+  }
+
+  /* "geneticprogrammingcython2.pyx":167
+ *     @cython.wraparound(False)
+ *     @cython.nonecheck(False)
+ *     cdef void setnode(self, list children):             # <<<<<<<<<<<<<<
+ *         if self.node_type == FUNC_NODE:
+ *             self.lock = False
  */
 
   /* function exit code */
-  __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("geneticprogrammingcython2.node.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = -1;
+  __Pyx_WriteUnraisable("geneticprogrammingcython2.node.setnode", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
-  return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":179
+/* "geneticprogrammingcython2.pyx":181
  *     @cython.wraparound(False)
  *     @cython.nonecheck(False)
  *     cdef long evaluate(self, list inp):             # <<<<<<<<<<<<<<
- *         cdef Py_ssize_t size
  *         cdef long results[3]
+ * 
  */
 
 static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_inp) {
-  Py_ssize_t __pyx_v_size;
   long __pyx_v_results[3];
   Py_ssize_t __pyx_v_i;
   long __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
+  Py_ssize_t __pyx_t_2;
   Py_ssize_t __pyx_t_3;
   Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
+  PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
@@ -2894,51 +2848,34 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("evaluate", 0);
 
-  /* "geneticprogrammingcython2.pyx":183
+  /* "geneticprogrammingcython2.pyx":184
  *         cdef long results[3]
  * 
  *         if self.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *             size = len(self.children)
- *             for i in range(size):
+ *             for i in range(self.size):
+ *                 results[i] = (<node>(self.children[i])).evaluate(inp)
  */
   __pyx_t_1 = ((__pyx_v_self->node_type == __pyx_v_25geneticprogrammingcython2_FUNC_NODE) != 0);
   if (__pyx_t_1) {
 
-    /* "geneticprogrammingcython2.pyx":184
- * 
- *         if self.node_type == FUNC_NODE:
- *             size = len(self.children)             # <<<<<<<<<<<<<<
- *             for i in range(size):
- *                 results[i] = (<node>(self.children[i])).evaluate(inp)
- */
-    __pyx_t_2 = __pyx_v_self->children;
-    __Pyx_INCREF(__pyx_t_2);
-    if (unlikely(__pyx_t_2 == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-      __PYX_ERR(0, 184, __pyx_L1_error)
-    }
-    __pyx_t_3 = PyList_GET_SIZE(__pyx_t_2); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 184, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_v_size = __pyx_t_3;
-
     /* "geneticprogrammingcython2.pyx":185
+ * 
  *         if self.node_type == FUNC_NODE:
- *             size = len(self.children)
- *             for i in range(size):             # <<<<<<<<<<<<<<
+ *             for i in range(self.size):             # <<<<<<<<<<<<<<
  *                 results[i] = (<node>(self.children[i])).evaluate(inp)
  * 
  */
-    __pyx_t_3 = __pyx_v_size;
-    __pyx_t_4 = __pyx_t_3;
-    for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-      __pyx_v_i = __pyx_t_5;
+    __pyx_t_2 = __pyx_v_self->size;
+    __pyx_t_3 = __pyx_t_2;
+    for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
+      __pyx_v_i = __pyx_t_4;
 
       /* "geneticprogrammingcython2.pyx":186
- *             size = len(self.children)
- *             for i in range(size):
+ *         if self.node_type == FUNC_NODE:
+ *             for i in range(self.size):
  *                 results[i] = (<node>(self.children[i])).evaluate(inp)             # <<<<<<<<<<<<<<
  * 
- *             if size == 1:
+ *             if self.size == 1:
  */
       if (unlikely(__pyx_v_self->children == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -2950,18 +2887,18 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
     /* "geneticprogrammingcython2.pyx":188
  *                 results[i] = (<node>(self.children[i])).evaluate(inp)
  * 
- *             if size == 1:             # <<<<<<<<<<<<<<
+ *             if self.size == 1:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0])
- *             elif size == 2:
+ *             elif self.size == 2:
  */
-    switch (__pyx_v_size) {
+    switch (__pyx_v_self->size) {
       case 1:
 
       /* "geneticprogrammingcython2.pyx":189
  * 
- *             if size == 1:
+ *             if self.size == 1:
  *                 return self.function(results[0])             # <<<<<<<<<<<<<<
- *             elif size == 2:
+ *             elif self.size == 2:
  *                 return self.function(results[0], results[1])
  */
       __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_results[0])); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 189, __pyx_L1_error)
@@ -2977,32 +2914,32 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
           __Pyx_DECREF_SET(__pyx_t_7, function);
         }
       }
-      __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_6);
+      __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_6);
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 189, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_5); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 189, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_r = __pyx_t_9;
       goto __pyx_L0;
 
       /* "geneticprogrammingcython2.pyx":188
  *                 results[i] = (<node>(self.children[i])).evaluate(inp)
  * 
- *             if size == 1:             # <<<<<<<<<<<<<<
+ *             if self.size == 1:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0])
- *             elif size == 2:
+ *             elif self.size == 2:
  */
       break;
       case 2:
 
       /* "geneticprogrammingcython2.pyx":191
  *                 return self.function(results[0])
- *             elif size == 2:
+ *             elif self.size == 2:
  *                 return self.function(results[0], results[1])             # <<<<<<<<<<<<<<
- *             elif size == 3:
+ *             elif self.size == 3:
  *                 return self.function(results[0], results[1], results[2])
  */
       __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_results[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 191, __pyx_L1_error)
@@ -3025,9 +2962,9 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_8)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_7, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else
@@ -3035,9 +2972,9 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_7, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else
@@ -3054,29 +2991,29 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
         PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_6);
         __pyx_t_7 = 0;
         __pyx_t_6 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 191, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_5); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 191, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_r = __pyx_t_9;
       goto __pyx_L0;
 
       /* "geneticprogrammingcython2.pyx":190
- *             if size == 1:
+ *             if self.size == 1:
  *                 return self.function(results[0])
- *             elif size == 2:             # <<<<<<<<<<<<<<
+ *             elif self.size == 2:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0], results[1])
- *             elif size == 3:
+ *             elif self.size == 3:
  */
       break;
       case 3:
 
       /* "geneticprogrammingcython2.pyx":193
  *                 return self.function(results[0], results[1])
- *             elif size == 3:
+ *             elif self.size == 3:
  *                 return self.function(results[0], results[1], results[2])             # <<<<<<<<<<<<<<
  *             # TODO: fix to use return self.function(*results)
  *         elif self.node_type == PARAM_NODE:
@@ -3103,9 +3040,9 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_8, __pyx_t_12, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 193, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -3114,9 +3051,9 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_8, __pyx_t_12, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 193, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -3137,20 +3074,20 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
         __pyx_t_8 = 0;
         __pyx_t_12 = 0;
         __pyx_t_6 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_13, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 193, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_t_5); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 193, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_r = __pyx_t_9;
       goto __pyx_L0;
 
       /* "geneticprogrammingcython2.pyx":192
- *             elif size == 2:
+ *             elif self.size == 2:
  *                 return self.function(results[0], results[1])
- *             elif size == 3:             # <<<<<<<<<<<<<<
+ *             elif self.size == 3:             # <<<<<<<<<<<<<<
  *                 return self.function(results[0], results[1], results[2])
  *             # TODO: fix to use return self.function(*results)
  */
@@ -3158,12 +3095,12 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
       default: break;
     }
 
-    /* "geneticprogrammingcython2.pyx":183
+    /* "geneticprogrammingcython2.pyx":184
  *         cdef long results[3]
  * 
  *         if self.node_type == FUNC_NODE:             # <<<<<<<<<<<<<<
- *             size = len(self.children)
- *             for i in range(size):
+ *             for i in range(self.size):
+ *                 results[i] = (<node>(self.children[i])).evaluate(inp)
  */
     goto __pyx_L3;
   }
@@ -3172,7 +3109,7 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
  *                 return self.function(results[0], results[1], results[2])
  *             # TODO: fix to use return self.function(*results)
  *         elif self.node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             return inp[self.param_idx]
+ *             return inp[self.value]
  *         else:
  */
   __pyx_t_1 = ((__pyx_v_self->node_type == __pyx_v_25geneticprogrammingcython2_PARAM_NODE) != 0);
@@ -3181,15 +3118,15 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
     /* "geneticprogrammingcython2.pyx":196
  *             # TODO: fix to use return self.function(*results)
  *         elif self.node_type == PARAM_NODE:
- *             return inp[self.param_idx]             # <<<<<<<<<<<<<<
+ *             return inp[self.value]             # <<<<<<<<<<<<<<
  *         else:
- *             return self.const_value
+ *             return self.value
  */
     if (unlikely(__pyx_v_inp == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 196, __pyx_L1_error)
     }
-    __pyx_t_9 = __Pyx_PyInt_As_long(PyList_GET_ITEM(__pyx_v_inp, __pyx_v_self->param_idx)); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 196, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_As_long(PyList_GET_ITEM(__pyx_v_inp, __pyx_v_self->value)); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 196, __pyx_L1_error)
     __pyx_r = __pyx_t_9;
     goto __pyx_L0;
 
@@ -3197,37 +3134,37 @@ static long __pyx_f_25geneticprogrammingcython2_4node_evaluate(struct __pyx_obj_
  *                 return self.function(results[0], results[1], results[2])
  *             # TODO: fix to use return self.function(*results)
  *         elif self.node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             return inp[self.param_idx]
+ *             return inp[self.value]
  *         else:
  */
   }
 
   /* "geneticprogrammingcython2.pyx":198
- *             return inp[self.param_idx]
+ *             return inp[self.value]
  *         else:
- *             return self.const_value             # <<<<<<<<<<<<<<
+ *             return self.value             # <<<<<<<<<<<<<<
  * 
  * 
  */
   /*else*/ {
-    __pyx_r = __pyx_v_self->const_value;
+    __pyx_r = __pyx_v_self->value;
     goto __pyx_L0;
   }
   __pyx_L3:;
 
-  /* "geneticprogrammingcython2.pyx":179
+  /* "geneticprogrammingcython2.pyx":181
  *     @cython.wraparound(False)
  *     @cython.nonecheck(False)
  *     cdef long evaluate(self, list inp):             # <<<<<<<<<<<<<<
- *         cdef Py_ssize_t size
  *         cdef long results[3]
+ * 
  */
 
   /* function exit code */
   __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
@@ -3431,7 +3368,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __py
  *             for c in self.children:
  *                 c.display(indent + 1)             # <<<<<<<<<<<<<<
  *         elif self.node_type == PARAM_NODE:
- *             print('%sp%d' % (' ' * indent, self.param_idx))
+ *             print('%sp%d' % (' ' * indent, self.value))
  */
       __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_c, __pyx_n_s_display); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
@@ -3479,7 +3416,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __py
  *             for c in self.children:
  *                 c.display(indent + 1)
  *         elif self.node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             print('%sp%d' % (' ' * indent, self.param_idx))
+ *             print('%sp%d' % (' ' * indent, self.value))
  *         else:
  */
   __pyx_t_1 = ((__pyx_v_self->node_type == __pyx_v_25geneticprogrammingcython2_PARAM_NODE) != 0);
@@ -3488,13 +3425,13 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __py
     /* "geneticprogrammingcython2.pyx":212
  *                 c.display(indent + 1)
  *         elif self.node_type == PARAM_NODE:
- *             print('%sp%d' % (' ' * indent, self.param_idx))             # <<<<<<<<<<<<<<
+ *             print('%sp%d' % (' ' * indent, self.value))             # <<<<<<<<<<<<<<
  *         else:
- *             print('%s%d' % (' ' * indent, self.const_value))
+ *             print('%s%d' % (' ' * indent, self.value))
  */
     __pyx_t_2 = PyNumber_Multiply(__pyx_kp_s__3, __pyx_v_indent); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->param_idx); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_self->value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 212, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
@@ -3514,23 +3451,23 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __py
  *             for c in self.children:
  *                 c.display(indent + 1)
  *         elif self.node_type == PARAM_NODE:             # <<<<<<<<<<<<<<
- *             print('%sp%d' % (' ' * indent, self.param_idx))
+ *             print('%sp%d' % (' ' * indent, self.value))
  *         else:
  */
     goto __pyx_L3;
   }
 
   /* "geneticprogrammingcython2.pyx":214
- *             print('%sp%d' % (' ' * indent, self.param_idx))
+ *             print('%sp%d' % (' ' * indent, self.value))
  *         else:
- *             print('%s%d' % (' ' * indent, self.const_value))             # <<<<<<<<<<<<<<
+ *             print('%s%d' % (' ' * indent, self.value))             # <<<<<<<<<<<<<<
  * 
  * 
  */
   /*else*/ {
     __pyx_t_3 = PyNumber_Multiply(__pyx_kp_s__3, __pyx_v_indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->const_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long(__pyx_v_self->value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
@@ -3576,377 +3513,6 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_2display(struct __py
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":150
- * # node objects
- * cdef class node:
- *     cdef public object function             # <<<<<<<<<<<<<<
- *     cdef public object name
- *     cdef public list children
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_8function_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_8function_1__get__(PyObject *__pyx_v_self) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8function___get__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_8function___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_self->function);
-  __pyx_r = __pyx_v_self->function;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_8function_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_8function_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8function_2__set__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), ((PyObject *)__pyx_v_value));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_8function_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__", 0);
-  __Pyx_INCREF(__pyx_v_value);
-  __Pyx_GIVEREF(__pyx_v_value);
-  __Pyx_GOTREF(__pyx_v_self->function);
-  __Pyx_DECREF(__pyx_v_self->function);
-  __pyx_v_self->function = __pyx_v_value;
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_8function_5__del__(PyObject *__pyx_v_self); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_8function_5__del__(PyObject *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8function_4__del__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_8function_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__", 0);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  __Pyx_GOTREF(__pyx_v_self->function);
-  __Pyx_DECREF(__pyx_v_self->function);
-  __pyx_v_self->function = Py_None;
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "geneticprogrammingcython2.pyx":151
- * cdef class node:
- *     cdef public object function
- *     cdef public object name             # <<<<<<<<<<<<<<
- *     cdef public list children
- *     cdef public int node_type
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_4name_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_4name_1__get__(PyObject *__pyx_v_self) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_4name___get__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4name___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_self->name);
-  __pyx_r = __pyx_v_self->name;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_4name_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_4name_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_4name_2__set__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), ((PyObject *)__pyx_v_value));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_4name_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__", 0);
-  __Pyx_INCREF(__pyx_v_value);
-  __Pyx_GIVEREF(__pyx_v_value);
-  __Pyx_GOTREF(__pyx_v_self->name);
-  __Pyx_DECREF(__pyx_v_self->name);
-  __pyx_v_self->name = __pyx_v_value;
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_4name_5__del__(PyObject *__pyx_v_self); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_4name_5__del__(PyObject *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_4name_4__del__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_4name_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__", 0);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  __Pyx_GOTREF(__pyx_v_self->name);
-  __Pyx_DECREF(__pyx_v_self->name);
-  __pyx_v_self->name = Py_None;
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "geneticprogrammingcython2.pyx":152
- *     cdef public object function
- *     cdef public object name
- *     cdef public list children             # <<<<<<<<<<<<<<
- *     cdef public int node_type
- *     cdef int func_num
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_8children_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_8children_1__get__(PyObject *__pyx_v_self) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8children___get__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_8children___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_self->children);
-  __pyx_r = __pyx_v_self->children;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_8children_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_8children_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8children_2__set__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), ((PyObject *)__pyx_v_value));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_8children_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(PyList_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 152, __pyx_L1_error)
-  __pyx_t_1 = __pyx_v_value;
-  __Pyx_INCREF(__pyx_t_1);
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->children);
-  __Pyx_DECREF(__pyx_v_self->children);
-  __pyx_v_self->children = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("geneticprogrammingcython2.node.children.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = -1;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_8children_5__del__(PyObject *__pyx_v_self); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_8children_5__del__(PyObject *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_8children_4__del__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_8children_4__del__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__del__", 0);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  __Pyx_GOTREF(__pyx_v_self->children);
-  __Pyx_DECREF(__pyx_v_self->children);
-  __pyx_v_self->children = ((PyObject*)Py_None);
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "geneticprogrammingcython2.pyx":153
- *     cdef public object name
- *     cdef public list children
- *     cdef public int node_type             # <<<<<<<<<<<<<<
- *     cdef int func_num
- *     cdef int lock
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_9node_type_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_25geneticprogrammingcython2_4node_9node_type_1__get__(PyObject *__pyx_v_self) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_9node_type___get__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_9node_type___get__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("__get__", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->node_type); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("geneticprogrammingcython2.node.node_type.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_25geneticprogrammingcython2_4node_9node_type_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_25geneticprogrammingcython2_4node_9node_type_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_25geneticprogrammingcython2_4node_9node_type_2__set__(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_self), ((PyObject *)__pyx_v_value));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_25geneticprogrammingcython2_4node_9node_type_2__set__(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
-  __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_value); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
-  __pyx_v_self->node_type = __pyx_t_1;
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_AddTraceback("geneticprogrammingcython2.node.node_type.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = -1;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef tuple state
@@ -3978,85 +3544,79 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
+  int __pyx_t_7;
   int __pyx_t_8;
   int __pyx_t_9;
-  int __pyx_t_10;
   __Pyx_RefNannySetupContext("__reduce_cython__", 0);
 
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.children, self.const_value, self.func_num, self.function, self.lock, self.name, self.node_type, self.param_idx, self.param_num)             # <<<<<<<<<<<<<<
+ *     state = (self.children, self.function, self.lock, self.name, self.node_type, self.param_num, self.size, self.value)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->const_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->lock); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->func_num); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_self->node_type); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->lock); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_self->param_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->node_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_4 = PyInt_FromSsize_t(__pyx_v_self->size); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->param_idx); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_long(__pyx_v_self->value); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->param_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(8); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(9); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 5, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_v_self->children);
   __Pyx_GIVEREF(__pyx_v_self->children);
-  PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_v_self->children);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1);
-  __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_self->children);
   __Pyx_INCREF(__pyx_v_self->function);
   __Pyx_GIVEREF(__pyx_v_self->function);
-  PyTuple_SET_ITEM(__pyx_t_7, 3, __pyx_v_self->function);
-  __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_7, 4, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_self->function);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_t_1);
   __Pyx_INCREF(__pyx_v_self->name);
   __Pyx_GIVEREF(__pyx_v_self->name);
-  PyTuple_SET_ITEM(__pyx_t_7, 5, __pyx_v_self->name);
+  PyTuple_SET_ITEM(__pyx_t_6, 3, __pyx_v_self->name);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_6, 4, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_6, 5, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_7, 6, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 6, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_7, 7, __pyx_t_5);
-  __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_7, 8, __pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_6, 7, __pyx_t_5);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
+  __pyx_v_state = ((PyObject*)__pyx_t_6);
   __pyx_t_6 = 0;
-  __pyx_v_state = ((PyObject*)__pyx_t_7);
-  __pyx_t_7 = 0;
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.children, self.const_value, self.func_num, self.function, self.lock, self.name, self.node_type, self.param_idx, self.param_num)
+ *     state = (self.children, self.function, self.lock, self.name, self.node_type, self.param_num, self.size, self.value)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
  */
-  __pyx_t_7 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 6, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_v__dict = __pyx_t_7;
-  __pyx_t_7 = 0;
+  __pyx_t_6 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 6, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_v__dict = __pyx_t_6;
+  __pyx_t_6 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.children, self.const_value, self.func_num, self.function, self.lock, self.name, self.node_type, self.param_idx, self.param_num)
+ *     state = (self.children, self.function, self.lock, self.name, self.node_type, self.param_num, self.size, self.value)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
  *         use_setstate = True
  */
-  __pyx_t_8 = (__pyx_v__dict != Py_None);
-  __pyx_t_9 = (__pyx_t_8 != 0);
-  if (__pyx_t_9) {
+  __pyx_t_7 = (__pyx_v__dict != Py_None);
+  __pyx_t_8 = (__pyx_t_7 != 0);
+  if (__pyx_t_8) {
 
     /* "(tree fragment)":8
  *     _dict = getattr(self, '__dict__', None)
@@ -4065,16 +3625,16 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
  *         use_setstate = True
  *     else:
  */
-    __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_v__dict);
     __Pyx_GIVEREF(__pyx_v__dict);
-    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_v__dict);
-    __pyx_t_6 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_6));
-    __pyx_t_6 = 0;
+    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v__dict);
+    __pyx_t_5 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_5));
+    __pyx_t_5 = 0;
 
     /* "(tree fragment)":9
  *     if _dict is not None:
@@ -4086,7 +3646,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.children, self.const_value, self.func_num, self.function, self.lock, self.name, self.node_type, self.param_idx, self.param_num)
+ *     state = (self.children, self.function, self.lock, self.name, self.node_type, self.param_num, self.size, self.value)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -4100,28 +3660,28 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
  *     else:
  *         use_setstate = self.children is not None or self.function is not None or self.name is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, None), state
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, None), state
  */
   /*else*/ {
-    __pyx_t_8 = (__pyx_v_self->children != ((PyObject*)Py_None));
-    __pyx_t_10 = (__pyx_t_8 != 0);
-    if (!__pyx_t_10) {
+    __pyx_t_7 = (__pyx_v_self->children != ((PyObject*)Py_None));
+    __pyx_t_9 = (__pyx_t_7 != 0);
+    if (!__pyx_t_9) {
     } else {
-      __pyx_t_9 = __pyx_t_10;
+      __pyx_t_8 = __pyx_t_9;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_10 = (__pyx_v_self->function != Py_None);
-    __pyx_t_8 = (__pyx_t_10 != 0);
-    if (!__pyx_t_8) {
+    __pyx_t_9 = (__pyx_v_self->function != Py_None);
+    __pyx_t_7 = (__pyx_t_9 != 0);
+    if (!__pyx_t_7) {
     } else {
-      __pyx_t_9 = __pyx_t_8;
+      __pyx_t_8 = __pyx_t_7;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_8 = (__pyx_v_self->name != Py_None);
-    __pyx_t_10 = (__pyx_t_8 != 0);
-    __pyx_t_9 = __pyx_t_10;
+    __pyx_t_7 = (__pyx_v_self->name != ((PyObject*)Py_None));
+    __pyx_t_9 = (__pyx_t_7 != 0);
+    __pyx_t_8 = __pyx_t_9;
     __pyx_L4_bool_binop_done:;
-    __pyx_v_use_setstate = __pyx_t_9;
+    __pyx_v_use_setstate = __pyx_t_8;
   }
   __pyx_L3:;
 
@@ -4129,89 +3689,89 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
  *     else:
  *         use_setstate = self.children is not None or self.function is not None or self.name is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, None), state
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, None), state
  *     else:
  */
-  __pyx_t_9 = (__pyx_v_use_setstate != 0);
-  if (__pyx_t_9) {
+  __pyx_t_8 = (__pyx_v_use_setstate != 0);
+  if (__pyx_t_8) {
 
     /* "(tree fragment)":13
  *         use_setstate = self.children is not None or self.function is not None or self.name is not None
  *     if use_setstate:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, state)
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, state)
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_pyx_unpickle_node); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_pyx_unpickle_node); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 13, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_7, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_153554213);
-    __Pyx_GIVEREF(__pyx_int_153554213);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_153554213);
+    PyTuple_SET_ITEM(__pyx_t_6, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_16127908);
+    __Pyx_GIVEREF(__pyx_int_16127908);
+    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_16127908);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
-    PyTuple_SET_ITEM(__pyx_t_7, 2, Py_None);
-    __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_6, 2, Py_None);
+    __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_6);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_state);
-    __pyx_t_6 = 0;
-    __pyx_t_7 = 0;
-    __pyx_r = __pyx_t_5;
+    PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_v_state);
     __pyx_t_5 = 0;
+    __pyx_t_6 = 0;
+    __pyx_r = __pyx_t_4;
+    __pyx_t_4 = 0;
     goto __pyx_L0;
 
     /* "(tree fragment)":12
  *     else:
  *         use_setstate = self.children is not None or self.function is not None or self.name is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, None), state
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, None), state
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, None), state
  *     else:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_node__set_state(self, __pyx_state)
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_pyx_unpickle_node); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_pyx_unpickle_node); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_7, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_153554213);
-    __Pyx_GIVEREF(__pyx_int_153554213);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_153554213);
+    PyTuple_SET_ITEM(__pyx_t_6, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_16127908);
+    __Pyx_GIVEREF(__pyx_int_16127908);
+    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_16127908);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_v_state);
-    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_7);
-    __pyx_t_5 = 0;
-    __pyx_t_7 = 0;
-    __pyx_r = __pyx_t_6;
+    PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_v_state);
+    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_6);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_6);
+    __pyx_t_4 = 0;
     __pyx_t_6 = 0;
+    __pyx_r = __pyx_t_5;
+    __pyx_t_5 = 0;
     goto __pyx_L0;
   }
 
@@ -4229,7 +3789,6 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_AddTraceback("geneticprogrammingcython2.node.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -4242,7 +3801,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_4__reduce_cython__(s
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, state)
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_node__set_state(self, __pyx_state)
  */
@@ -4267,7 +3826,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_6__setstate_cython__
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, state)
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_node__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -4278,7 +3837,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4node_6__setstate_cython__
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_node, (type(self), 0x9270d25, state)
+ *         return __pyx_unpickle_node, (type(self), 0x0f617a4, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_node__set_state(self, __pyx_state)
  */
@@ -4310,7 +3869,8 @@ static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogr
   float __pyx_v_param_prob = ((float)0.6);
   PyObject *__pyx_v_children = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_v_i;
-  int __pyx_v_func_num;
+  struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_newnode = 0;
+  long __pyx_v_func_num;
   struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v_tree = NULL;
   struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4318,13 +3878,14 @@ static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogr
   int __pyx_t_2;
   float __pyx_t_3;
   int __pyx_t_4;
-  int __pyx_t_5;
+  long __pyx_t_5;
   int __pyx_t_6;
-  Py_ssize_t __pyx_t_7;
-  struct __pyx_opt_args_25geneticprogrammingcython2_makerandomtree __pyx_t_8;
-  int __pyx_t_9;
-  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_7;
+  Py_ssize_t __pyx_t_8;
+  struct __pyx_opt_args_25geneticprogrammingcython2_makerandomtree __pyx_t_9;
+  int __pyx_t_10;
   PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("makerandomtree", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
@@ -4343,21 +3904,21 @@ static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogr
  * cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
  *     cdef list children = []             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t i
- *     if crandom() < func_prob and maxdepth > 0:
+ *     cdef node newnode
  */
   __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_children = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":254
- *     cdef list children = []
+  /* "geneticprogrammingcython2.pyx":255
  *     cdef Py_ssize_t i
+ *     cdef node newnode
  *     if crandom() < func_prob and maxdepth > 0:             # <<<<<<<<<<<<<<
  *         func_num = crandint(0, numfuncs-1)
  *         for i in range(param_array[func_num]):
  */
-  __pyx_t_3 = __pyx_f_25geneticprogrammingcython2_crandom(); if (unlikely(__pyx_t_3 == ((float)-1.0))) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_25geneticprogrammingcython2_crandom(); if (unlikely(__pyx_t_3 == ((float)-1.0))) __PYX_ERR(0, 255, __pyx_L1_error)
   __pyx_t_4 = ((__pyx_t_3 < __pyx_v_func_prob) != 0);
   if (__pyx_t_4) {
   } else {
@@ -4369,166 +3930,182 @@ static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogr
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_2) {
 
-    /* "geneticprogrammingcython2.pyx":255
- *     cdef Py_ssize_t i
+    /* "geneticprogrammingcython2.pyx":256
+ *     cdef node newnode
  *     if crandom() < func_prob and maxdepth > 0:
  *         func_num = crandint(0, numfuncs-1)             # <<<<<<<<<<<<<<
  *         for i in range(param_array[func_num]):
  *             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
  */
-    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, (__pyx_v_25geneticprogrammingcython2_numfuncs - 1)); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 255, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, (__pyx_v_25geneticprogrammingcython2_numfuncs - 1)); if (unlikely(__pyx_t_5 == ((long)-1L))) __PYX_ERR(0, 256, __pyx_L1_error)
     __pyx_v_func_num = __pyx_t_5;
 
-    /* "geneticprogrammingcython2.pyx":256
+    /* "geneticprogrammingcython2.pyx":257
  *     if crandom() < func_prob and maxdepth > 0:
  *         func_num = crandint(0, numfuncs-1)
  *         for i in range(param_array[func_num]):             # <<<<<<<<<<<<<<
  *             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
  *             children.append(tree)
  */
-    __pyx_t_5 = (__pyx_v_25geneticprogrammingcython2_param_array[__pyx_v_func_num]);
-    __pyx_t_6 = __pyx_t_5;
-    for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-      __pyx_v_i = __pyx_t_7;
+    __pyx_t_6 = (__pyx_v_25geneticprogrammingcython2_param_array[__pyx_v_func_num]);
+    __pyx_t_7 = __pyx_t_6;
+    for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+      __pyx_v_i = __pyx_t_8;
 
-      /* "geneticprogrammingcython2.pyx":257
+      /* "geneticprogrammingcython2.pyx":258
  *         func_num = crandint(0, numfuncs-1)
  *         for i in range(param_array[func_num]):
  *             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)             # <<<<<<<<<<<<<<
  *             children.append(tree)
- *         return node(FUNC_NODE, func_num, children)
+ *         newnode = node(FUNC_NODE, func_num)
  */
-      __pyx_t_8.__pyx_n = 3;
-      __pyx_t_8.maxdepth = (__pyx_v_maxdepth - 1);
-      __pyx_t_8.func_prob = __pyx_v_func_prob;
-      __pyx_t_8.param_prob = __pyx_v_param_prob;
-      __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(__pyx_v_param_count, &__pyx_t_8)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
+      __pyx_t_9.__pyx_n = 3;
+      __pyx_t_9.maxdepth = (__pyx_v_maxdepth - 1);
+      __pyx_t_9.func_prob = __pyx_v_func_prob;
+      __pyx_t_9.param_prob = __pyx_v_param_prob;
+      __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(__pyx_v_param_count, &__pyx_t_9)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_XDECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "geneticprogrammingcython2.pyx":258
+      /* "geneticprogrammingcython2.pyx":259
  *         for i in range(param_array[func_num]):
  *             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
  *             children.append(tree)             # <<<<<<<<<<<<<<
- *         return node(FUNC_NODE, func_num, children)
- *     elif crandom() < param_prob:
+ *         newnode = node(FUNC_NODE, func_num)
+ *         newnode.setnode(children)
  */
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, ((PyObject *)__pyx_v_tree)); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 258, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_children, ((PyObject *)__pyx_v_tree)); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 259, __pyx_L1_error)
     }
 
-    /* "geneticprogrammingcython2.pyx":259
+    /* "geneticprogrammingcython2.pyx":260
  *             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
  *             children.append(tree)
- *         return node(FUNC_NODE, func_num, children)             # <<<<<<<<<<<<<<
+ *         newnode = node(FUNC_NODE, func_num)             # <<<<<<<<<<<<<<
+ *         newnode.setnode(children)
+ *         return newnode
+ */
+    __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_FUNC_NODE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_11 = __Pyx_PyInt_From_long(__pyx_v_func_num); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
+    __pyx_t_12 = PyTuple_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_11);
+    PyTuple_SET_ITEM(__pyx_t_12, 1, __pyx_t_11);
+    __pyx_t_1 = 0;
+    __pyx_t_11 = 0;
+    __pyx_t_11 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_12, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
+    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+    __pyx_v_newnode = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_11);
+    __pyx_t_11 = 0;
+
+    /* "geneticprogrammingcython2.pyx":261
+ *             children.append(tree)
+ *         newnode = node(FUNC_NODE, func_num)
+ *         newnode.setnode(children)             # <<<<<<<<<<<<<<
+ *         return newnode
  *     elif crandom() < param_prob:
- *         return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
+ */
+    ((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_newnode->__pyx_vtab)->setnode(__pyx_v_newnode, __pyx_v_children);
+
+    /* "geneticprogrammingcython2.pyx":262
+ *         newnode = node(FUNC_NODE, func_num)
+ *         newnode.setnode(children)
+ *         return newnode             # <<<<<<<<<<<<<<
+ *     elif crandom() < param_prob:
+ *         return node(PARAM_NODE, crandint(0, param_count - 1))
  */
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_FUNC_NODE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_func_num); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 259, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_11 = PyTuple_New(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 259, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
-    __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_1);
-    __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_10);
-    __Pyx_INCREF(__pyx_v_children);
-    __Pyx_GIVEREF(__pyx_v_children);
-    PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_v_children);
-    __pyx_t_1 = 0;
-    __pyx_t_10 = 0;
-    __pyx_t_10 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_11, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 259, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __pyx_r = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_10);
-    __pyx_t_10 = 0;
+    __Pyx_INCREF(((PyObject *)__pyx_v_newnode));
+    __pyx_r = __pyx_v_newnode;
     goto __pyx_L0;
 
-    /* "geneticprogrammingcython2.pyx":254
- *     cdef list children = []
+    /* "geneticprogrammingcython2.pyx":255
  *     cdef Py_ssize_t i
+ *     cdef node newnode
  *     if crandom() < func_prob and maxdepth > 0:             # <<<<<<<<<<<<<<
  *         func_num = crandint(0, numfuncs-1)
  *         for i in range(param_array[func_num]):
  */
   }
 
-  /* "geneticprogrammingcython2.pyx":260
- *             children.append(tree)
- *         return node(FUNC_NODE, func_num, children)
+  /* "geneticprogrammingcython2.pyx":263
+ *         newnode.setnode(children)
+ *         return newnode
  *     elif crandom() < param_prob:             # <<<<<<<<<<<<<<
- *         return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
+ *         return node(PARAM_NODE, crandint(0, param_count - 1))
  *     else:
  */
-  __pyx_t_3 = __pyx_f_25geneticprogrammingcython2_crandom(); if (unlikely(__pyx_t_3 == ((float)-1.0))) __PYX_ERR(0, 260, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_25geneticprogrammingcython2_crandom(); if (unlikely(__pyx_t_3 == ((float)-1.0))) __PYX_ERR(0, 263, __pyx_L1_error)
   __pyx_t_2 = ((__pyx_t_3 < __pyx_v_param_prob) != 0);
   if (__pyx_t_2) {
 
-    /* "geneticprogrammingcython2.pyx":261
- *         return node(FUNC_NODE, func_num, children)
+    /* "geneticprogrammingcython2.pyx":264
+ *         return newnode
  *     elif crandom() < param_prob:
- *         return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))             # <<<<<<<<<<<<<<
+ *         return node(PARAM_NODE, crandint(0, param_count - 1))             # <<<<<<<<<<<<<<
  *     else:
- *         return node(CONST_NODE, crandint(0, 10)) #constnode(crandint(0, 10))
+ *         return node(CONST_NODE, crandint(0, 10))
  */
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    __pyx_t_10 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_PARAM_NODE); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 261, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, (__pyx_v_param_count - 1)); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 261, __pyx_L1_error)
-    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_t_5); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 261, __pyx_L1_error)
+    __pyx_t_11 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_PARAM_NODE); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 264, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, (__pyx_v_param_count - 1)); if (unlikely(__pyx_t_5 == ((long)-1L))) __PYX_ERR(0, 264, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_From_long(__pyx_t_5); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 264, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_10);
     __Pyx_GIVEREF(__pyx_t_11);
-    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_11);
-    __pyx_t_10 = 0;
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_11);
+    __Pyx_GIVEREF(__pyx_t_12);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_12);
     __pyx_t_11 = 0;
-    __pyx_t_11 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_1, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 261, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
+    __pyx_t_12 = 0;
+    __pyx_t_12 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_1, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 264, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_r = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_11);
-    __pyx_t_11 = 0;
+    __pyx_r = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_12);
+    __pyx_t_12 = 0;
     goto __pyx_L0;
 
-    /* "geneticprogrammingcython2.pyx":260
- *             children.append(tree)
- *         return node(FUNC_NODE, func_num, children)
+    /* "geneticprogrammingcython2.pyx":263
+ *         newnode.setnode(children)
+ *         return newnode
  *     elif crandom() < param_prob:             # <<<<<<<<<<<<<<
- *         return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
+ *         return node(PARAM_NODE, crandint(0, param_count - 1))
  *     else:
  */
   }
 
-  /* "geneticprogrammingcython2.pyx":263
- *         return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
+  /* "geneticprogrammingcython2.pyx":266
+ *         return node(PARAM_NODE, crandint(0, param_count - 1))
  *     else:
- *         return node(CONST_NODE, crandint(0, 10)) #constnode(crandint(0, 10))             # <<<<<<<<<<<<<<
+ *         return node(CONST_NODE, crandint(0, 10))             # <<<<<<<<<<<<<<
  * 
  * 
  */
   /*else*/ {
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    __pyx_t_11 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_CONST_NODE); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_12 = PyInt_FromSsize_t(__pyx_v_25geneticprogrammingcython2_CONST_NODE); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 266, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
+    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, 10); if (unlikely(__pyx_t_5 == ((long)-1L))) __PYX_ERR(0, 266, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_5 = __pyx_f_25geneticprogrammingcython2_crandint(0, 10); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 263, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __Pyx_GIVEREF(__pyx_t_11);
-    PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_11);
+    __Pyx_GIVEREF(__pyx_t_12);
+    PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_12);
     __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_1);
-    __pyx_t_11 = 0;
+    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_1);
+    __pyx_t_12 = 0;
     __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_25geneticprogrammingcython2_node), __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_r = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1);
     __pyx_t_1 = 0;
     goto __pyx_L0;
@@ -4545,19 +4122,20 @@ static struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_f_25geneticprogr
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_12);
   __Pyx_AddTraceback("geneticprogrammingcython2.makerandomtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_children);
+  __Pyx_XDECREF((PyObject *)__pyx_v_newnode);
   __Pyx_XDECREF((PyObject *)__pyx_v_tree);
   __Pyx_XGIVEREF((PyObject *)__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":267
+/* "geneticprogrammingcython2.pyx":269
  * 
  * 
  * def runexperiment():             # <<<<<<<<<<<<<<
@@ -4588,7 +4166,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("runexperiment", 0);
 
-  /* "geneticprogrammingcython2.pyx":268
+  /* "geneticprogrammingcython2.pyx":270
  * 
  * def runexperiment():
  *     srand(10)             # <<<<<<<<<<<<<<
@@ -4597,26 +4175,26 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
  */
   srand(10);
 
-  /* "geneticprogrammingcython2.pyx":269
+  /* "geneticprogrammingcython2.pyx":271
  * def runexperiment():
  *     srand(10)
  *     tree = makerandomtree(2)             # <<<<<<<<<<<<<<
  *     tree.display()
  *     print(tree.evaluate([5,2]))
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_tree = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":270
+  /* "geneticprogrammingcython2.pyx":272
  *     srand(10)
  *     tree = makerandomtree(2)
  *     tree.display()             # <<<<<<<<<<<<<<
  *     print(tree.evaluate([5,2]))
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_display); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 270, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_display); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4630,19 +4208,19 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":271
+  /* "geneticprogrammingcython2.pyx":273
  *     tree = makerandomtree(2)
  *     tree.display()
  *     print(tree.evaluate([5,2]))             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_int_5);
   __Pyx_GIVEREF(__pyx_int_5);
@@ -4650,13 +4228,13 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
   PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_2);
-  __pyx_t_2 = __Pyx_PyInt_From_long(((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 271, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_long(((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 271, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":267
+  /* "geneticprogrammingcython2.pyx":269
  * 
  * 
  * def runexperiment():             # <<<<<<<<<<<<<<
@@ -4680,11 +4258,11 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_runexperiment(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":275
+/* "geneticprogrammingcython2.pyx":277
  * 
  * 
  * cdef timeit():             # <<<<<<<<<<<<<<
- *     runs = 250000
+ *     runs = 1000000
  * 
  */
 
@@ -4707,28 +4285,27 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   long __pyx_t_6;
   int __pyx_t_7;
   Py_ssize_t __pyx_t_8;
-  PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("timeit", 0);
 
-  /* "geneticprogrammingcython2.pyx":276
+  /* "geneticprogrammingcython2.pyx":278
  * 
  * cdef timeit():
- *     runs = 250000             # <<<<<<<<<<<<<<
+ *     runs = 1000000             # <<<<<<<<<<<<<<
  * 
  *     start = time.time()
  */
-  __pyx_v_runs = 0x3D090;
+  __pyx_v_runs = 0xF4240;
 
-  /* "geneticprogrammingcython2.pyx":278
- *     runs = 250000
+  /* "geneticprogrammingcython2.pyx":280
+ *     runs = 1000000
  * 
  *     start = time.time()             # <<<<<<<<<<<<<<
  *     population = []
  *     input = [10, 42]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4743,32 +4320,32 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_start = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":279
+  /* "geneticprogrammingcython2.pyx":281
  * 
  *     start = time.time()
  *     population = []             # <<<<<<<<<<<<<<
  *     input = [10, 42]
  *     for i in range(runs):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_population = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":280
+  /* "geneticprogrammingcython2.pyx":282
  *     start = time.time()
  *     population = []
  *     input = [10, 42]             # <<<<<<<<<<<<<<
  *     for i in range(runs):
  *         population.append(makerandomtree(2))
  */
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_int_10);
   __Pyx_GIVEREF(__pyx_int_10);
@@ -4779,7 +4356,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   __pyx_v_input = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":281
+  /* "geneticprogrammingcython2.pyx":283
  *     population = []
  *     input = [10, 42]
  *     for i in range(runs):             # <<<<<<<<<<<<<<
@@ -4791,29 +4368,29 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "geneticprogrammingcython2.pyx":282
+    /* "geneticprogrammingcython2.pyx":284
  *     input = [10, 42]
  *     for i in range(runs):
  *         population.append(makerandomtree(2))             # <<<<<<<<<<<<<<
  *     mid = time.time()
  *     for tree in population:
  */
-    __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
+    __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_population, __pyx_t_1); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 282, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_population, __pyx_t_1); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 284, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "geneticprogrammingcython2.pyx":283
+  /* "geneticprogrammingcython2.pyx":285
  *     for i in range(runs):
  *         population.append(makerandomtree(2))
  *     mid = time.time()             # <<<<<<<<<<<<<<
  *     for tree in population:
  *         (<node>tree).evaluate(input)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 285, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 285, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -4828,13 +4405,13 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_mid = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":284
+  /* "geneticprogrammingcython2.pyx":286
  *         population.append(makerandomtree(2))
  *     mid = time.time()
  *     for tree in population:             # <<<<<<<<<<<<<<
@@ -4845,15 +4422,15 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   for (;;) {
     if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_2); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 284, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_2); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 286, __pyx_L1_error)
     #else
-    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_tree, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "geneticprogrammingcython2.pyx":285
+    /* "geneticprogrammingcython2.pyx":287
  *     mid = time.time()
  *     for tree in population:
  *         (<node>tree).evaluate(input)             # <<<<<<<<<<<<<<
@@ -4862,7 +4439,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
  */
     (void)(((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_tree)->__pyx_vtab)->evaluate(((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_v_tree), __pyx_v_input));
 
-    /* "geneticprogrammingcython2.pyx":284
+    /* "geneticprogrammingcython2.pyx":286
  *         population.append(makerandomtree(2))
  *     mid = time.time()
  *     for tree in population:             # <<<<<<<<<<<<<<
@@ -4872,16 +4449,16 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":286
+  /* "geneticprogrammingcython2.pyx":288
  *     for tree in population:
  *         (<node>tree).evaluate(input)
  *     end = time.time()             # <<<<<<<<<<<<<<
  *     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 286, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4896,24 +4473,24 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_end = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":287
+  /* "geneticprogrammingcython2.pyx":289
  *         (<node>tree).evaluate(input)
  *     end = time.time()
  *     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_1 = PyNumber_Subtract(__pyx_v_mid, __pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(__pyx_v_mid, __pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Subtract(__pyx_v_end, __pyx_v_mid); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Subtract(__pyx_v_end, __pyx_v_mid); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_kp_s_Benchmark_geneticprogrammingcyth);
   __Pyx_GIVEREF(__pyx_kp_s_Benchmark_geneticprogrammingcyth);
@@ -4924,19 +4501,19 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_3);
   __pyx_t_1 = 0;
   __pyx_t_3 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":290
+  /* "geneticprogrammingcython2.pyx":292
  * 
  * 
  *     start = time.time()             # <<<<<<<<<<<<<<
  *     population = []
  *     input = [10, 42]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -4951,32 +4528,32 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_start, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":291
+  /* "geneticprogrammingcython2.pyx":293
  * 
  *     start = time.time()
  *     population = []             # <<<<<<<<<<<<<<
  *     input = [10, 42]
  *     for i in range(runs):
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 293, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF_SET(__pyx_v_population, ((PyObject*)__pyx_t_2));
   __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":292
+  /* "geneticprogrammingcython2.pyx":294
  *     start = time.time()
  *     population = []
  *     input = [10, 42]             # <<<<<<<<<<<<<<
  *     for i in range(runs):
  *         population.append(gpc2.makerandomtree(2))
  */
-  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_int_10);
   __Pyx_GIVEREF(__pyx_int_10);
@@ -4987,7 +4564,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   __Pyx_DECREF_SET(__pyx_v_input, ((PyObject*)__pyx_t_2));
   __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":293
+  /* "geneticprogrammingcython2.pyx":295
  *     population = []
  *     input = [10, 42]
  *     for i in range(runs):             # <<<<<<<<<<<<<<
@@ -4999,29 +4576,29 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "geneticprogrammingcython2.pyx":294
+    /* "geneticprogrammingcython2.pyx":296
  *     input = [10, 42]
  *     for i in range(runs):
  *         population.append(gpc2.makerandomtree(2))             # <<<<<<<<<<<<<<
  *     mid = time.time()
  *     for tree in population:
  */
-    __pyx_t_2 = __pyx_f_24geneticprogrammingcython_makerandomtree(2, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_2 = __pyx_f_24geneticprogrammingcython_makerandomtree(2, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_population, __pyx_t_2); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_population, __pyx_t_2); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 296, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
 
-  /* "geneticprogrammingcython2.pyx":295
+  /* "geneticprogrammingcython2.pyx":297
  *     for i in range(runs):
  *         population.append(gpc2.makerandomtree(2))
  *     mid = time.time()             # <<<<<<<<<<<<<<
  *     for tree in population:
  *         gpc2.evaluate(tree, input)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 295, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -5036,13 +4613,13 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 295, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_mid, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":296
+  /* "geneticprogrammingcython2.pyx":298
  *         population.append(gpc2.makerandomtree(2))
  *     mid = time.time()
  *     for tree in population:             # <<<<<<<<<<<<<<
@@ -5053,25 +4630,25 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   for (;;) {
     if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_2)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 298, __pyx_L1_error)
     #else
-    __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_tree, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "geneticprogrammingcython2.pyx":297
+    /* "geneticprogrammingcython2.pyx":299
  *     mid = time.time()
  *     for tree in population:
  *         gpc2.evaluate(tree, input)             # <<<<<<<<<<<<<<
  * 
  *     end = time.time()
  */
-    if (!(likely(PyList_CheckExact(__pyx_v_tree))||((__pyx_v_tree) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_tree)->tp_name), 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+    if (!(likely(PyList_CheckExact(__pyx_v_tree))||((__pyx_v_tree) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_tree)->tp_name), 0))) __PYX_ERR(0, 299, __pyx_L1_error)
     (void)(__pyx_f_24geneticprogrammingcython_evaluate(((PyObject*)__pyx_v_tree), __pyx_v_input));
 
-    /* "geneticprogrammingcython2.pyx":296
+    /* "geneticprogrammingcython2.pyx":298
  *         population.append(gpc2.makerandomtree(2))
  *     mid = time.time()
  *     for tree in population:             # <<<<<<<<<<<<<<
@@ -5081,16 +4658,16 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":299
+  /* "geneticprogrammingcython2.pyx":301
  *         gpc2.evaluate(tree, input)
  * 
  *     end = time.time()             # <<<<<<<<<<<<<<
  *     print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 301, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -5105,24 +4682,24 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   }
   __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 301, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_end, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":300
+  /* "geneticprogrammingcython2.pyx":302
  * 
  *     end = time.time()
  *     print("Benchmark (geneticprogrammingcython.py):  ", mid-start, end-mid)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = PyNumber_Subtract(__pyx_v_mid, __pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Subtract(__pyx_v_mid, __pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyNumber_Subtract(__pyx_v_end, __pyx_v_mid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(__pyx_v_end, __pyx_v_mid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_kp_s_Benchmark_geneticprogrammingcyth_2);
   __Pyx_GIVEREF(__pyx_kp_s_Benchmark_geneticprogrammingcyth_2);
@@ -5133,257 +4710,14 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_1);
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 300, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "geneticprogrammingcython2.pyx":304
- * 
- * 
- *     start = time.time()             # <<<<<<<<<<<<<<
- *     population = []
- *     input = [10, 42]
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_1);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF_SET(__pyx_v_start, __pyx_t_3);
-  __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":305
- * 
- *     start = time.time()
- *     population = []             # <<<<<<<<<<<<<<
- *     input = [10, 42]
- *     for i in range(runs):
- */
-  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF_SET(__pyx_v_population, ((PyObject*)__pyx_t_3));
-  __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":306
- *     start = time.time()
- *     population = []
- *     input = [10, 42]             # <<<<<<<<<<<<<<
- *     for i in range(runs):
- *         population.append(gpc1.makerandomtree(2))
- */
-  __pyx_t_3 = PyList_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_INCREF(__pyx_int_10);
-  __Pyx_GIVEREF(__pyx_int_10);
-  PyList_SET_ITEM(__pyx_t_3, 0, __pyx_int_10);
-  __Pyx_INCREF(__pyx_int_42);
-  __Pyx_GIVEREF(__pyx_int_42);
-  PyList_SET_ITEM(__pyx_t_3, 1, __pyx_int_42);
-  __Pyx_DECREF_SET(__pyx_v_input, ((PyObject*)__pyx_t_3));
-  __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":307
- *     population = []
- *     input = [10, 42]
- *     for i in range(runs):             # <<<<<<<<<<<<<<
- *         population.append(gpc1.makerandomtree(2))
- *     mid = time.time()
- */
-  __pyx_t_4 = __pyx_v_runs;
-  __pyx_t_5 = __pyx_t_4;
-  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
-    __pyx_v_i = __pyx_t_6;
-
-    /* "geneticprogrammingcython2.pyx":308
- *     input = [10, 42]
- *     for i in range(runs):
- *         population.append(gpc1.makerandomtree(2))             # <<<<<<<<<<<<<<
- *     mid = time.time()
- *     for tree in population:
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_gpc1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 308, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_makerandomtree); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 308, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-      __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-      if (likely(__pyx_t_2)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-        __Pyx_INCREF(__pyx_t_2);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_1, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_int_2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_int_2);
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 308, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_population, __pyx_t_3); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 308, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  }
-
-  /* "geneticprogrammingcython2.pyx":309
- *     for i in range(runs):
- *         population.append(gpc1.makerandomtree(2))
- *     mid = time.time()             # <<<<<<<<<<<<<<
- *     for tree in population:
- *         tree.evaluate(input)
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_1);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 309, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF_SET(__pyx_v_mid, __pyx_t_3);
-  __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":310
- *         population.append(gpc1.makerandomtree(2))
- *     mid = time.time()
- *     for tree in population:             # <<<<<<<<<<<<<<
- *         tree.evaluate(input)
- *     end = time.time()
- */
-  __pyx_t_3 = __pyx_v_population; __Pyx_INCREF(__pyx_t_3); __pyx_t_8 = 0;
-  for (;;) {
-    if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_3)) break;
-    #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_2); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 310, __pyx_L1_error)
-    #else
-    __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    #endif
-    __Pyx_XDECREF_SET(__pyx_v_tree, __pyx_t_2);
-    __pyx_t_2 = 0;
-
-    /* "geneticprogrammingcython2.pyx":311
- *     mid = time.time()
- *     for tree in population:
- *         tree.evaluate(input)             # <<<<<<<<<<<<<<
- *     end = time.time()
- *     print("Benchmark (gpcython.py): ", mid-start, end-mid)
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_tree, __pyx_n_s_evaluate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_9 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-      __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_1);
-      if (likely(__pyx_t_9)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-        __Pyx_INCREF(__pyx_t_9);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_1, function);
-      }
-    }
-    __pyx_t_2 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_9, __pyx_v_input) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_input);
-    __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "geneticprogrammingcython2.pyx":310
- *         population.append(gpc1.makerandomtree(2))
- *     mid = time.time()
- *     for tree in population:             # <<<<<<<<<<<<<<
- *         tree.evaluate(input)
- *     end = time.time()
- */
-  }
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":312
- *     for tree in population:
- *         tree.evaluate(input)
- *     end = time.time()             # <<<<<<<<<<<<<<
- *     print("Benchmark (gpcython.py): ", mid-start, end-mid)
- * 
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 312, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF_SET(__pyx_v_end, __pyx_t_3);
-  __pyx_t_3 = 0;
-
-  /* "geneticprogrammingcython2.pyx":313
- *         tree.evaluate(input)
- *     end = time.time()
- *     print("Benchmark (gpcython.py): ", mid-start, end-mid)             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  __pyx_t_3 = PyNumber_Subtract(__pyx_v_mid, __pyx_v_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 313, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyNumber_Subtract(__pyx_v_end, __pyx_v_mid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 313, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_INCREF(__pyx_kp_s_Benchmark_gpcython_py);
-  __Pyx_GIVEREF(__pyx_kp_s_Benchmark_gpcython_py);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_kp_s_Benchmark_gpcython_py);
-  __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_3);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_1);
-  __pyx_t_3 = 0;
-  __pyx_t_1 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 313, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-  /* "geneticprogrammingcython2.pyx":275
+  /* "geneticprogrammingcython2.pyx":277
  * 
  * 
  * cdef timeit():             # <<<<<<<<<<<<<<
- *     runs = 250000
+ *     runs = 1000000
  * 
  */
 
@@ -5394,7 +4728,6 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("geneticprogrammingcython2.timeit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -5409,7 +4742,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":343
+/* "geneticprogrammingcython2.pyx":345
  * 
  * 
  * def test_evaluate():             # <<<<<<<<<<<<<<
@@ -5450,14 +4783,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("test_evaluate", 0);
 
-  /* "geneticprogrammingcython2.pyx":344
+  /* "geneticprogrammingcython2.pyx":346
  * 
  * def test_evaluate():
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply             # <<<<<<<<<<<<<<
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
  */
-  __pyx_t_1 = PyList_New(11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 344, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 346, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -5493,14 +4826,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_1, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":345
+  /* "geneticprogrammingcython2.pyx":347
  * def test_evaluate():
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
  *             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply
  */
-  __pyx_t_2 = PyList_New(11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 347, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
@@ -5536,14 +4869,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_2, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":346
+  /* "geneticprogrammingcython2.pyx":348
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract             # <<<<<<<<<<<<<<
  *             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply
  *             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add
  */
-  __pyx_t_3 = PyList_New(11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 348, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -5579,14 +4912,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_3, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":347
+  /* "geneticprogrammingcython2.pyx":349
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
  *             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply             # <<<<<<<<<<<<<<
  *             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add
  *             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_4 = PyList_New(11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 349, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -5622,14 +4955,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_4, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":348
+  /* "geneticprogrammingcython2.pyx":350
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
  *             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply
  *             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add             # <<<<<<<<<<<<<<
  *             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_5 = PyList_New(11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 348, __pyx_L1_error)
+  __pyx_t_5 = PyList_New(11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 350, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -5665,14 +4998,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_5, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":349
+  /* "geneticprogrammingcython2.pyx":351
  *             [1,  2, -1,  0,  5,  1,  3,  4,  1, -1, -1], # Multiply
  *             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add
  *             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_6 = PyList_New(11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 349, __pyx_L1_error)
+  __pyx_t_6 = PyList_New(11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 351, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
@@ -5708,14 +5041,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_6, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":350
+  /* "geneticprogrammingcython2.pyx":352
  *             [1,  0, -1,  0,  3,  1,  1,  2,  1, -1, -1], # Add
  *             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
  *             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
  */
-  __pyx_t_7 = PyList_New(11); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 350, __pyx_L1_error)
+  __pyx_t_7 = PyList_New(11); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 352, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -5751,14 +5084,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_7, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":351
+  /* "geneticprogrammingcython2.pyx":353
  *             [3, -1,  2,  0,  1, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]
  * 
  */
-  __pyx_t_8 = PyList_New(11); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 351, __pyx_L1_error)
+  __pyx_t_8 = PyList_New(11); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 353, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -5794,14 +5127,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_8, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":352
+  /* "geneticprogrammingcython2.pyx":354
  *             [2, -1,  0,  0,  2, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1,  0,  4, -1, -1, -1, -1, -1, -1],
  *             [3, -1, 10,  0,  6, -1, -1, -1, -1, -1, -1]]             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_9 = PyList_New(11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 352, __pyx_L1_error)
+  __pyx_t_9 = PyList_New(11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
@@ -5837,14 +5170,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_9, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":344
+  /* "geneticprogrammingcython2.pyx":346
  * 
  * def test_evaluate():
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply             # <<<<<<<<<<<<<<
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  *             [1,  1, -1,  0,  7,  1,  5,  6,  1, -1, -1], # Subtract
  */
-  __pyx_t_10 = PyList_New(9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 344, __pyx_L1_error)
+  __pyx_t_10 = PyList_New(9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 346, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_10, 0, __pyx_t_1);
@@ -5876,14 +5209,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __pyx_v_tree = ((PyObject*)__pyx_t_10);
   __pyx_t_10 = 0;
 
-  /* "geneticprogrammingcython2.pyx":355
+  /* "geneticprogrammingcython2.pyx":357
  * 
  * 
  *     input = [5,2]             # <<<<<<<<<<<<<<
  *     assert tree.evaluate(input) == 28
  *     input = [2,5]
  */
-  __pyx_t_10 = PyList_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 355, __pyx_L1_error)
+  __pyx_t_10 = PyList_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 357, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_INCREF(__pyx_int_5);
   __Pyx_GIVEREF(__pyx_int_5);
@@ -5894,7 +5227,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __pyx_v_input = ((PyObject*)__pyx_t_10);
   __pyx_t_10 = 0;
 
-  /* "geneticprogrammingcython2.pyx":356
+  /* "geneticprogrammingcython2.pyx":358
  * 
  *     input = [5,2]
  *     assert tree.evaluate(input) == 28             # <<<<<<<<<<<<<<
@@ -5903,28 +5236,28 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_10 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 358, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_9 = __Pyx_PyInt_EqObjC(__pyx_t_10, __pyx_int_28, 28, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_EqObjC(__pyx_t_10, __pyx_int_28, 28, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 358, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 358, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     if (unlikely(!__pyx_t_11)) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 356, __pyx_L1_error)
+      __PYX_ERR(0, 358, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":357
+  /* "geneticprogrammingcython2.pyx":359
  *     input = [5,2]
  *     assert tree.evaluate(input) == 28
  *     input = [2,5]             # <<<<<<<<<<<<<<
  *     assert tree.evaluate(input) == 70
  * 
  */
-  __pyx_t_9 = PyList_New(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 357, __pyx_L1_error)
+  __pyx_t_9 = PyList_New(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 359, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -5935,7 +5268,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_DECREF_SET(__pyx_v_input, ((PyObject*)__pyx_t_9));
   __pyx_t_9 = 0;
 
-  /* "geneticprogrammingcython2.pyx":358
+  /* "geneticprogrammingcython2.pyx":360
  *     assert tree.evaluate(input) == 28
  *     input = [2,5]
  *     assert tree.evaluate(input) == 70             # <<<<<<<<<<<<<<
@@ -5944,28 +5277,28 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_9 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 358, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 360, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_10 = __Pyx_PyInt_EqObjC(__pyx_t_9, __pyx_int_70, 70, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 358, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyInt_EqObjC(__pyx_t_9, __pyx_int_70, 70, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 360, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 358, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 360, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     if (unlikely(!__pyx_t_11)) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 358, __pyx_L1_error)
+      __PYX_ERR(0, 360, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":360
+  /* "geneticprogrammingcython2.pyx":362
  *     assert tree.evaluate(input) == 70
  * 
  *     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF             # <<<<<<<<<<<<<<
  *             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
  */
-  __pyx_t_10 = PyList_New(11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 360, __pyx_L1_error)
+  __pyx_t_10 = PyList_New(11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -6001,14 +5334,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_1);
   PyList_SET_ITEM(__pyx_t_10, 10, __pyx_int_1);
 
-  /* "geneticprogrammingcython2.pyx":361
+  /* "geneticprogrammingcython2.pyx":363
  * 
  *     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF
  *             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add             # <<<<<<<<<<<<<<
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
  *             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_9 = PyList_New(11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 361, __pyx_L1_error)
+  __pyx_t_9 = PyList_New(11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 363, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -6044,14 +5377,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_9, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":362
+  /* "geneticprogrammingcython2.pyx":364
  *     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF
  *             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >             # <<<<<<<<<<<<<<
  *             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],
  *             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply
  */
-  __pyx_t_8 = PyList_New(11); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 362, __pyx_L1_error)
+  __pyx_t_8 = PyList_New(11); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 364, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -6087,14 +5420,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_8, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":363
+  /* "geneticprogrammingcython2.pyx":365
  *             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
  *             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply
  *             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_7 = PyList_New(11); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 363, __pyx_L1_error)
+  __pyx_t_7 = PyList_New(11); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 365, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6130,14 +5463,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_7, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":364
+  /* "geneticprogrammingcython2.pyx":366
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
  *             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],
  *             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply             # <<<<<<<<<<<<<<
  *             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_6 = PyList_New(11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 364, __pyx_L1_error)
+  __pyx_t_6 = PyList_New(11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 366, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
@@ -6173,14 +5506,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_6, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":365
+  /* "geneticprogrammingcython2.pyx":367
  *             [2, -1,  0, 0, 11, -1, -1, -1, -1, -1, -1],
  *             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply
  *             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_5 = PyList_New(11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 365, __pyx_L1_error)
+  __pyx_t_5 = PyList_New(11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 367, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
@@ -6216,14 +5549,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_5, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":366
+  /* "geneticprogrammingcython2.pyx":368
  *             [1,  2, -1, 0, 14,  1,  1,  2,  1, -1, -1], # Multiply
  *             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_4 = PyList_New(11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 368, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6259,14 +5592,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_4, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":367
+  /* "geneticprogrammingcython2.pyx":369
  *             [3, -1,  7, 0, 12, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
  */
-  __pyx_t_3 = PyList_New(11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 369, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6302,14 +5635,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_3, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":368
+  /* "geneticprogrammingcython2.pyx":370
  *             [2, -1,  0, 0, 13, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],             # <<<<<<<<<<<<<<
  *             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
  * 
  */
-  __pyx_t_2 = PyList_New(11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 368, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6345,14 +5678,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_2, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":369
+  /* "geneticprogrammingcython2.pyx":371
  *             [2, -1,  1, 0, 16, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  1, 0, 18, -1, -1, -1, -1, -1, -1],
  *             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]             # <<<<<<<<<<<<<<
  * 
  *     input = [5,2]
  */
-  __pyx_t_1 = PyList_New(11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 369, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6388,14 +5721,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_GIVEREF(__pyx_int_neg_1);
   PyList_SET_ITEM(__pyx_t_1, 10, __pyx_int_neg_1);
 
-  /* "geneticprogrammingcython2.pyx":360
+  /* "geneticprogrammingcython2.pyx":362
  *     assert tree.evaluate(input) == 70
  * 
  *     tree = [[1,  4, -1, 0, 20,  1,  7,  8,  1,  9,  1], # IF             # <<<<<<<<<<<<<<
  *             [1,  0, -1, 0, 17,  1,  5,  6,  1, -1, -1], # Add
  *             [1,  3, -1, 0, 15,  1,  1,  2,  3, -1, -1], # >
  */
-  __pyx_t_12 = PyList_New(10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 360, __pyx_L1_error)
+  __pyx_t_12 = PyList_New(10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
   __Pyx_GIVEREF(__pyx_t_10);
   PyList_SET_ITEM(__pyx_t_12, 0, __pyx_t_10);
@@ -6430,14 +5763,14 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_DECREF_SET(__pyx_v_tree, ((PyObject*)__pyx_t_12));
   __pyx_t_12 = 0;
 
-  /* "geneticprogrammingcython2.pyx":371
+  /* "geneticprogrammingcython2.pyx":373
  *             [2, -1,  0, 0, 19, -1, -1, -1, -1, -1, -1]]
  * 
  *     input = [5,2]             # <<<<<<<<<<<<<<
  *     assert tree.evaluate(input) == 2
  *     input = [2,5]
  */
-  __pyx_t_12 = PyList_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 371, __pyx_L1_error)
+  __pyx_t_12 = PyList_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 373, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
   __Pyx_INCREF(__pyx_int_5);
   __Pyx_GIVEREF(__pyx_int_5);
@@ -6448,7 +5781,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_DECREF_SET(__pyx_v_input, ((PyObject*)__pyx_t_12));
   __pyx_t_12 = 0;
 
-  /* "geneticprogrammingcython2.pyx":372
+  /* "geneticprogrammingcython2.pyx":374
  * 
  *     input = [5,2]
  *     assert tree.evaluate(input) == 2             # <<<<<<<<<<<<<<
@@ -6457,28 +5790,28 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_12 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 372, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_t_12, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 372, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_t_12, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 372, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_11)) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 372, __pyx_L1_error)
+      __PYX_ERR(0, 374, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":373
+  /* "geneticprogrammingcython2.pyx":375
  *     input = [5,2]
  *     assert tree.evaluate(input) == 2
  *     input = [2,5]             # <<<<<<<<<<<<<<
  *     assert tree.evaluate(input) == 5
  *     print("Pass test_evaluate")
  */
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 373, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
@@ -6489,7 +5822,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   __Pyx_DECREF_SET(__pyx_v_input, ((PyObject*)__pyx_t_1));
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":374
+  /* "geneticprogrammingcython2.pyx":376
  *     assert tree.evaluate(input) == 2
  *     input = [2,5]
  *     assert tree.evaluate(input) == 5             # <<<<<<<<<<<<<<
@@ -6498,30 +5831,30 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 374, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyList_Type_evaluate, __pyx_v_tree, __pyx_v_input); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 376, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_12 = __Pyx_PyInt_EqObjC(__pyx_t_1, __pyx_int_5, 5, 0); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 374, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_EqObjC(__pyx_t_1, __pyx_int_5, 5, 0); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 376, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_12); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 374, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_12); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 376, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     if (unlikely(!__pyx_t_11)) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 374, __pyx_L1_error)
+      __PYX_ERR(0, 376, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":375
+  /* "geneticprogrammingcython2.pyx":377
  *     input = [2,5]
  *     assert tree.evaluate(input) == 5
  *     print("Pass test_evaluate")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Pass_test_evaluate) < 0) __PYX_ERR(0, 375, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Pass_test_evaluate) < 0) __PYX_ERR(0, 377, __pyx_L1_error)
 
-  /* "geneticprogrammingcython2.pyx":343
+  /* "geneticprogrammingcython2.pyx":345
  * 
  * 
  * def test_evaluate():             # <<<<<<<<<<<<<<
@@ -6554,7 +5887,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_2test_evaluate(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":378
+/* "geneticprogrammingcython2.pyx":380
  * 
  * 
  * cdef test_makerandomtree():             # <<<<<<<<<<<<<<
@@ -6567,89 +5900,67 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("test_makerandomtree", 0);
 
-  /* "geneticprogrammingcython2.pyx":379
+  /* "geneticprogrammingcython2.pyx":381
  * 
  * cdef test_makerandomtree():
  *     srand(10)             # <<<<<<<<<<<<<<
  *     tree = makerandomtree(2)
- *     print(tree.evaluate([5, 2]))
+ *     # print(tree.evaluate([5, 2]))
  */
   srand(10);
 
-  /* "geneticprogrammingcython2.pyx":380
+  /* "geneticprogrammingcython2.pyx":382
  * cdef test_makerandomtree():
  *     srand(10)
  *     tree = makerandomtree(2)             # <<<<<<<<<<<<<<
- *     print(tree.evaluate([5, 2]))
+ *     # print(tree.evaluate([5, 2]))
  *     assert tree.evaluate([5, 2]) == 36
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 382, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_tree = ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":381
- *     srand(10)
+  /* "geneticprogrammingcython2.pyx":384
  *     tree = makerandomtree(2)
- *     print(tree.evaluate([5, 2]))             # <<<<<<<<<<<<<<
- *     assert tree.evaluate([5, 2]) == 36
- * 
- */
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 381, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_int_5);
-  __Pyx_GIVEREF(__pyx_int_5);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_5);
-  __Pyx_INCREF(__pyx_int_2);
-  __Pyx_GIVEREF(__pyx_int_2);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_2);
-  __pyx_t_2 = __Pyx_PyInt_From_long(((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 381, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 381, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-  /* "geneticprogrammingcython2.pyx":382
- *     tree = makerandomtree(2)
- *     print(tree.evaluate([5, 2]))
+ *     # print(tree.evaluate([5, 2]))
  *     assert tree.evaluate([5, 2]) == 36             # <<<<<<<<<<<<<<
  * 
  *     tree = makerandomtree(2)
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 384, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_int_5);
     __Pyx_GIVEREF(__pyx_int_5);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_int_5);
+    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_5);
     __Pyx_INCREF(__pyx_int_2);
     __Pyx_GIVEREF(__pyx_int_2);
-    PyList_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_2)) == 36) != 0))) {
+    PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_2);
+    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 36) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 382, __pyx_L1_error)
+      __PYX_ERR(0, 384, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":384
+  /* "geneticprogrammingcython2.pyx":386
  *     assert tree.evaluate([5, 2]) == 36
  * 
  *     tree = makerandomtree(2)             # <<<<<<<<<<<<<<
  *     # print(treearray.evaluate([100, 200]))
  *     assert tree.evaluate([100, 200]) == 5
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 384, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_2));
-  __pyx_t_2 = 0;
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(2, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1));
+  __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":386
+  /* "geneticprogrammingcython2.pyx":388
  *     tree = makerandomtree(2)
  *     # print(treearray.evaluate([100, 200]))
  *     assert tree.evaluate([100, 200]) == 5             # <<<<<<<<<<<<<<
@@ -6658,35 +5969,35 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 386, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 388, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_int_100);
     __Pyx_GIVEREF(__pyx_int_100);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_int_100);
+    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_100);
     __Pyx_INCREF(__pyx_int_200);
     __Pyx_GIVEREF(__pyx_int_200);
-    PyList_SET_ITEM(__pyx_t_2, 1, __pyx_int_200);
-    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_2)) == 5) != 0))) {
+    PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_200);
+    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 5) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 386, __pyx_L1_error)
+      __PYX_ERR(0, 388, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":388
+  /* "geneticprogrammingcython2.pyx":390
  *     assert tree.evaluate([100, 200]) == 5
  * 
  *     tree = makerandomtree(3)             # <<<<<<<<<<<<<<
  *     # print(treearray.evaluate([1, 2, 3]))
  *     assert tree.evaluate([1, 2, 3]) == 2
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(3, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 388, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_2));
-  __pyx_t_2 = 0;
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(3, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 390, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1));
+  __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":390
+  /* "geneticprogrammingcython2.pyx":392
  *     tree = makerandomtree(3)
  *     # print(treearray.evaluate([1, 2, 3]))
  *     assert tree.evaluate([1, 2, 3]) == 2             # <<<<<<<<<<<<<<
@@ -6695,38 +6006,38 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 390, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_int_1);
     __Pyx_GIVEREF(__pyx_int_1);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_int_1);
+    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_1);
     __Pyx_INCREF(__pyx_int_2);
     __Pyx_GIVEREF(__pyx_int_2);
-    PyList_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
+    PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_2);
     __Pyx_INCREF(__pyx_int_3);
     __Pyx_GIVEREF(__pyx_int_3);
-    PyList_SET_ITEM(__pyx_t_2, 2, __pyx_int_3);
-    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_2)) == 2) != 0))) {
+    PyList_SET_ITEM(__pyx_t_1, 2, __pyx_int_3);
+    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 2) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 390, __pyx_L1_error)
+      __PYX_ERR(0, 392, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":392
+  /* "geneticprogrammingcython2.pyx":394
  *     assert tree.evaluate([1, 2, 3]) == 2
  * 
  *     tree = makerandomtree(4)             # <<<<<<<<<<<<<<
  *     # print(treearray.evaluate([4, 3, 2, 1]))
  *     assert tree.evaluate([4, 3, 2, 1]) == 0
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(4, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 392, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_2));
-  __pyx_t_2 = 0;
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(4, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 394, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1));
+  __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":394
+  /* "geneticprogrammingcython2.pyx":396
  *     tree = makerandomtree(4)
  *     # print(treearray.evaluate([4, 3, 2, 1]))
  *     assert tree.evaluate([4, 3, 2, 1]) == 0             # <<<<<<<<<<<<<<
@@ -6735,41 +6046,41 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_2 = PyList_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 394, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyList_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_int_4);
     __Pyx_GIVEREF(__pyx_int_4);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_int_4);
+    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_4);
     __Pyx_INCREF(__pyx_int_3);
     __Pyx_GIVEREF(__pyx_int_3);
-    PyList_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
+    PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_3);
     __Pyx_INCREF(__pyx_int_2);
     __Pyx_GIVEREF(__pyx_int_2);
-    PyList_SET_ITEM(__pyx_t_2, 2, __pyx_int_2);
+    PyList_SET_ITEM(__pyx_t_1, 2, __pyx_int_2);
     __Pyx_INCREF(__pyx_int_1);
     __Pyx_GIVEREF(__pyx_int_1);
-    PyList_SET_ITEM(__pyx_t_2, 3, __pyx_int_1);
-    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_2)) == 0) != 0))) {
+    PyList_SET_ITEM(__pyx_t_1, 3, __pyx_int_1);
+    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 0) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 394, __pyx_L1_error)
+      __PYX_ERR(0, 396, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":396
+  /* "geneticprogrammingcython2.pyx":398
  *     assert tree.evaluate([4, 3, 2, 1]) == 0
  * 
  *     tree = makerandomtree(5)             # <<<<<<<<<<<<<<
  *     # print(treearray.evaluate([2, 4, 6, 8, 10]))
  *     assert tree.evaluate([2, 4, 6, 8, 10]) == 8
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(5, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 396, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_2));
-  __pyx_t_2 = 0;
+  __pyx_t_1 = ((PyObject *)__pyx_f_25geneticprogrammingcython2_makerandomtree(5, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_tree, ((struct __pyx_obj_25geneticprogrammingcython2_node *)__pyx_t_1));
+  __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":398
+  /* "geneticprogrammingcython2.pyx":400
  *     tree = makerandomtree(5)
  *     # print(treearray.evaluate([2, 4, 6, 8, 10]))
  *     assert tree.evaluate([2, 4, 6, 8, 10]) == 8             # <<<<<<<<<<<<<<
@@ -6778,41 +6089,41 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_2 = PyList_New(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 398, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_int_2);
     __Pyx_GIVEREF(__pyx_int_2);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_int_2);
+    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_int_2);
     __Pyx_INCREF(__pyx_int_4);
     __Pyx_GIVEREF(__pyx_int_4);
-    PyList_SET_ITEM(__pyx_t_2, 1, __pyx_int_4);
+    PyList_SET_ITEM(__pyx_t_1, 1, __pyx_int_4);
     __Pyx_INCREF(__pyx_int_6);
     __Pyx_GIVEREF(__pyx_int_6);
-    PyList_SET_ITEM(__pyx_t_2, 2, __pyx_int_6);
+    PyList_SET_ITEM(__pyx_t_1, 2, __pyx_int_6);
     __Pyx_INCREF(__pyx_int_8);
     __Pyx_GIVEREF(__pyx_int_8);
-    PyList_SET_ITEM(__pyx_t_2, 3, __pyx_int_8);
+    PyList_SET_ITEM(__pyx_t_1, 3, __pyx_int_8);
     __Pyx_INCREF(__pyx_int_10);
     __Pyx_GIVEREF(__pyx_int_10);
-    PyList_SET_ITEM(__pyx_t_2, 4, __pyx_int_10);
-    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_2)) == 8) != 0))) {
+    PyList_SET_ITEM(__pyx_t_1, 4, __pyx_int_10);
+    if (unlikely(!((((struct __pyx_vtabstruct_25geneticprogrammingcython2_node *)__pyx_v_tree->__pyx_vtab)->evaluate(__pyx_v_tree, ((PyObject*)__pyx_t_1)) == 8) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 398, __pyx_L1_error)
+      __PYX_ERR(0, 400, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   #endif
 
-  /* "geneticprogrammingcython2.pyx":400
+  /* "geneticprogrammingcython2.pyx":402
  *     assert tree.evaluate([2, 4, 6, 8, 10]) == 8
  * 
  *     print("Pass test_makerandomtree")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Pass_test_makerandomtree) < 0) __PYX_ERR(0, 400, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Pass_test_makerandomtree) < 0) __PYX_ERR(0, 402, __pyx_L1_error)
 
-  /* "geneticprogrammingcython2.pyx":378
+  /* "geneticprogrammingcython2.pyx":380
  * 
  * 
  * cdef test_makerandomtree():             # <<<<<<<<<<<<<<
@@ -6825,7 +6136,6 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_AddTraceback("geneticprogrammingcython2.test_makerandomtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -6835,7 +6145,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_test_makerandomtree(void) {
   return __pyx_r;
 }
 
-/* "geneticprogrammingcython2.pyx":404
+/* "geneticprogrammingcython2.pyx":406
  * 
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -6863,29 +6173,29 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_4main(CYTHON_UNUSED PyObje
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("main", 0);
 
-  /* "geneticprogrammingcython2.pyx":407
+  /* "geneticprogrammingcython2.pyx":409
  *     # runexperiment()
  *     # test_evaluate()
  *     test_makerandomtree()             # <<<<<<<<<<<<<<
  *     timeit()
  * 
  */
-  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_test_makerandomtree(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_test_makerandomtree(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 409, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":408
+  /* "geneticprogrammingcython2.pyx":410
  *     # test_evaluate()
  *     test_makerandomtree()
  *     timeit()             # <<<<<<<<<<<<<<
  * 
  * if __name__ == "__main__":
  */
-  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_timeit(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_25geneticprogrammingcython2_timeit(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "geneticprogrammingcython2.pyx":404
+  /* "geneticprogrammingcython2.pyx":406
  * 
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -7001,18 +6311,18 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x9270d25:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x0f617a4:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x9270d25) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x0f617a4) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x9270d25:
+ *     if __pyx_checksum != 0x0f617a4:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  *     __pyx_result = node.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
@@ -7031,15 +6341,15 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0x9270d25:
+ *     if __pyx_checksum != 0x0f617a4:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = node.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x92, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x0f, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -7066,15 +6376,15 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x9270d25:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x0f617a4:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  *     __pyx_result = node.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
@@ -7100,7 +6410,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  *     __pyx_result = node.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
@@ -7123,7 +6433,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x9270d25 = (children, const_value, func_num, function, lock, name, node_type, param_idx, param_num))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x0f617a4 = (children, function, lock, name, node_type, param_num, size, value))" % __pyx_checksum)
  *     __pyx_result = node.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
@@ -7136,7 +6446,7 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -7169,8 +6479,8 @@ static PyObject *__pyx_pf_25geneticprogrammingcython2_6__pyx_unpickle_node(CYTHO
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_state(struct __pyx_obj_25geneticprogrammingcython2_node *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -7178,8 +6488,8 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
+  Py_ssize_t __pyx_t_3;
+  long __pyx_t_4;
   int __pyx_t_5;
   int __pyx_t_6;
   PyObject *__pyx_t_7 = NULL;
@@ -7190,9 +6500,9 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[9])
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[8])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -7212,24 +6522,6 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->const_value = __pyx_t_2;
-  if (unlikely(__pyx_v___pyx_state == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(1, 12, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->func_num = __pyx_t_2;
-  if (unlikely(__pyx_v___pyx_state == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(1, 12, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->function);
   __Pyx_DECREF(__pyx_v___pyx_result->function);
@@ -7239,77 +6531,87 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v___pyx_result->lock = __pyx_t_2;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->name);
   __Pyx_DECREF(__pyx_v___pyx_result->name);
-  __pyx_v___pyx_result->name = __pyx_t_1;
+  __pyx_v___pyx_result->name = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_3 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->node_type = __pyx_t_3;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_3 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->param_num = __pyx_t_3;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_3 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->node_type = __pyx_t_2;
+  __pyx_v___pyx_result->size = __pyx_t_3;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_1); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->param_idx = __pyx_t_2;
-  if (unlikely(__pyx_v___pyx_state == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(1, 12, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->param_num = __pyx_t_2;
+  __pyx_v___pyx_result->value = __pyx_t_4;
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[9])
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[8])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
-  __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_5 = ((__pyx_t_4 > 9) != 0);
+  __pyx_t_3 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
+  __pyx_t_5 = ((__pyx_t_3 > 8) != 0);
   if (__pyx_t_5) {
   } else {
-    __pyx_t_3 = __pyx_t_5;
+    __pyx_t_2 = __pyx_t_5;
     goto __pyx_L4_bool_binop_done;
   }
   __pyx_t_5 = __Pyx_HasAttr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
   __pyx_t_6 = (__pyx_t_5 != 0);
-  __pyx_t_3 = __pyx_t_6;
+  __pyx_t_2 = __pyx_t_6;
   __pyx_L4_bool_binop_done:;
-  if (__pyx_t_3) {
+  if (__pyx_t_2) {
 
     /* "(tree fragment)":14
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[9])             # <<<<<<<<<<<<<<
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[8])             # <<<<<<<<<<<<<<
  */
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
@@ -7320,7 +6622,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -7342,9 +6644,9 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[9])
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[8])
  */
   }
 
@@ -7352,8 +6654,8 @@ static PyObject *__pyx_f_25geneticprogrammingcython2___pyx_unpickle_node__set_st
  *         __pyx_unpickle_node__set_state(<node> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_node__set_state(node __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.children = __pyx_state[0]; __pyx_result.const_value = __pyx_state[1]; __pyx_result.func_num = __pyx_state[2]; __pyx_result.function = __pyx_state[3]; __pyx_result.lock = __pyx_state[4]; __pyx_result.name = __pyx_state[5]; __pyx_result.node_type = __pyx_state[6]; __pyx_result.param_idx = __pyx_state[7]; __pyx_result.param_num = __pyx_state[8]
- *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.children = __pyx_state[0]; __pyx_result.function = __pyx_state[1]; __pyx_result.lock = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.node_type = __pyx_state[4]; __pyx_result.param_num = __pyx_state[5]; __pyx_result.size = __pyx_state[6]; __pyx_result.value = __pyx_state[7]
+ *     if len(__pyx_state) > 8 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -10185,8 +9487,8 @@ static PyObject *__pyx_tp_new_25geneticprogrammingcython2_node(PyTypeObject *t, 
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_25geneticprogrammingcython2_node *)o);
   p->__pyx_vtab = __pyx_vtabptr_25geneticprogrammingcython2_node;
+  p->name = ((PyObject*)Py_None); Py_INCREF(Py_None);
   p->function = Py_None; Py_INCREF(Py_None);
-  p->name = Py_None; Py_INCREF(Py_None);
   p->children = ((PyObject*)Py_None); Py_INCREF(Py_None);
   return o;
 }
@@ -10199,8 +9501,8 @@ static void __pyx_tp_dealloc_25geneticprogrammingcython2_node(PyObject *o) {
   }
   #endif
   PyObject_GC_UnTrack(o);
-  Py_CLEAR(p->function);
   Py_CLEAR(p->name);
+  Py_CLEAR(p->function);
   Py_CLEAR(p->children);
   (*Py_TYPE(o)->tp_free)(o);
 }
@@ -10210,9 +9512,6 @@ static int __pyx_tp_traverse_25geneticprogrammingcython2_node(PyObject *o, visit
   struct __pyx_obj_25geneticprogrammingcython2_node *p = (struct __pyx_obj_25geneticprogrammingcython2_node *)o;
   if (p->function) {
     e = (*v)(p->function, a); if (e) return e;
-  }
-  if (p->name) {
-    e = (*v)(p->name, a); if (e) return e;
   }
   if (p->children) {
     e = (*v)(p->children, a); if (e) return e;
@@ -10226,66 +9525,10 @@ static int __pyx_tp_clear_25geneticprogrammingcython2_node(PyObject *o) {
   tmp = ((PyObject*)p->function);
   p->function = Py_None; Py_INCREF(Py_None);
   Py_XDECREF(tmp);
-  tmp = ((PyObject*)p->name);
-  p->name = Py_None; Py_INCREF(Py_None);
-  Py_XDECREF(tmp);
   tmp = ((PyObject*)p->children);
   p->children = ((PyObject*)Py_None); Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
-}
-
-static PyObject *__pyx_getprop_25geneticprogrammingcython2_4node_function(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_25geneticprogrammingcython2_4node_8function_1__get__(o);
-}
-
-static int __pyx_setprop_25geneticprogrammingcython2_4node_function(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
-  if (v) {
-    return __pyx_pw_25geneticprogrammingcython2_4node_8function_3__set__(o, v);
-  }
-  else {
-    return __pyx_pw_25geneticprogrammingcython2_4node_8function_5__del__(o);
-  }
-}
-
-static PyObject *__pyx_getprop_25geneticprogrammingcython2_4node_name(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_25geneticprogrammingcython2_4node_4name_1__get__(o);
-}
-
-static int __pyx_setprop_25geneticprogrammingcython2_4node_name(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
-  if (v) {
-    return __pyx_pw_25geneticprogrammingcython2_4node_4name_3__set__(o, v);
-  }
-  else {
-    return __pyx_pw_25geneticprogrammingcython2_4node_4name_5__del__(o);
-  }
-}
-
-static PyObject *__pyx_getprop_25geneticprogrammingcython2_4node_children(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_25geneticprogrammingcython2_4node_8children_1__get__(o);
-}
-
-static int __pyx_setprop_25geneticprogrammingcython2_4node_children(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
-  if (v) {
-    return __pyx_pw_25geneticprogrammingcython2_4node_8children_3__set__(o, v);
-  }
-  else {
-    return __pyx_pw_25geneticprogrammingcython2_4node_8children_5__del__(o);
-  }
-}
-
-static PyObject *__pyx_getprop_25geneticprogrammingcython2_4node_node_type(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_25geneticprogrammingcython2_4node_9node_type_1__get__(o);
-}
-
-static int __pyx_setprop_25geneticprogrammingcython2_4node_node_type(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
-  if (v) {
-    return __pyx_pw_25geneticprogrammingcython2_4node_9node_type_3__set__(o, v);
-  }
-  else {
-    PyErr_SetString(PyExc_NotImplementedError, "__del__");
-    return -1;
-  }
 }
 
 static PyMethodDef __pyx_methods_25geneticprogrammingcython2_node[] = {
@@ -10293,14 +9536,6 @@ static PyMethodDef __pyx_methods_25geneticprogrammingcython2_node[] = {
   {"__reduce_cython__", (PyCFunction)__pyx_pw_25geneticprogrammingcython2_4node_5__reduce_cython__, METH_NOARGS, 0},
   {"__setstate_cython__", (PyCFunction)__pyx_pw_25geneticprogrammingcython2_4node_7__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
-};
-
-static struct PyGetSetDef __pyx_getsets_25geneticprogrammingcython2_node[] = {
-  {(char *)"function", __pyx_getprop_25geneticprogrammingcython2_4node_function, __pyx_setprop_25geneticprogrammingcython2_4node_function, (char *)0, 0},
-  {(char *)"name", __pyx_getprop_25geneticprogrammingcython2_4node_name, __pyx_setprop_25geneticprogrammingcython2_4node_name, (char *)0, 0},
-  {(char *)"children", __pyx_getprop_25geneticprogrammingcython2_4node_children, __pyx_setprop_25geneticprogrammingcython2_4node_children, (char *)0, 0},
-  {(char *)"node_type", __pyx_getprop_25geneticprogrammingcython2_4node_node_type, __pyx_setprop_25geneticprogrammingcython2_4node_node_type, (char *)0, 0},
-  {0, 0, 0, 0, 0}
 };
 
 static PyTypeObject __pyx_type_25geneticprogrammingcython2_node = {
@@ -10338,7 +9573,7 @@ static PyTypeObject __pyx_type_25geneticprogrammingcython2_node = {
   0, /*tp_iternext*/
   __pyx_methods_25geneticprogrammingcython2_node, /*tp_methods*/
   0, /*tp_members*/
-  __pyx_getsets_25geneticprogrammingcython2_node, /*tp_getset*/
+  0, /*tp_getset*/
   0, /*tp_base*/
   0, /*tp_dict*/
   0, /*tp_descr_get*/
@@ -10583,11 +9818,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 0},
   {&__pyx_kp_s_Benchmark_geneticprogrammingcyth, __pyx_k_Benchmark_geneticprogrammingcyth, sizeof(__pyx_k_Benchmark_geneticprogrammingcyth), 0, 0, 1, 0},
   {&__pyx_kp_s_Benchmark_geneticprogrammingcyth_2, __pyx_k_Benchmark_geneticprogrammingcyth_2, sizeof(__pyx_k_Benchmark_geneticprogrammingcyth_2), 0, 0, 1, 0},
-  {&__pyx_kp_s_Benchmark_gpcython_py, __pyx_k_Benchmark_gpcython_py, sizeof(__pyx_k_Benchmark_gpcython_py), 0, 0, 1, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x92, __pyx_k_Incompatible_checksums_s_vs_0x92, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x92), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x0f, __pyx_k_Incompatible_checksums_s_vs_0x0f, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x0f), 0, 0, 1, 0},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
   {&__pyx_kp_s_Pass_test_evaluate, __pyx_k_Pass_test_evaluate, sizeof(__pyx_k_Pass_test_evaluate), 0, 0, 1, 0},
   {&__pyx_kp_s_Pass_test_makerandomtree, __pyx_k_Pass_test_makerandomtree, sizeof(__pyx_k_Pass_test_makerandomtree), 0, 0, 1, 0},
@@ -10601,7 +9835,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_add, __pyx_k_add, sizeof(__pyx_k_add), 0, 0, 1, 1},
   {&__pyx_n_s_append, __pyx_k_append, sizeof(__pyx_k_append), 0, 0, 1, 1},
   {&__pyx_n_s_cfunc_to_py, __pyx_k_cfunc_to_py, sizeof(__pyx_k_cfunc_to_py), 0, 0, 1, 1},
-  {&__pyx_n_s_children, __pyx_k_children, sizeof(__pyx_k_children), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
   {&__pyx_n_s_display, __pyx_k_display, sizeof(__pyx_k_display), 0, 0, 1, 1},
@@ -10627,7 +9860,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_isgreater, __pyx_k_isgreater, sizeof(__pyx_k_isgreater), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_main_2, __pyx_k_main_2, sizeof(__pyx_k_main_2), 0, 0, 1, 1},
-  {&__pyx_n_s_makerandomtree, __pyx_k_makerandomtree, sizeof(__pyx_k_makerandomtree), 0, 0, 1, 1},
   {&__pyx_n_s_multiply, __pyx_k_multiply, sizeof(__pyx_k_multiply), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_kp_u_ndarray_is_not_C_contiguous, __pyx_k_ndarray_is_not_C_contiguous, sizeof(__pyx_k_ndarray_is_not_C_contiguous), 0, 1, 0, 0},
@@ -10780,38 +10012,38 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__13);
   __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_wrap, 65, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(1, 65, __pyx_L1_error)
 
-  /* "geneticprogrammingcython2.pyx":267
+  /* "geneticprogrammingcython2.pyx":269
  * 
  * 
  * def runexperiment():             # <<<<<<<<<<<<<<
  *     srand(10)
  *     tree = makerandomtree(2)
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_n_s_tree); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_n_s_tree); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 269, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_runexperiment, 267, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_runexperiment, 269, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 269, __pyx_L1_error)
 
-  /* "geneticprogrammingcython2.pyx":343
+  /* "geneticprogrammingcython2.pyx":345
  * 
  * 
  * def test_evaluate():             # <<<<<<<<<<<<<<
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_tuple__17 = PyTuple_Pack(2, __pyx_n_s_tree, __pyx_n_s_input); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_tuple__17 = PyTuple_Pack(2, __pyx_n_s_tree, __pyx_n_s_input); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_test_evaluate, 343, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_test_evaluate, 345, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 345, __pyx_L1_error)
 
-  /* "geneticprogrammingcython2.pyx":404
+  /* "geneticprogrammingcython2.pyx":406
  * 
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     # runexperiment()
  *     # test_evaluate()
  */
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_main_2, 404, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 404, __pyx_L1_error)
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_geneticprogrammingcython2_pyx, __pyx_n_s_main_2, 406, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 406, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_node(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -10858,7 +10090,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_70 = PyInt_FromLong(70); if (unlikely(!__pyx_int_70)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_200 = PyInt_FromLong(200); if (unlikely(!__pyx_int_200)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_153554213 = PyInt_FromLong(153554213L); if (unlikely(!__pyx_int_153554213)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_16127908 = PyInt_FromLong(16127908L); if (unlikely(!__pyx_int_16127908)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -10904,6 +10136,7 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   __pyx_vtabptr_25geneticprogrammingcython2_node = &__pyx_vtable_25geneticprogrammingcython2_node;
+  __pyx_vtable_25geneticprogrammingcython2_node.setnode = (void (*)(struct __pyx_obj_25geneticprogrammingcython2_node *, PyObject *))__pyx_f_25geneticprogrammingcython2_4node_setnode;
   __pyx_vtable_25geneticprogrammingcython2_node.evaluate = (long (*)(struct __pyx_obj_25geneticprogrammingcython2_node *, PyObject *))__pyx_f_25geneticprogrammingcython2_4node_evaluate;
   if (PyType_Ready(&__pyx_type_25geneticprogrammingcython2_node) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
@@ -11570,67 +10803,67 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_25geneticprogrammingcython2_nodes = 0;
 
-  /* "geneticprogrammingcython2.pyx":267
+  /* "geneticprogrammingcython2.pyx":269
  * 
  * 
  * def runexperiment():             # <<<<<<<<<<<<<<
  *     srand(10)
  *     tree = makerandomtree(2)
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_1runexperiment, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_1runexperiment, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 269, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_runexperiment, __pyx_t_2) < 0) __PYX_ERR(0, 267, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_runexperiment, __pyx_t_2) < 0) __PYX_ERR(0, 269, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":343
+  /* "geneticprogrammingcython2.pyx":345
  * 
  * 
  * def test_evaluate():             # <<<<<<<<<<<<<<
  *     tree = [[1, 2, -1,  0,  8,  1,  1,  2,  7, -1, -1], # Multiply
  *             [3, -1,  7,  0,  0, -1, -1, -1, -1, -1, -1],
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_3test_evaluate, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_3test_evaluate, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test_evaluate, __pyx_t_2) < 0) __PYX_ERR(0, 343, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test_evaluate, __pyx_t_2) < 0) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":404
+  /* "geneticprogrammingcython2.pyx":406
  * 
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     # runexperiment()
  *     # test_evaluate()
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_5main, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 404, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_25geneticprogrammingcython2_5main, NULL, __pyx_n_s_geneticprogrammingcython2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 406, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_2) < 0) __PYX_ERR(0, 404, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_2) < 0) __PYX_ERR(0, 406, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "geneticprogrammingcython2.pyx":410
+  /* "geneticprogrammingcython2.pyx":412
  *     timeit()
  * 
  * if __name__ == "__main__":             # <<<<<<<<<<<<<<
  *     main()
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 412, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 412, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_8) {
 
-    /* "geneticprogrammingcython2.pyx":411
+    /* "geneticprogrammingcython2.pyx":413
  * 
  * if __name__ == "__main__":
  *     main()             # <<<<<<<<<<<<<<
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_main_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 411, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_main_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 411, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "geneticprogrammingcython2.pyx":410
+    /* "geneticprogrammingcython2.pyx":412
  *     timeit()
  * 
  * if __name__ == "__main__":             # <<<<<<<<<<<<<<
@@ -12319,114 +11552,6 @@ bad:
     return -1;
 }
 
-/* ArgTypeTest */
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)
-{
-    if (unlikely(!type)) {
-        PyErr_SetString(PyExc_SystemError, "Missing type object");
-        return 0;
-    }
-    else if (exact) {
-        #if PY_MAJOR_VERSION == 2
-        if ((type == &PyBaseString_Type) && likely(__Pyx_PyBaseString_CheckExact(obj))) return 1;
-        #endif
-    }
-    else {
-        if (likely(__Pyx_TypeCheck(obj, type))) return 1;
-    }
-    PyErr_Format(PyExc_TypeError,
-        "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
-        name, type->tp_name, Py_TYPE(obj)->tp_name);
-    return 0;
-}
-
-/* GetItemInt */
-static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
-    PyObject *r;
-    if (!j) return NULL;
-    r = PyObject_GetItem(o, j);
-    Py_DECREF(j);
-    return r;
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
-                                                              CYTHON_NCP_UNUSED int wraparound,
-                                                              CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    Py_ssize_t wrapped_i = i;
-    if (wraparound & unlikely(i < 0)) {
-        wrapped_i += PyList_GET_SIZE(o);
-    }
-    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyList_GET_SIZE(o)))) {
-        PyObject *r = PyList_GET_ITEM(o, wrapped_i);
-        Py_INCREF(r);
-        return r;
-    }
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-#else
-    return PySequence_GetItem(o, i);
-#endif
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
-                                                              CYTHON_NCP_UNUSED int wraparound,
-                                                              CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    Py_ssize_t wrapped_i = i;
-    if (wraparound & unlikely(i < 0)) {
-        wrapped_i += PyTuple_GET_SIZE(o);
-    }
-    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyTuple_GET_SIZE(o)))) {
-        PyObject *r = PyTuple_GET_ITEM(o, wrapped_i);
-        Py_INCREF(r);
-        return r;
-    }
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-#else
-    return PySequence_GetItem(o, i);
-#endif
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, int is_list,
-                                                     CYTHON_NCP_UNUSED int wraparound,
-                                                     CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
-    if (is_list || PyList_CheckExact(o)) {
-        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyList_GET_SIZE(o);
-        if ((!boundscheck) || (likely(__Pyx_is_valid_index(n, PyList_GET_SIZE(o))))) {
-            PyObject *r = PyList_GET_ITEM(o, n);
-            Py_INCREF(r);
-            return r;
-        }
-    }
-    else if (PyTuple_CheckExact(o)) {
-        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyTuple_GET_SIZE(o);
-        if ((!boundscheck) || likely(__Pyx_is_valid_index(n, PyTuple_GET_SIZE(o)))) {
-            PyObject *r = PyTuple_GET_ITEM(o, n);
-            Py_INCREF(r);
-            return r;
-        }
-    } else {
-        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
-        if (likely(m && m->sq_item)) {
-            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
-                Py_ssize_t l = m->sq_length(o);
-                if (likely(l >= 0)) {
-                    i += l;
-                } else {
-                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
-                        return NULL;
-                    PyErr_Clear();
-                }
-            }
-            return m->sq_item(o, i);
-        }
-    }
-#else
-    if (is_list || PySequence_Check(o)) {
-        return PySequence_GetItem(o, i);
-    }
-#endif
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-}
-
 /* PyErrFetchRestore */
 #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
@@ -13068,6 +12193,93 @@ bad:
     return;
 }
 #endif
+
+/* GetItemInt */
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
+    PyObject *r;
+    if (!j) return NULL;
+    r = PyObject_GetItem(o, j);
+    Py_DECREF(j);
+    return r;
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyList_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyList_GET_SIZE(o)))) {
+        PyObject *r = PyList_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
+#endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyTuple_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyTuple_GET_SIZE(o)))) {
+        PyObject *r = PyTuple_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
+#endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, int is_list,
+                                                     CYTHON_NCP_UNUSED int wraparound,
+                                                     CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
+    if (is_list || PyList_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyList_GET_SIZE(o);
+        if ((!boundscheck) || (likely(__Pyx_is_valid_index(n, PyList_GET_SIZE(o))))) {
+            PyObject *r = PyList_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    }
+    else if (PyTuple_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyTuple_GET_SIZE(o);
+        if ((!boundscheck) || likely(__Pyx_is_valid_index(n, PyTuple_GET_SIZE(o)))) {
+            PyObject *r = PyTuple_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    } else {
+        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
+        if (likely(m && m->sq_item)) {
+            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
+                Py_ssize_t l = m->sq_length(o);
+                if (likely(l >= 0)) {
+                    i += l;
+                } else {
+                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
+                        return NULL;
+                    PyErr_Clear();
+                }
+            }
+            return m->sq_item(o, i);
+        }
+    }
+#else
+    if (is_list || PySequence_Check(o)) {
+        return PySequence_GetItem(o, i);
+    }
+#endif
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+}
 
 /* HasAttr */
 static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
@@ -14501,59 +13713,6 @@ bad:
 }
 
 /* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntFromPyVerify */
-#define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
-#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
-#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
-    {\
-        func_type value = func_value;\
-        if (sizeof(target_type) < sizeof(func_type)) {\
-            if (unlikely(value != (func_type) (target_type) value)) {\
-                func_type zero = 0;\
-                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
-                    return (target_type) -1;\
-                if (is_unsigned && unlikely(value < zero))\
-                    goto raise_neg_overflow;\
-                else\
-                    goto raise_overflow;\
-            }\
-        }\
-        return (target_type) value;\
-    }
-
-/* CIntToPy */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -14583,6 +13742,28 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
                                      little, !is_unsigned);
     }
 }
+
+/* CIntFromPyVerify */
+#define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
+#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
+#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
+    {\
+        func_type value = func_value;\
+        if (sizeof(target_type) < sizeof(func_type)) {\
+            if (unlikely(value != (func_type) (target_type) value)) {\
+                func_type zero = 0;\
+                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
+                    return (target_type) -1;\
+                if (is_unsigned && unlikely(value < zero))\
+                    goto raise_neg_overflow;\
+                else\
+                    goto raise_overflow;\
+            }\
+        }\
+        return (target_type) value;\
+    }
 
 /* Print */
 #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
@@ -14689,6 +13870,37 @@ bad:
     return -1;
 }
 #endif
+
+/* CIntToPy */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
+}
 
 /* Declarations */
 #if CYTHON_CCOMPLEX
@@ -15032,195 +14244,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES v
 }
 
 /* CIntFromPy */
-static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-#if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_Check(x))) {
-        if (sizeof(int) < sizeof(long)) {
-            __PYX_VERIFY_RETURN_INT(int, long, PyInt_AS_LONG(x))
-        } else {
-            long val = PyInt_AS_LONG(x);
-            if (is_unsigned && unlikely(val < 0)) {
-                goto raise_neg_overflow;
-            }
-            return (int) val;
-        }
-    } else
-#endif
-    if (likely(PyLong_Check(x))) {
-        if (is_unsigned) {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (int) 0;
-                case  1: __PYX_VERIFY_RETURN_INT(int, digit, digits[0])
-                case 2:
-                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 2 * PyLong_SHIFT) {
-                            return (int) (((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 3 * PyLong_SHIFT) {
-                            return (int) (((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 4 * PyLong_SHIFT) {
-                            return (int) (((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-            }
-#endif
-#if CYTHON_COMPILING_IN_CPYTHON
-            if (unlikely(Py_SIZE(x) < 0)) {
-                goto raise_neg_overflow;
-            }
-#else
-            {
-                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
-                if (unlikely(result < 0))
-                    return (int) -1;
-                if (unlikely(result == 1))
-                    goto raise_neg_overflow;
-            }
-#endif
-            if (sizeof(int) <= sizeof(unsigned long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned long, PyLong_AsUnsignedLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
-#endif
-            }
-        } else {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (int) 0;
-                case -1: __PYX_VERIFY_RETURN_INT(int, sdigit, (sdigit) (-(sdigit)digits[0]))
-                case  1: __PYX_VERIFY_RETURN_INT(int,  digit, +digits[0])
-                case -2:
-                    if (8 * sizeof(int) - 1 > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 2:
-                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                            return (int) ((((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case -3:
-                    if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                            return (int) ((((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case -4:
-                    if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
-                            return (int) ((((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-            }
-#endif
-            if (sizeof(int) <= sizeof(long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, long, PyLong_AsLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, PY_LONG_LONG, PyLong_AsLongLong(x))
-#endif
-            }
-        }
-        {
-#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
-            PyErr_SetString(PyExc_RuntimeError,
-                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
-#else
-            int val;
-            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
- #if PY_MAJOR_VERSION < 3
-            if (likely(v) && !PyLong_Check(v)) {
-                PyObject *tmp = v;
-                v = PyNumber_Long(tmp);
-                Py_DECREF(tmp);
-            }
- #endif
-            if (likely(v)) {
-                int one = 1; int is_little = (int)*(unsigned char *)&one;
-                unsigned char *bytes = (unsigned char *)&val;
-                int ret = _PyLong_AsByteArray((PyLongObject *)v,
-                                              bytes, sizeof(val),
-                                              is_little, !is_unsigned);
-                Py_DECREF(v);
-                if (likely(!ret))
-                    return val;
-            }
-#endif
-            return (int) -1;
-        }
-    } else {
-        int val;
-        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
-        if (!tmp) return (int) -1;
-        val = __Pyx_PyInt_As_int(tmp);
-        Py_DECREF(tmp);
-        return val;
-    }
-raise_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "value too large to convert to int");
-    return (int) -1;
-raise_neg_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "can't convert negative value to int");
-    return (int) -1;
-}
-
-/* CIntFromPy */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -15407,6 +14430,195 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to long");
     return (long) -1;
+}
+
+/* CIntFromPy */
+static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+#if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_Check(x))) {
+        if (sizeof(int) < sizeof(long)) {
+            __PYX_VERIFY_RETURN_INT(int, long, PyInt_AS_LONG(x))
+        } else {
+            long val = PyInt_AS_LONG(x);
+            if (is_unsigned && unlikely(val < 0)) {
+                goto raise_neg_overflow;
+            }
+            return (int) val;
+        }
+    } else
+#endif
+    if (likely(PyLong_Check(x))) {
+        if (is_unsigned) {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (int) 0;
+                case  1: __PYX_VERIFY_RETURN_INT(int, digit, digits[0])
+                case 2:
+                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 2 * PyLong_SHIFT) {
+                            return (int) (((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 3 * PyLong_SHIFT) {
+                            return (int) (((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 4 * PyLong_SHIFT) {
+                            return (int) (((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+            }
+#endif
+#if CYTHON_COMPILING_IN_CPYTHON
+            if (unlikely(Py_SIZE(x) < 0)) {
+                goto raise_neg_overflow;
+            }
+#else
+            {
+                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
+                if (unlikely(result < 0))
+                    return (int) -1;
+                if (unlikely(result == 1))
+                    goto raise_neg_overflow;
+            }
+#endif
+            if (sizeof(int) <= sizeof(unsigned long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned long, PyLong_AsUnsignedLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
+#endif
+            }
+        } else {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (int) 0;
+                case -1: __PYX_VERIFY_RETURN_INT(int, sdigit, (sdigit) (-(sdigit)digits[0]))
+                case  1: __PYX_VERIFY_RETURN_INT(int,  digit, +digits[0])
+                case -2:
+                    if (8 * sizeof(int) - 1 > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 2:
+                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                            return (int) ((((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case -3:
+                    if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                            return (int) ((((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case -4:
+                    if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
+                            return (int) ((((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+            }
+#endif
+            if (sizeof(int) <= sizeof(long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, long, PyLong_AsLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, PY_LONG_LONG, PyLong_AsLongLong(x))
+#endif
+            }
+        }
+        {
+#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
+            PyErr_SetString(PyExc_RuntimeError,
+                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
+#else
+            int val;
+            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
+ #if PY_MAJOR_VERSION < 3
+            if (likely(v) && !PyLong_Check(v)) {
+                PyObject *tmp = v;
+                v = PyNumber_Long(tmp);
+                Py_DECREF(tmp);
+            }
+ #endif
+            if (likely(v)) {
+                int one = 1; int is_little = (int)*(unsigned char *)&one;
+                unsigned char *bytes = (unsigned char *)&val;
+                int ret = _PyLong_AsByteArray((PyLongObject *)v,
+                                              bytes, sizeof(val),
+                                              is_little, !is_unsigned);
+                Py_DECREF(v);
+                if (likely(!ret))
+                    return val;
+            }
+#endif
+            return (int) -1;
+        }
+    } else {
+        int val;
+        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
+        if (!tmp) return (int) -1;
+        val = __Pyx_PyInt_As_int(tmp);
+        Py_DECREF(tmp);
+        return val;
+    }
+raise_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "value too large to convert to int");
+    return (int) -1;
+raise_neg_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "can't convert negative value to int");
+    return (int) -1;
 }
 
 /* PrintOne */

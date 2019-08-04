@@ -140,36 +140,38 @@ cdef float crandom() except -1:
     return  <float>rand() / <float>RAND_MAX
 
 @cython.cdivision(True)
-cdef int crandint(int lower, int upper) except -1:
+cdef long crandint(int lower, int upper) except -1:
     return (rand() % (upper - lower + 1)) + lower
 
 
 
 # node objects
 cdef class node:
-    cdef public object function
-    cdef public object name
-    cdef public list children
-    cdef public int node_type
-    cdef int func_num
-    cdef int lock
-    cdef int param_num
-    cdef int param_idx
-    cdef int const_value
-
-    def __init__(self, int node_type, int value, list children=None):
+    cdef str name
+    cdef object function
+    cdef list children
+    cdef bint lock
+    cdef long value
+    cdef Py_ssize_t node_type
+    cdef Py_ssize_t param_num
+    cdef Py_ssize_t size
+    
+    def __init__(self, int node_type, long value):
         self.node_type = node_type
-        self.lock = False
-        if node_type == FUNC_NODE:
-            self.func_num = value
-            self.function = func_array[self.func_num]
-            self.name = name_array[self.func_num]
-            self.param_num = param_array[self.func_num]
+        self.value = value
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.nonecheck(False)
+    cdef void setnode(self, list children):
+        if self.node_type == FUNC_NODE:
+            self.lock = False
+            self.function = func_array[self.value]
+            self.name = name_array[self.value]
+            self.param_num = param_array[self.value]
             self.children = children
-        elif node_type == PARAM_NODE:
-            self.param_idx = value
-        else:
-            self.const_value = value
+            self.size = len(children)
 
 
 
@@ -177,25 +179,23 @@ cdef class node:
     @cython.wraparound(False)
     @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
-        cdef Py_ssize_t size
         cdef long results[3]
     
         if self.node_type == FUNC_NODE:
-            size = len(self.children)
-            for i in range(size):
+            for i in range(self.size):
                 results[i] = (<node>(self.children[i])).evaluate(inp)
 
-            if size == 1:
+            if self.size == 1:
                 return self.function(results[0])
-            elif size == 2:
+            elif self.size == 2:
                 return self.function(results[0], results[1])
-            elif size == 3:
+            elif self.size == 3:
                 return self.function(results[0], results[1], results[2])
             # TODO: fix to use return self.function(*results)
         elif self.node_type == PARAM_NODE:
-            return inp[self.param_idx]
+            return inp[self.value]
         else:
-            return self.const_value
+            return self.value
 
 
     def display(self, indent=0):
@@ -209,9 +209,9 @@ cdef class node:
             for c in self.children:
                 c.display(indent + 1)
         elif self.node_type == PARAM_NODE:
-            print('%sp%d' % (' ' * indent, self.param_idx))
+            print('%sp%d' % (' ' * indent, self.value))
         else:
-            print('%s%d' % (' ' * indent, self.const_value))  
+            print('%s%d' % (' ' * indent, self.value))  
 
 
 
@@ -251,17 +251,19 @@ cdef class node:
 cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
+    cdef node newnode
     if crandom() < func_prob and maxdepth > 0:
         func_num = crandint(0, numfuncs-1)
         for i in range(param_array[func_num]):
             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
-            children.append(tree)
-        return node(FUNC_NODE, func_num, children)
+            children.append(tree)            
+        newnode = node(FUNC_NODE, func_num)
+        newnode.setnode(children)
+        return newnode
     elif crandom() < param_prob:
-        return node(PARAM_NODE, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
+        return node(PARAM_NODE, crandint(0, param_count - 1))
     else:
-        return node(CONST_NODE, crandint(0, 10)) #constnode(crandint(0, 10))
-
+        return node(CONST_NODE, crandint(0, 10))
 
 
 def runexperiment():
@@ -273,7 +275,7 @@ def runexperiment():
 
 
 cdef timeit():
-    runs = 250000
+    runs = 1000000
 
     start = time.time()
     population = []
@@ -301,16 +303,16 @@ cdef timeit():
 
 
 
-    start = time.time()
-    population = []
-    input = [10, 42]
-    for i in range(runs):
-        population.append(gpc1.makerandomtree(2))
-    mid = time.time()
-    for tree in population:
-        tree.evaluate(input)
-    end = time.time()
-    print("Benchmark (gpcython.py): ", mid-start, end-mid)
+    # start = time.time()
+    # population = []
+    # input = [10, 42]
+    # for i in range(runs):
+    #     population.append(gpc1.makerandomtree(2))
+    # mid = time.time()
+    # for tree in population:
+    #     tree.evaluate(input)
+    # end = time.time()
+    # print("Benchmark (gpcython.py): ", mid-start, end-mid)
 
 
 
