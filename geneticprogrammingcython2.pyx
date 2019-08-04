@@ -155,16 +155,13 @@ cdef class node:
     cdef Py_ssize_t node_type
     cdef Py_ssize_t param_num
     cdef Py_ssize_t size
-    
-    def __init__(self, int node_type, long value):
-        self.node_type = node_type
-        self.value = value
-
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
-    cdef void setnode(self, list children):
+    cdef void setnode(self, int node_type, long value, list children):
+        self.node_type = node_type
+        self.value = value
         if self.node_type == FUNC_NODE:
             self.lock = False
             self.function = func_array[self.value]
@@ -172,7 +169,10 @@ cdef class node:
             self.param_num = param_array[self.value]
             self.children = children
             self.size = len(children)
-
+        elif node_type == PARAM_NODE:
+            self.value = value
+        else:
+            self.value = value
 
 
     @cython.boundscheck(False)
@@ -182,23 +182,28 @@ cdef class node:
         cdef int size
         cdef long results[3]
         cdef object t
-        size = len(self.children)
-        for i in range(size):
-            t = type(self.children[i]) 
-            if t == node:
-                results[i] = (<node>(self.children[i])).evaluate(inp)
-            elif t == constnode:
-                results[i] = (<constnode>(self.children[i])).evaluate(inp)
-            else:
-                results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+        if self.node_type == FUNC_NODE:
+            size = len(self.children)        
+            for i in range(size):
+                t = type(self.children[i]) 
+                if t == node:
+                    results[i] = (<node>(self.children[i])).evaluate(inp)
+                elif t == constnode:
+                    results[i] = (<constnode>(self.children[i])).evaluate(inp)
+                else:
+                    results[i] = (<paramnode>(self.children[i])).evaluate(inp)
 
-        if size == 1:
-            return self.function(results[0])
-        elif size == 2:
-            return self.function(results[0], results[1])
-        elif size == 3:
-            return self.function(results[0], results[1], results[2])
-        # TODO: fix to use return self.function(*results)
+            if size == 1:
+                return self.function(results[0])
+            elif size == 2:
+                return self.function(results[0], results[1])
+            elif size == 3:
+                return self.function(results[0], results[1], results[2])
+            # TODO: fix to use return self.function(*results)
+        elif self.node_type == PARAM_NODE:
+            return inp[self.value]
+        else:
+            return self.value
 
 
     def display(self, indent=0):
@@ -254,14 +259,13 @@ cdef class constnode:
 cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
-    cdef node newnode
+    cdef node newnode = node()
     if crandom() < func_prob and maxdepth > 0:
         func_num = crandint(0, numfuncs-1)
         for i in range(param_array[func_num]):
             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
             children.append(tree)            
-        newnode = node(FUNC_NODE, func_num)
-        newnode.setnode(children)
+        newnode.setnode(FUNC_NODE, func_num, children)
         return newnode
     elif crandom() < param_prob:
         return paramnode(crandint(0, param_count - 1))
