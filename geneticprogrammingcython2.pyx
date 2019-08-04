@@ -156,10 +156,13 @@ cdef class node:
     cdef Py_ssize_t param_num
     cdef Py_ssize_t size
 
+    def __init__(self, int node_type, long value, list children=None):
+        self.setnode(node_type, value, children)
+
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
-    cdef void setnode(self, int node_type, long value, list children):
+    cdef void setnode(self, int node_type, long value, list children=None):
         self.node_type = node_type
         self.value = value
         if node_type == PARAM_NODE:
@@ -224,11 +227,14 @@ cdef class node:
 
 
 cdef class paramnode:
-    cdef int idx
+    cdef Py_ssize_t idx
 
     def __init__(self, int idx):
         self.idx = idx
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
         return inp[self.idx]
 
@@ -242,6 +248,9 @@ cdef class constnode:
     def __init__(self, long value):
         self.value = value
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
         return self.value
 
@@ -259,15 +268,15 @@ cdef class constnode:
 cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
-    cdef node newnode = node()
     if crandom() < func_prob and maxdepth > 0:
         func_num = crandint(0, numfuncs-1)
         for i in range(param_array[func_num]):
             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
             children.append(tree)            
-        newnode.setnode(FUNC_NODE, func_num, children)
-        return newnode
+        return node(FUNC_NODE, func_num, children)
     elif crandom() < param_prob:
+        # newnode.setnode(PARAM_NODE, crandint(0, param_count - 1))
+        # return newnode
         return paramnode(crandint(0, param_count - 1))
     else:
         return constnode(crandint(0, 10))
