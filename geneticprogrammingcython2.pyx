@@ -285,7 +285,7 @@ cdef long evaluate(object tree, list inp):
         
 
 cdef timeit():
-    runs = 1000000
+    runs = 5000000
 
     start = time.time()
     population = []

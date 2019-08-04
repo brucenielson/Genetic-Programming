@@ -5562,7 +5562,7 @@ static long __pyx_f_25geneticprogrammingcython2_evaluate(PyObject *__pyx_v_tree,
  * 
  * 
  * cdef timeit():             # <<<<<<<<<<<<<<
- *     runs = 1000000
+ *     runs = 5000000
  * 
  */
 
@@ -5590,14 +5590,14 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
   /* "geneticprogrammingcython2.pyx":288
  * 
  * cdef timeit():
- *     runs = 1000000             # <<<<<<<<<<<<<<
+ *     runs = 5000000             # <<<<<<<<<<<<<<
  * 
  *     start = time.time()
  */
-  __pyx_v_runs = 0xF4240;
+  __pyx_v_runs = 0x4C4B40;
 
   /* "geneticprogrammingcython2.pyx":290
- *     runs = 1000000
+ *     runs = 5000000
  * 
  *     start = time.time()             # <<<<<<<<<<<<<<
  *     population = []
@@ -6017,7 +6017,7 @@ static PyObject *__pyx_f_25geneticprogrammingcython2_timeit(void) {
  * 
  * 
  * cdef timeit():             # <<<<<<<<<<<<<<
- *     runs = 1000000
+ *     runs = 5000000
  * 
  */
 
