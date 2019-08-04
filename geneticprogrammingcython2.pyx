@@ -179,23 +179,26 @@ cdef class node:
     @cython.wraparound(False)
     @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
+        cdef int size
         cdef long results[3]
-    
-        if self.node_type == FUNC_NODE:
-            for i in range(self.size):
+        cdef object t
+        size = len(self.children)
+        for i in range(size):
+            t = type(self.children[i]) 
+            if t == node:
                 results[i] = (<node>(self.children[i])).evaluate(inp)
+            elif t == constnode:
+                results[i] = (<constnode>(self.children[i])).evaluate(inp)
+            else:
+                results[i] = (<paramnode>(self.children[i])).evaluate(inp)
 
-            if self.size == 1:
-                return self.function(results[0])
-            elif self.size == 2:
-                return self.function(results[0], results[1])
-            elif self.size == 3:
-                return self.function(results[0], results[1], results[2])
-            # TODO: fix to use return self.function(*results)
-        elif self.node_type == PARAM_NODE:
-            return inp[self.value]
-        else:
-            return self.value
+        if size == 1:
+            return self.function(results[0])
+        elif size == 2:
+            return self.function(results[0], results[1])
+        elif size == 3:
+            return self.function(results[0], results[1], results[2])
+        # TODO: fix to use return self.function(*results)
 
 
     def display(self, indent=0):
@@ -215,30 +218,30 @@ cdef class node:
 
 
 
-# cdef class paramnode:
-#     cdef int idx
+cdef class paramnode:
+    cdef int idx
 
-#     def __init__(self, int idx):
-#         self.idx = idx
+    def __init__(self, int idx):
+        self.idx = idx
 
-#     cdef long evaluate(self, list inp):
-#         return inp[self.idx]
+    cdef long evaluate(self, list inp):
+        return inp[self.idx]
 
-#     def display(self, indent=0):
-#         print('%sp%d' % (' ' * indent, self.idx))
+    def display(self, indent=0):
+        print('%sp%d' % (' ' * indent, self.idx))
 
 
-# cdef class constnode:
-#     cdef long value
+cdef class constnode:
+    cdef long value
 
-#     def __init__(self, long value):
-#         self.value = value
+    def __init__(self, long value):
+        self.value = value
 
-#     cdef long evaluate(self, list inp):
-#         return self.value
+    cdef long evaluate(self, list inp):
+        return self.value
 
-#     def display(self, indent=0):
-#         print('%s%d' % (' ' * indent, self.value))
+    def display(self, indent=0):
+        print('%s%d' % (' ' * indent, self.value))
 
 
 
@@ -248,7 +251,7 @@ cdef class node:
 
 # @cython.boundscheck(False)
 # @cython.wraparound(False)
-cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
     cdef node newnode
@@ -261,18 +264,25 @@ cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, f
         newnode.setnode(children)
         return newnode
     elif crandom() < param_prob:
-        return node(PARAM_NODE, crandint(0, param_count - 1))
+        return paramnode(crandint(0, param_count - 1))
     else:
-        return node(CONST_NODE, crandint(0, 10))
+        return constnode(crandint(0, 10))
 
 
 def runexperiment():
     srand(10)
     tree = makerandomtree(2)
     tree.display()
-    print(tree.evaluate([5,2]))
+    print(evaluate(tree, [5,2]))
 
-
+cdef long evaluate(object tree, list inp):
+    if type(tree) == node:
+        return (<node>(tree)).evaluate(inp)
+    elif type(tree) == constnode:
+        return (<constnode>(tree)).evaluate(inp)
+    else:
+        return (<paramnode>(tree)).evaluate(inp)
+        
 
 cdef timeit():
     runs = 1000000
@@ -284,7 +294,7 @@ cdef timeit():
         population.append(makerandomtree(2))
     mid = time.time()
     for tree in population:
-        (<node>tree).evaluate(input)
+        evaluate(tree, input)
     end = time.time()
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
@@ -381,23 +391,23 @@ cdef test_makerandomtree():
     srand(10)
     tree = makerandomtree(2)
     # print(tree.evaluate([5, 2]))
-    assert tree.evaluate([5, 2]) == 36
+    assert evaluate(tree, [5, 2]) == 36
 
     tree = makerandomtree(2)
     # print(treearray.evaluate([100, 200]))
-    assert tree.evaluate([100, 200]) == 5
+    assert evaluate(tree, [100, 200]) == 5
 
     tree = makerandomtree(3)
     # print(treearray.evaluate([1, 2, 3]))
-    assert tree.evaluate([1, 2, 3]) == 2
+    assert evaluate(tree, [1, 2, 3]) == 2
 
     tree = makerandomtree(4)
     # print(treearray.evaluate([4, 3, 2, 1]))
-    assert tree.evaluate([4, 3, 2, 1]) == 0
+    assert evaluate(tree, [4, 3, 2, 1]) == 0
 
     tree = makerandomtree(5)
     # print(treearray.evaluate([2, 4, 6, 8, 10]))   
-    assert tree.evaluate([2, 4, 6, 8, 10]) == 8
+    assert evaluate(tree, [2, 4, 6, 8, 10]) == 8
     
     print("Pass test_makerandomtree")
 
