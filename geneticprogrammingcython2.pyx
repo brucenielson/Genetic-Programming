@@ -144,38 +144,50 @@ cdef long crandint(int lower, int upper) except -1:
     return (rand() % (upper - lower + 1)) + lower
 
 
+# node parenet
+cdef class node:
+    cdef Py_ssize_t node_type
+    def __cinit__(self):
+        pass
+
+    # TODO: Can python call a super class method?
+    cdef long evaluate(self, list inp):
+        super.evaluate(inp)
+
+
+    def display(self, indent=0):
+        super.display(indent)
+
+
+
 
 # node objects
-cdef class node:
+cdef class functnode(node):
     cdef str name
     cdef object function
     cdef list children
     cdef bint lock
     cdef long value
-    cdef Py_ssize_t node_type
     cdef Py_ssize_t param_num
     cdef Py_ssize_t size
 
-    def __init__(self, int node_type, long value, list children=None):
-        self.setnode(node_type, value, children)
+    def __cinit__(self, long value, list children=None):
+        self.setnode(value, children)
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
-    cdef void setnode(self, int node_type, long value, list children=None):
-        self.node_type = node_type
+    cdef void setnode(self, long value, list children=None):
+        self.node_type = FUNC_NODE
         self.value = value
-        if node_type == PARAM_NODE:
-            self.value = value
-        elif node_type == CONST_NODE:
-            self.value = value
-        else:
-            self.lock = False
-            self.function = func_array[self.value]
-            self.name = name_array[self.value]
-            self.param_num = param_array[self.value]
-            self.children = children
-            self.size = len(children)
+        self.lock = False
+        self.function = func_array[self.value]
+        self.name = name_array[self.value]
+        self.param_num = param_array[self.value]
+        self.size = len(children)
+        self.children = children
+        # for i in range(self.size):
+        #     self.children[i] = <node>children[i]
 
 
     @cython.boundscheck(False)
@@ -185,52 +197,36 @@ cdef class node:
         cdef int size
         cdef long results[3]
         cdef object t
-        if self.node_type == PARAM_NODE:
-            return inp[self.value]
-        elif self.node_type == CONST_NODE:
-            return self.value
-        else:
-            size = len(self.children)        
-            for i in range(size):
-                t = type(self.children[i]) 
-                if t == node:
-                    results[i] = (<node>(self.children[i])).evaluate(inp)
-                elif t == constnode:
-                    results[i] = (<constnode>(self.children[i])).evaluate(inp)
-                else:
-                    results[i] = (<paramnode>(self.children[i])).evaluate(inp)
+        for i in range(self.size):
+            results[i] = (<node>(self.children[i])).evaluate(inp)
 
-            if size == 1:
-                return self.function(results[0])
-            elif size == 2:
-                return self.function(results[0], results[1])
-            elif size == 3:
-                return self.function(results[0], results[1], results[2])
-            # TODO: fix to use return self.function(*results)
+        if self.size == 1:
+            return self.function(results[0])
+        elif self.size == 2:
+            return self.function(results[0], results[1])
+        elif self.size == 3:
+            return self.function(results[0], results[1], results[2])
+        # TODO: fix to use return self.function(*results)
+
 
 
     def display(self, indent=0):
-        if self.node_type == FUNC_NODE:
-            if self.lock:
-                add = "*"
-            else:
-                add = ""
-            name = str(self.name)
-            print( (' ' * indent) + name + add)
-            for c in self.children:
-                c.display(indent + 1)
-        elif self.node_type == PARAM_NODE:
-            print('%sp%d' % (' ' * indent, self.value))
+        if self.lock:
+            add = "*"
         else:
-            print('%s%d' % (' ' * indent, self.value))  
+            add = ""
+        name = str(self.name)
+        print( (' ' * indent) + name + add)
+        for c in self.children:
+            c.display(indent + 1)
 
 
-
-cdef class paramnode:
+cdef class paramnode(node):
     cdef Py_ssize_t idx
 
-    def __init__(self, int idx):
+    def __cinit__(self, int idx):
         self.idx = idx
+        self.node_type = PARAM_NODE
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
@@ -239,14 +235,16 @@ cdef class paramnode:
         return inp[self.idx]
 
     def display(self, indent=0):
-        print('%sp%d' % (' ' * indent, self.idx))
+            print('%sp%d' % (' ' * indent, self.value))
 
 
-cdef class constnode:
+cdef class constnode(node):
     cdef long value
 
-    def __init__(self, long value):
+    def __cinit__(self, long value):
         self.value = value
+        self.node_type = CONST_NODE
+
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
@@ -255,8 +253,7 @@ cdef class constnode:
         return self.value
 
     def display(self, indent=0):
-        print('%s%d' % (' ' * indent, self.value))
-
+            print('%s%d' % (' ' * indent, self.value))  
 
 
 
@@ -265,7 +262,7 @@ cdef class constnode:
 
 # @cython.boundscheck(False)
 # @cython.wraparound(False)
-cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
+cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, float param_prob=0.6):
     cdef list children = []
     cdef Py_ssize_t i
     if crandom() < func_prob and maxdepth > 0:
@@ -273,29 +270,21 @@ cdef object makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5,
         for i in range(param_array[func_num]):
             tree = makerandomtree(param_count, maxdepth - 1, func_prob, param_prob)
             children.append(tree)            
-        return node(FUNC_NODE, func_num, children)
+        return functnode.__new__(functnode, func_num, children) #functnode(func_num, children)
     elif crandom() < param_prob:
         # newnode.setnode(PARAM_NODE, crandint(0, param_count - 1))
         # return newnode
-        return paramnode(crandint(0, param_count - 1))
+        return paramnode.__new__(paramnode, crandint(0, param_count - 1)) #paramnode(crandint(0, param_count - 1))
     else:
-        return constnode(crandint(0, 10))
+        return constnode.__new__(constnode, crandint(0, 10)) #constnode(crandint(0, 10))
 
 
 def runexperiment():
     srand(10)
     tree = makerandomtree(2)
     tree.display()
-    print(evaluate(tree, [5,2]))
+    print(tree.evaluate([5,2]))
 
-cdef long evaluate(object tree, list inp):
-    if type(tree) == node:
-        return (<node>(tree)).evaluate(inp)
-    elif type(tree) == constnode:
-        return (<constnode>(tree)).evaluate(inp)
-    else:
-        return (<paramnode>(tree)).evaluate(inp)
-        
 
 cdef timeit():
     runs = 5000000
@@ -308,7 +297,7 @@ cdef timeit():
         population.append(makerandomtree(2))
     mid = time.time()
     for tree in population:
-        evaluate(tree, input)
+        (<node>tree).evaluate(input)
     end = time.time()
     print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
 
@@ -406,23 +395,24 @@ cdef test_makerandomtree():
     srand(10)
     tree = makerandomtree(2)
     # print(tree.evaluate([5, 2]))
-    assert evaluate(tree, [5, 2]) == 36
+    # assert evaluate(tree, [5, 2]) == 36
+    assert tree.evaluate([5,2]) == 36
 
     tree = makerandomtree(2)
     # print(treearray.evaluate([100, 200]))
-    assert evaluate(tree, [100, 200]) == 5
+    assert tree.evaluate([100, 200]) == 5
 
     tree = makerandomtree(3)
     # print(treearray.evaluate([1, 2, 3]))
-    assert evaluate(tree, [1, 2, 3]) == 2
+    assert tree.evaluate([1, 2, 3]) == 2
 
     tree = makerandomtree(4)
     # print(treearray.evaluate([4, 3, 2, 1]))
-    assert evaluate(tree, [4, 3, 2, 1]) == 0
+    assert tree.evaluate([4, 3, 2, 1]) == 0
 
     tree = makerandomtree(5)
     # print(treearray.evaluate([2, 4, 6, 8, 10]))   
-    assert evaluate(tree, [2, 4, 6, 8, 10]) == 8
+    assert tree.evaluate([2, 4, 6, 8, 10]) == 8
     
     print("Pass test_makerandomtree")
 
