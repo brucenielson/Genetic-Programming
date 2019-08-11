@@ -167,23 +167,22 @@ cdef class functnode(node):
     cdef object function
     cdef list children
     cdef bint lock
-    cdef long value
+    cdef Py_ssize_t func_num
     cdef Py_ssize_t param_num
     cdef Py_ssize_t size
 
-    def __cinit__(self, long value, list children=None):
-        self.setnode(value, children)
+    def __cinit__(self, Py_ssize_t func_num, list children=None):
+        self.setnode(func_num, children)
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
-    cdef void setnode(self, long value, list children=None):
+    cdef void setnode(self, Py_ssize_t func_num, list children=None):
         self.node_type = FUNC_NODE
-        self.value = value
+        self.func_num = func_num
         self.lock = False
-        self.function = func_array[self.value]
-        self.name = name_array[self.value]
-        self.param_num = param_array[self.value]
+        self.function = func_array[self.func_num]
+        self.name = name_array[self.func_num]
         self.size = len(children)
         self.children = children
         # for i in range(self.size):
@@ -235,14 +234,14 @@ cdef class paramnode(node):
         return inp[self.idx]
 
     def display(self, indent=0):
-            print('%sp%d' % (' ' * indent, self.value))
+            print('%sp%d' % (' ' * indent, self.idx))
 
 
 cdef class constnode(node):
-    cdef long value
+    cdef long constval
 
-    def __cinit__(self, long value):
-        self.value = value
+    def __cinit__(self, long constval):
+        self.constval = constval
         self.node_type = CONST_NODE
 
 
@@ -250,10 +249,10 @@ cdef class constnode(node):
     @cython.wraparound(False)
     @cython.nonecheck(False)
     cdef long evaluate(self, list inp):
-        return self.value
+        return self.constval
 
     def display(self, indent=0):
-            print('%s%d' % (' ' * indent, self.value))  
+            print('%s%d' % (' ' * indent, self.constval))  
 
 
 
