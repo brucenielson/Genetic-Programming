@@ -58,6 +58,7 @@ ctypedef long (*funct3param)(long param1, long param2, long param3)
 cdef int param_array[5]
 cdef list name_array = []
 cdef list func_array = []
+cdef func2param func_array2[5]
 func_list = []
 
 cdef list definefunction(function, param_count, name):    
@@ -103,11 +104,12 @@ definefunction(iffunc, 3, 'if')
 cdef Py_ssize_t numfuncs = len(func_list)
 
 # TODO: How to create a memory view to speed up numpy array: cdef int[:] func_list_cview = func_list. See NumPy Tutorial above. Except this won't work for the function array. I need a better way.
+
 for i in range(5):
     param_array[i] = func_list[i][PARAM_COUNT]
     name_array.append(func_list[i][NAME])
     func_array.append(func_list[i][FUNCTION])
-
+    # func_array2[i] = <func2param>func_list[i][FUNCTION]
 
 # Program Trees: Lists or Dynamic arrays that follow this format:
 # [TYPE #, Function #, value or param indx, lock, node id, child1offset, child1length, child2offset, child2length, child3offset, child3length]
@@ -163,7 +165,7 @@ cdef class node:
 
 # node objects
 cdef class functnode(node):
-    cdef str name
+    # cdef str name
     cdef object function
     cdef list children
     cdef bint lock
@@ -182,7 +184,7 @@ cdef class functnode(node):
         self.func_num = func_num
         self.lock = False
         self.function = func_array[self.func_num]
-        self.name = name_array[self.func_num]
+        # self.name = name_array[self.func_num]
         self.size = len(children)
         self.children = children
         # for i in range(self.size):
@@ -204,9 +206,9 @@ cdef class functnode(node):
         elif self.size == 2:
             return self.function(results[0], results[1])
         elif self.size == 3:
+            # return self.function(*results)
             return self.function(results[0], results[1], results[2])
         # TODO: fix to use return self.function(*results)
-
 
 
     def display(self, indent=0):
@@ -214,7 +216,7 @@ cdef class functnode(node):
             add = "*"
         else:
             add = ""
-        name = str(self.name)
+        name = name_array[self.func_num]
         print( (' ' * indent) + name + add)
         for c in self.children:
             c.display(indent + 1)
