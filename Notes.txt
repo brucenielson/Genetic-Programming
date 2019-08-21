@@ -47,3 +47,9 @@ python -m nuitka --standalone --show-scons  --mingw64 hello.py
 ('Benchmark (geneticprogrammingcython.py):  ', 1.7029762268066406, 0.2423560619354248)
 ('Benchmark (gpcython.py): ', 2.4172420501708984, 0.11968302726745605)
 ('Benchmark (gp.py): ', 4.945305347442627, 0.4537932872772217)
+
+
+('Benchmark (geneticprogrammingcython2.py):  ', 22.288552284240723, 1.2956106662750244)
+('Benchmark (geneticprogrammingcython2.py):  ', 20.57940649986267, 1.3935036659240723)
+('Benchmark (geneticprogrammingcython2.py):  ', 20.528622150421143, 1.2695653438568115)
+

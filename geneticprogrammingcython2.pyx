@@ -9,6 +9,9 @@ import geneticprogramming as gp2
 from libc.stdlib cimport rand, RAND_MAX, srand
 import geneticprogrammingcython as gpc2
 cimport geneticprogrammingcython as gpc2
+from libc.math cimport log
+from copy import deepcopy
+import operator
 
 
 
@@ -258,6 +261,27 @@ cdef class constnode(node):
 
 
 
+def hiddenfunction(x, y):
+    return x ** 2 + 2 * y + 3 * x + 5
+
+
+def buildhiddenset():
+    rows = []
+    for i in range(200):
+        x = crandint(0, 40)
+        y = crandint(0, 40)
+        rows.append([x, y, hiddenfunction(x, y)])
+    return rows
+
+
+
+# class exampletree(node):
+#     def __init__(self):
+#         children = [node(gtw, [paramnode(0), constnode(3)]),
+#                     node(addw, [paramnode(1), constnode(5)]),
+#                     node(subw, [paramnode(1), constnode(2)])]
+
+#         node.__init__(self, ifw, children)
 
 
 
@@ -280,11 +304,103 @@ cdef node makerandomtree(int param_count, int maxdepth=4, float func_prob=0.5, f
         return constnode.__new__(constnode, crandint(0, 10)) #constnode(crandint(0, 10))
 
 
+
+cdef object scorefunction(object tree, list dataset, bint penalizecomplexity=False):
+    cdef double dif, val, start, end, x, y, z
+    cdef int i, size
+    if penalizecomplexity:
+        start = time.time()
+    dif = 0
+    size = len(dataset)
+    for i in range(size):
+        x, y, z = dataset[i]
+        val = tree.evaluate([x, y])
+        dif += abs(val - z)
+
+    if penalizecomplexity:
+        end = time.time()
+        return (dif, tree, end-start)
+    else:
+        return (dif, tree)
+
+
+
+# This is the locksubtree function that locks subtrees
+cdef object locksubtree(object t, float probchange=0.05, bint top=True):
+    result = deepcopy(t)
+
+    if not hasattr(result, "children"):
+        return result
+    if result.lock:
+        return result
+    if crandom() < probchange and not top:
+        result.lock = True
+        return result
+    else:
+        result.children = [locksubtree(c, probchange, top=False) for c in result.children]
+        return result
+
+
+
+
+cdef object mutate(object t, int pc, float probchange=0.1):
+    if crandom() < probchange:
+        return makerandomtree(pc)
+    else:
+        result = deepcopy(t)
+        if hasattr(t, "children"):
+            result.children = [mutate(c, pc, probchange) for c in t.children]
+
+        return result
+
+
+cdef object crossover(object t1, object t2, float probswap=0.1, bint top=True):
+    cdef Py_ssize_t child_num
+    cdef object child
+    # print "t1:", getattr(t1, "id", -1), "t2:", getattr(t2, "id", -1)
+    if crandom() < probswap and not top:
+        # print "return t2:", getattr(t2, "id", -1)
+        return deepcopy(t2)
+    else:
+        result = deepcopy(t1)
+        if hasattr(t1, 'children') and hasattr(t2, 'children') and not getattr(result, "lock", False):
+            child_num = crandint(0,len(t2.children)-1)
+            child = t2.children[child_num]
+            result.children = [crossover(c, child, probswap, top=False)
+                               for c in t1.children]
+        # print "return crossover:", getattr(result, "id", -1)
+        return result
+
+
+cdef getrankfunction(list dataset):
+    def rankfunction(population, penalizecomplexity=False):
+        scores = [scorefunction(t, dataset, penalizecomplexity) for t in population]
+        if penalizecomplexity:
+            scores = sorted(scores, key=operator.itemgetter(0, 2))
+        else:
+            scores = sorted(scores, key=operator.itemgetter(0))
+
+        return scores
+
+    return rankfunction
+
+
+cdef int selectindex(float fitnesspref, int popsize) except -1:
+    # TODO: https://stackoverflow.com/questions/40976880/canonical-way-to-generate-random-numbers-in-cython?noredirect=1&lq=1
+    cdef float r
+    cdef int val
+    r = crandom() + 0.00000000001
+    return <int>(log(r) / log(fitnesspref))
+
+
 def runexperiment():
     srand(10)
     tree = makerandomtree(2)
     tree.display()
     print(tree.evaluate([5,2]))
+    # tree = exampletree()
+    # tree.display
+    # print(tree.evaluate[5,2])
 
 
 cdef timeit():
