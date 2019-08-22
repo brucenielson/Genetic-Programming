@@ -180,8 +180,8 @@ cdef class node:
 cdef class functnode(node):
     # cdef str name
     cdef object function
-    cdef list children
-    cdef bint lock
+    cdef public list children
+    cdef public bint lock
     cdef Py_ssize_t func_num
     # cdef Py_ssize_t param_num
     cdef Py_ssize_t size
@@ -349,7 +349,7 @@ cdef object scorefunction(object tree, list dataset, bint penalizecomplexity=Fal
 cdef object locksubtree(object t, float probchange=0.05, bint top=True):
     result = deepcopy(t)
 
-    if not hasattr(result, "children"):
+    if not type(result) == functnode:
         return result
     if result.lock:
         return result
@@ -368,7 +368,7 @@ cdef object mutate(object t, int pc, float probchange=0.1):
         return makerandomtree(pc)
     else:
         result = deepcopy(t)
-        if hasattr(t, "children"):
+        if type(t) == functnode:
             result.children = [mutate(c, pc, probchange) for c in t.children]
 
         return result
@@ -377,18 +377,16 @@ cdef object mutate(object t, int pc, float probchange=0.1):
 cdef object crossover(object t1, object t2, float probswap=0.1, bint top=True):
     cdef Py_ssize_t child_num
     cdef object child
-    # print "t1:", getattr(t1, "id", -1), "t2:", getattr(t2, "id", -1)
     if crandom() < probswap and not top:
-        # print "return t2:", getattr(t2, "id", -1)
         return deepcopy(t2)
     else:
         result = deepcopy(t1)
-        if hasattr(t1, 'children') and hasattr(t2, 'children') and not getattr(result, "lock", False):
+
+        if type(t1) == functnode and type(t2) == functnode and not result.lock:
             child_num = crandint(0,len(t2.children)-1)
             child = t2.children[child_num]
             result.children = [crossover(c, child, probswap, top=False)
                                for c in t1.children]
-        # print "return crossover:", getattr(result, "id", -1)
         return result
 
 
@@ -424,7 +422,7 @@ def runexperimentold():
 
 
 cdef timeit():
-    runs = 5000000
+    runs = 50 #00000
 
     # 20.821658849716187, 2.0441694259643555; 16.92554783821106, 2.061018705368042; 17.349987030029297, 2.0460333824157715
     start = time.time()
@@ -444,11 +442,18 @@ cdef timeit():
     newpop = []
     fitnesspref = 0.7
     while len(newpop) < popsize:
-        newpop.append(mutate(
-            crossover(population[selectindex(fitnesspref, popsize)],
-                        population[selectindex(fitnesspref, popsize)],
-                        ),
-            2))
+        # newpop.append(mutate(
+        #     crossover(population[selectindex(fitnesspref, popsize)],
+        #                 population[selectindex(fitnesspref, popsize)],
+        #                 ),
+        #     2))
+        i = selectindex(fitnesspref, popsize)
+        t = population[i]
+        t.display()
+        m = mutate(t, 2, probchange=0.4)
+        t.display()
+        m.display()
+        newpop.append(m)
     end = time.time()
     print("Benchmark for mutate and crossover (geneticprogrammingcython2.py):  ", end-start)
 
@@ -574,7 +579,7 @@ cdef test_makerandomtree():
 def main():
     # runexperiment()
     # test_evaluate()
-    test_makerandomtree()
+    # test_makerandomtree()
     timeit()
 
 
@@ -644,7 +649,7 @@ cdef object evolve(int pc, int popsize, object rankfunction, int maxgen=500,
     return (scores, i + 1)
 
 
-cpdef getstats(int rounds=50, int maxgen=50, float mutationrate=0.05, float breedingrate=0.10, float fitnesspref=0.95, float probnew=0.10, bint penalizecomplexity=False, bint detectstuck = False, bint modularize=False, bint mute=False):
+cpdef getstats(int rounds=5, int maxgen=50, float mutationrate=0.05, float breedingrate=0.10, float fitnesspref=0.95, float probnew=0.10, bint penalizecomplexity=False, bint detectstuck = False, bint modularize=False, bint mute=False):
     cdef int i
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
@@ -698,7 +703,7 @@ def runexperiment():
     # print " "
     # print " "
     print("Best Paramaters************")
-    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    getstats(rounds=10000, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
     print(" ")
     # print(" ")
     # print("Penalize Complexity*********")
