@@ -53,3 +53,11 @@ python -m nuitka --standalone --show-scons  --mingw64 hello.py
 ('Benchmark (geneticprogrammingcython2.py):  ', 20.57940649986267, 1.3935036659240723)
 ('Benchmark (geneticprogrammingcython2.py):  ', 20.528622150421143, 1.2695653438568115)
 
+
+Warning Msg: Using deprecated NumPy API, disable it with #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+geneticprogrammingcython2.c(5195): warning C4244: 'function': conversion from 'Py_ssize_t' to 'int', possible loss of data
+geneticprogrammingcython2.c(5476): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
+geneticprogrammingcython2.c(6395): warning C4244: 'function': conversion from 'Py_ssize_t' to 'int', possible loss of data
+geneticprogrammingcython2.c(6948): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+geneticprogrammingcython2.c(7436): warning C4244: 'function': conversion from 'double' to 'float', possible loss of data
+geneticprogrammingcython2.c(7447): warning C4244: 'function': conversion from 'double' to 'float', possible loss of data

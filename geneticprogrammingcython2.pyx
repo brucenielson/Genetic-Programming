@@ -1,3 +1,4 @@
+# distutils: language = c++
 import numpy as np
 cimport numpy as np
 import random
@@ -152,8 +153,15 @@ cdef long crandint(int lower, int upper) except -1:
 # node parenet
 cdef class node:
     cdef Py_ssize_t node_type
+
     def __cinit__(self):
         pass
+
+
+    def __init__(self):
+        pass
+
+
 
     # TODO: Can python call a super class method?
     cdef long evaluate(self, list inp):
@@ -165,7 +173,6 @@ cdef class node:
 
 
 
-
 # node objects
 cdef class functnode(node):
     # cdef str name
@@ -173,7 +180,7 @@ cdef class functnode(node):
     cdef list children
     cdef bint lock
     cdef Py_ssize_t func_num
-    cdef Py_ssize_t param_num
+    # cdef Py_ssize_t param_num
     cdef Py_ssize_t size
 
     def __cinit__(self, Py_ssize_t func_num, list children=None):
@@ -224,6 +231,10 @@ cdef class functnode(node):
         for c in self.children:
             c.display(indent + 1)
 
+    def __deepcopy__(self,memo_dictionary):
+        cp = functnode.__new__(functnode, self.func_num, self.children)
+        return cp
+
 
 cdef class paramnode(node):
     cdef Py_ssize_t idx
@@ -241,6 +252,9 @@ cdef class paramnode(node):
     def display(self, indent=0):
             print('%sp%d' % (' ' * indent, self.idx))
 
+    def __deepcopy__(self,memo_dictionary):
+        cp = paramnode.__new__(paramnode, self.idx)
+        return cp
 
 cdef class constnode(node):
     cdef long constval
@@ -259,6 +273,9 @@ cdef class constnode(node):
     def display(self, indent=0):
             print('%s%d' % (' ' * indent, self.constval))  
 
+    def __deepcopy__(self,memo_dictionary):
+        cp = constnode.__new__(constnode, self.constval)
+        return cp
 
 
 def hiddenfunction(x, y):
@@ -416,7 +433,23 @@ cdef timeit():
     for tree in population:
         (<node>tree).evaluate(input)
     end = time.time()
-    print("Benchmark (geneticprogrammingcython2.py):  ", mid-start, end-mid)
+    print("Benchmark for makerandomtree and evaluate (geneticprogrammingcython2.py):  ", mid-start, end-mid)
+    
+    # Build the next generation
+    start = time.time()
+    popsize = runs
+    newpop = []
+    fitnesspref = 0.7
+    while len(newpop) < popsize:
+        newpop.append(mutate(
+            crossover(population[selectindex(fitnesspref, popsize)],
+                        population[selectindex(fitnesspref, popsize)],
+                        ),
+            2))
+    end = time.time()
+    print("Benchmark for mutate and crossover (geneticprogrammingcython2.py):  ", end-start)
+
+
 
 
     # # 32.76694297790527, 5.336438894271851; 34.19974899291992, 5.901979446411133; 31.23992419242859, 5.255947113037109
