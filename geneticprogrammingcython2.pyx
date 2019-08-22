@@ -654,18 +654,24 @@ cpdef getstats(int rounds=5, int maxgen=50, float mutationrate=0.05, float breed
     dataset = buildhiddenset()
     rf = getrankfunction(dataset)
     tries = []
+    start_run = time.time()
     for i in range(rounds):
+        if i % 10 == 0:
+            print("Round:",i)
+
         if not mute:
           print("*******Round: ", i+1, "*******")
-        start = time.time()
+        start_round = time.time()
         scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, detectstuck=detectstuck, modularize=modularize, mute=mute)
         best = scores[0][1]
         score = scorefunction(best, dataset)
-        end = time.time()
-        seconds = end - start
+        end_round = time.time()
+        seconds = end_round - start_round
         row = (score[0], seconds, generations, best)
         tries.append(row)
 
+    end_run = time.time()
+    print("Run Time:", end_run-start_run) 
     scores = [row[0] for row in tries]
 
     avg_score = mean(scores)
@@ -703,7 +709,7 @@ def runexperiment():
     # print " "
     # print " "
     print("Best Paramaters************")
-    getstats(rounds=10000, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
+    getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
     print(" ")
     # print(" ")
     # print("Penalize Complexity*********")
@@ -742,7 +748,7 @@ cdef _double_carray_from_list(list l):
     return ca
 
 
-cdef carray_from_list(char type_code, list l):
+cdef carray_from_list(bytes type_code, list l):
     if type_code == 'i':
         return _int_carray_from_list(l), len(l)
     elif type_code == 'l':
@@ -759,13 +765,13 @@ cdef carray_from_list(char type_code, list l):
 cdef mean(list data):
     cdef double[:] cdata
     cdef int size
-    cdata, size = carray_from_list("d", data)
+    cdata, size = carray_from_list(<bytes>'d', data)
     return cmean(cdata, size)
 
 cdef stddev(list data):
     cdef double[:] cdata
     cdef int size
-    cdata, size = carray_from_list("d", data)
+    cdata, size = carray_from_list(<bytes>'d', data)
     return cstddev(cdata, size)
 
 
