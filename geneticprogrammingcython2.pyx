@@ -1,4 +1,3 @@
-# distutils: language = c++
 import numpy as np
 cimport numpy as np
 import random
@@ -13,6 +12,9 @@ cimport geneticprogrammingcython as gpc2
 from libc.math cimport log
 from copy import deepcopy
 import operator
+from cpython cimport array
+import array
+
 
 
 
@@ -331,7 +333,7 @@ cdef object scorefunction(object tree, list dataset, bint penalizecomplexity=Fal
     size = len(dataset)
     for i in range(size):
         x, y, z = dataset[i]
-        val = tree.evaluate([x, y])
+        val = (<node>tree).evaluate([x, y])
         dif += abs(val - z)
 
     if penalizecomplexity:
@@ -410,7 +412,7 @@ cdef int selectindex(float fitnesspref, int popsize) except -1:
     return <int>(log(r) / log(fitnesspref))
 
 
-def runexperiment():
+def runexperimentold():
     srand(10)
     tree = makerandomtree(2)
     tree.display()
@@ -574,5 +576,226 @@ def main():
     test_makerandomtree()
     timeit()
 
+
+cdef object evolve(int pc, int popsize, object rankfunction, int maxgen=500,
+           float mutationrate=0.2, float breedingrate=0.1, float fitnesspref=0.7, float probnew=0.1,
+           bint penalizecomplexity=False, bint detectstuck=False, bint modularize=False, bint mute=False):
+    
+    # Returns a random number, tending towards lower numbers. The lower pexp
+    # is, more lower numbers you will get
+    cdef int i, stuckcounter, lastscore
+    
+    # Create a random initial population
+    population = [makerandomtree(pc) for i in range(popsize)]
+    lastscore = -1
+    stuckcounter = 0
+    for i in range(maxgen):
+        scores = rankfunction(population, penalizecomplexity)
+
+        # If we get same value too often, take action
+        adj_mutate = mutationrate
+        if detectstuck:
+            if scores[0][2] == lastscore:
+                stuckcounter += 1
+            else:
+                stuckcounter = 0
+
+            lastscore = scores[0][2]
+
+            if stuckcounter > 0:
+                adj_mutate = mutationrate + 2.0 * (float(stuckcounter) / 100.0)
+                if adj_mutate > 0.5: adj_mutate = 0.5
+
+        if not mute:
+            if penalizecomplexity:
+                print("Generation:", i + 1, "Best Score:", scores[0][0], "Time:", scores[0][2])
+            else:
+                print("Generation:", i + 1, "Best Score:", scores[0][0])
+
+        if scores[0][0] == 0: break
+
+        # The two best always make it
+        newpop = [scores[0][1], scores[1][1]]
+
+        if modularize:
+            # Next one is same as first one, but modularized
+            newpop.append(locksubtree(newpop[0]))
+
+        # Build the next generation
+        while len(newpop) < popsize:
+            if crandom() > probnew:
+                newpop.append(mutate(
+                    crossover(scores[selectindex(fitnesspref, popsize)][1],
+                              scores[selectindex(fitnesspref, popsize)][1],
+                              probswap=breedingrate),
+                    pc, probchange=adj_mutate))
+            else:
+                # Add a random node to mix things up
+                newpop.append(makerandomtree(pc))
+
+        population = newpop
+
+    if not mute:
+        print("******")
+        print("Best Tree Found:")
+        scores[0][1].display()
+
+    return (scores, i + 1)
+
+
+cpdef getstats(int rounds=50, int maxgen=50, float mutationrate=0.05, float breedingrate=0.10, float fitnesspref=0.95, float probnew=0.10, bint penalizecomplexity=False, bint detectstuck = False, bint modularize=False, bint mute=False):
+    cdef int i
+    dataset = buildhiddenset()
+    rf = getrankfunction(dataset)
+    tries = []
+    for i in range(rounds):
+        if not mute:
+          print("*******Round: ", i+1, "*******")
+        start = time.time()
+        scores, generations = evolve(2, 500, rf, maxgen=maxgen, mutationrate=mutationrate, breedingrate=breedingrate, fitnesspref=fitnesspref, probnew=probnew, penalizecomplexity=penalizecomplexity, detectstuck=detectstuck, modularize=modularize, mute=mute)
+        best = scores[0][1]
+        score = scorefunction(best, dataset)
+        end = time.time()
+        seconds = end - start
+        row = (score[0], seconds, generations, best)
+        tries.append(row)
+
+    scores = [row[0] for row in tries]
+
+    avg_score = mean(scores)
+    std_score = stddev(scores)
+
+    successes = scores.count(0)
+    success_perc = float(successes) / float(rounds)
+    failures = rounds - successes
+    success_failure = []
+    for i in range(successes):
+        success_failure.append(1.0)
+    for i in range(failures):
+        success_failure.append(0.0)
+
+    std_successes = stddev(success_failure)
+
+    times = [row[1] for row in tries]
+    avg_time = mean(times)
+    std_time = stddev(times)
+
+    generations = [row[2] for row in tries]
+    avg_generations = mean(generations)
+    std_generations = stddev(generations)
+
+    print("# of Successes:", successes, "StD:", round(std_successes * float(rounds),2), "Success %:", success_perc, "StD:", round(std_successes, 2))
+    print("Average Score:", avg_score, "StD:", round(std_score, 2))
+    print("Average Time (Seconds):", avg_time, "StD:", round(std_time, 2))
+    print("Average Generations:", avg_generations, "StD:", round(std_generations, 2))
+
+    return successes, avg_score, avg_time, avg_generations
+
+def runexperiment():
+    # print "Default********************"
+    # getstats(rounds=100, maxgen=50, mutationrate=0.2, breedingrate=0.1, fitnesspref=0.7, probnew=0.1, mute=True)
+    # print " "
+    # print " "
+    print("Best Paramaters************")
+    getstats(rounds=5, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=False)
+    print(" ")
+    # print(" ")
+    # print("Penalize Complexity*********")
+    # getstats(rounds=2, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    # print " "
+    # print " "
+    # print "Modualization*********"
+    # getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, modularize=True, mute=True)
+
+
+
 if __name__ == "__main__":
     main()
+
+
+
+
+cdef _int_carray_from_list(list l):
+    cdef array.array a = array.array('i', l)
+    cdef int[:] ca = a
+    return ca
+
+cdef _long_carray_from_list(list l):
+    cdef array.array a = array.array('l', l)
+    cdef long[:] ca = a
+    return ca
+
+cdef _float_carray_from_list(list l):
+    cdef array.array a = array.array('f', l)
+    cdef float[:] ca = a
+    return ca
+
+cdef _double_carray_from_list(list l):
+    cdef array.array a = array.array('d', l)
+    cdef double[:] ca = a
+    return ca
+
+
+cdef carray_from_list(char type_code, list l):
+    if type_code == 'i':
+        return _int_carray_from_list(l), len(l)
+    elif type_code == 'l':
+        return _long_carray_from_list(l), len(l)
+    elif type_code == 'f':
+        return _float_carray_from_list(l), len(l)
+    elif type_code == 'd':
+        return _double_carray_from_list(l), len(l)
+    else:
+        raise Exception("type_code not a supported type.")
+
+
+# Stats Code
+cdef mean(list data):
+    cdef double[:] cdata
+    cdef int size
+    cdata, size = carray_from_list("d", data)
+    return cmean(cdata, size)
+
+cdef stddev(list data):
+    cdef double[:] cdata
+    cdef int size
+    cdata, size = carray_from_list("d", data)
+    return cstddev(cdata, size)
+
+
+cdef double cmean(double[:] data, int size):
+    """Return the sample arithmetic mean of data."""
+    cdef double tot
+    if size < 1:
+        raise ValueError('mean requires at least one data point')
+    
+    # Now loop in C and get mean
+    tot = 0
+    for i in range(size):
+        tot += data[i]
+    tot = tot / float(size)
+    return tot
+
+
+cdef double _ss(double[:] data, int size):
+    """Return sum of square deviations of sequence data."""
+    cdef double c, tot
+    c = cmean(data, size)
+    tot = 0
+    # C loop
+    for i in range(size):
+        tot += (data[i] - c)**2
+    return tot
+
+
+cdef double cstddev(double[:] data, int size, int ddof=1):
+    """Calculates the population standard deviation
+    if ddof=0; specify ddof=1 to compute the sample
+    standard deviation. (which I made default)"""
+    cdef double pvar, ss
+    if size < 2:
+        raise ValueError('variance requires at least two data points')
+    ss = _ss(data, size)
+    pvar = ss/(size-ddof)
+    return pvar**0.5
+
