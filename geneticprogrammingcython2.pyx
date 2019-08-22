@@ -14,6 +14,7 @@ from copy import deepcopy
 import operator
 from cpython cimport array
 import array
+## distutils: language = c++
 
 
 
