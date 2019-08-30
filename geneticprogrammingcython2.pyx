@@ -656,7 +656,7 @@ cpdef getstats(int rounds=5, int maxgen=50, float mutationrate=0.05, float breed
     tries = []
     start_run = time.time()
     for i in range(rounds):
-        if i % 10 == 0:
+        if i % 100 == 0:
             print("Round:",i)
 
         if not mute:
@@ -709,11 +709,11 @@ def runexperiment():
     # print " "
     # print " "
     print("Best Paramaters************")
-    getstats(rounds=100, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
+    getstats(rounds=1000, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, mute=True)
     print(" ")
-    # print(" ")
-    # print("Penalize Complexity*********")
-    # getstats(rounds=2, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=False)
+    print(" ")
+    print("Penalize Complexity*********")
+    getstats(rounds=1000, maxgen=50, mutationrate=0.05, breedingrate=0.10, fitnesspref=0.95, probnew=0.10, penalizecomplexity=True, mute=True)
     # print " "
     # print " "
     # print "Modualization*********"

@@ -107,3 +107,20 @@ Run Time: 374.4780876636505
 Average Score: 681.9 StD: 1147.47
 Average Time (Seconds): 7.48956175327301 StD: 7.6
 Average Generations: 27.22 StD: 16.4
+
+
+
+Best Paramaters************
+Run Time: 8401.960005044937
+# of Successes: 583 StD: 493.31 Success %: 0.583 StD: 0.49
+Average Score: 1041.516 StD: 1333.89
+Average Time (Seconds): 8.401959008693694 StD: 7.86
+Average Generations: 30.454 StD: 17.74
+ 
+ 
+Penalize Complexity*********
+Run Time: 7142.351888895035
+# of Successes: 624 StD: 484.62 Success %: 0.624 StD: 0.48
+Average Score: 960.833 StD: 1345.31
+Average Time (Seconds): 7.142346908330917 StD: 6.59
+Average Generations: 29.972 StD: 17.22
